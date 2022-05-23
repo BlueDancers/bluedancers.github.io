@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>React17学习记录 | vkcyan Blog</title>
+  <meta name="description" content="为什么学习React17​		公司使用的是vue技术栈，并且因为历史原因，以及外部因素，可能不会使用react来做生产环境的项目，最近vue3走上正轨，大家都需要抛弃vue2.x的编码思想，在vue3中，hook思想开始越发明显，所以学习react17也是想借此加深对hook的理解，同时取长补短，综合vue与react的优点，在实际的开发中更好的完成开发任务 useState的疑问​    关于r">
+<meta property="og:type" content="article">
+<meta property="og:title" content="React17学习记录">
+<meta property="og:url" content="https://vkcyan.github.io/2021/10/15/react17%E5%AD%A6%E4%B9%A0/index.html">
+<meta property="og:site_name" content="vkcya Blog">
+<meta property="og:description" content="为什么学习React17​		公司使用的是vue技术栈，并且因为历史原因，以及外部因素，可能不会使用react来做生产环境的项目，最近vue3走上正轨，大家都需要抛弃vue2.x的编码思想，在vue3中，hook思想开始越发明显，所以学习react17也是想借此加深对hook的理解，同时取长补短，综合vue与react的优点，在实际的开发中更好的完成开发任务 useState的疑问​    关于r">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-10-14T16:00:00.000Z">
+<meta property="article:modified_time" content="2022-05-23T08:22:16.813Z">
+<meta property="article:author" content="vkcyan">
+<meta property="article:tag" content="JavaScript">
+<meta name="twitter:card" content="summary">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://vkcyan.github.io/2021/10/15/react17%E5%AD%A6%E4%B9%A0/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="vkcya Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+
+<body class="main-center theme-black" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/vkcyan" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">vkcyan</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Web Developer &amp; Product Manager</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> HeFei, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-books">
+          <a href="/books">
+            
+            <i class="icon icon-book-fill"></i>
+            
+            <span class="menu-title">书单</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">友链</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/vkcyan" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://juejin.cn/user/3720403077840519" target="_blank" title="Juejin" data-toggle=tooltip data-placement=top><i class="icon icon-juejin"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>故不积跬步，无以至千里；不积小流，无以成江海。</p><br/>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript-2021/">JavaScript-2021</a><span class="category-list-count">10</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript-2022/">JavaScript-2022</a><span class="category-list-count">7</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a><span class="tag-list-count">17</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/JavaScript/" style="font-size: 13px;">JavaScript</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/05/">五月 2022</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/03/">三月 2022</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/12/">十二月 2021</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/10/">十月 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/06/">六月 2021</a><span class="archive-list-count">7</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2022/05/23/%E9%92%88%E5%AF%B9%E5%85%8D%E7%99%BB%E5%BD%95%E7%9A%84%E4%B8%80%E4%BA%9B%E5%AE%9E%E8%B7%B5%E4%B8%8E%E6%80%9D%E8%80%83/" class="title">(no title)</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-05-23T06:29:52.233Z" itemprop="datePublished">2022-05-23</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/JavaScript-2022/">JavaScript-2022</a>
+              </p>
+              <p class="item-title">
+                <a href="/2022/03/15/JS%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" class="title">JS数据结构与算法</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-03-14T16:00:00.000Z" itemprop="datePublished">2022-03-15</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/JavaScript-2022/">JavaScript-2022</a>
+              </p>
+              <p class="item-title">
+                <a href="/2022/03/15/Vue3%20%E4%BD%BF%E7%94%A8jsx%E5%BC%80%E5%8F%91%E6%8C%87%E5%8D%97/" class="title">Vue3 + jsx开发指南</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-03-14T16:00:00.000Z" itemprop="datePublished">2022-03-15</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/JavaScript-2022/">JavaScript-2022</a>
+              </p>
+              <p class="item-title">
+                <a href="/2022/03/15/vite%E9%85%8D%E7%BD%AEalias/" class="title">Vite配置alias（设置别名）</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-03-14T16:00:00.000Z" itemprop="datePublished">2022-03-15</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/JavaScript-2022/">JavaScript-2022</a>
+              </p>
+              <p class="item-title">
+                <a href="/2022/03/15/vue3.x%20%E9%A2%84%E6%B8%B2%E6%9F%93%20Unable%20to%20prerender%20all%20routes%E9%94%99%E8%AF%AF%E6%8E%92%E6%9F%A5/" class="title">Vue3.x 预渲染 Unable to prerender all routes错误排查</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-03-14T16:00:00.000Z" itemprop="datePublished">2022-03-15</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<aside
+  class="sidebar sidebar-toc collapse  in "
+  id="collapseToc"
+  itemscope
+  itemtype="http://schema.org/WPSideBar"
+>
+  <div class="slimContent">
+    <nav id="toc" class="article-toc">
+      <h3 class="toc-title">文章目录</h3>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E5%AD%A6%E4%B9%A0React17"><span class="toc-number">1.</span> <span class="toc-text">为什么学习React17</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#useState%E7%9A%84%E7%96%91%E9%97%AE"><span class="toc-number">2.</span> <span class="toc-text">useState的疑问</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89hook"><span class="toc-number">3.</span> <span class="toc-text">自定义hook</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AAhook%E9%A3%8E%E6%A0%BC%E7%9A%84%E9%98%B2%E6%8A%96%E5%87%BD%E6%95%B0"><span class="toc-number">3.1.</span> <span class="toc-text">实现一个hook风格的防抖函数</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#react%E4%B8%AD%E4%BD%BF%E7%94%A8TS%E5%81%9A%E4%BB%A3%E7%A0%81%E9%9D%99%E6%80%81%E6%A3%80%E6%9F%A5"><span class="toc-number">4.</span> <span class="toc-text">react中使用TS做代码静态检查</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89hook-useArray"><span class="toc-number">5.</span> <span class="toc-text">自定义hook useArray</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E4%BA%8ETS%E4%B8%ADinterface%E7%9A%84%E5%B1%9E%E6%80%A7%E7%BB%A7%E6%89%BF"><span class="toc-number">6.</span> <span class="toc-text">关于TS中interface的属性继承</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#useContext"><span class="toc-number">7.</span> <span class="toc-text">useContext</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#TS%E7%B1%BB%E5%9E%8B%E7%9A%84%E4%B8%80%E4%BA%9B%E7%9F%A5%E8%AF%86"><span class="toc-number">8.</span> <span class="toc-text">TS类型的一些知识</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Parameters"><span class="toc-number">8.1.</span> <span class="toc-text">Parameters</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%81%94%E5%90%88%E7%B1%BB%E5%9E%8B"><span class="toc-number">8.2.</span> <span class="toc-text">联合类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#js%E7%9A%84typeof%E4%B8%8Ets%E7%9A%84typeof"><span class="toc-number">8.3.</span> <span class="toc-text">js的typeof与ts的typeof</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Partial%E4%B8%8EOmit%E5%85%B3%E9%94%AE%E5%AD%97"><span class="toc-number">8.4.</span> <span class="toc-text">Partial与Omit关键字</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E4%BA%8Ecss%E4%B8%80%E4%BA%9B%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84"><span class="toc-number">9.</span> <span class="toc-text">关于css一些不知道的</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B3%E4%BA%8Erem"><span class="toc-number">9.0.1.</span> <span class="toc-text">关于rem</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B3%E4%BA%8Evh"><span class="toc-number">9.1.</span> <span class="toc-text">关于vh</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#emotion"><span class="toc-number">10.</span> <span class="toc-text">emotion</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89hook-useAsync%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="toc-number">11.</span> <span class="toc-text">自定义hook useAsync的实现</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#react%E4%B8%AD%E5%AE%9E%E7%8E%B0%E6%8D%95%E6%8D%89%E8%BE%B9%E7%95%8C%E9%94%99%E8%AF%AF"><span class="toc-number">12.</span> <span class="toc-text">react中实现捕捉边界错误</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%98%B6%E6%AE%B5%E6%80%A7%E7%BB%93%E6%9D%9F"><span class="toc-number">13.</span> <span class="toc-text">阶段性结束</span></a></li></ol>
+    </nav>
+  </div>
+</aside>
+
+<script>
+  // 移动端不显示菜单
+  if (
+    navigator.userAgent.match(
+      /(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i
+    )
+  ) {
+    let self = document.querySelector(".sidebar-toc");
+    var parent = self.parentElement;
+    parent.removeChild(self);
+  } else {
+  }
+</script>
+
+
+
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-react17学习" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      React17学习记录
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2021/10/15/react17%E5%AD%A6%E4%B9%A0/" class="article-date">
+	  <time datetime="2021-10-14T16:00:00.000Z" itemprop="datePublished">2021-10-15</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/JavaScript-2021/">JavaScript-2021</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/JavaScript/" rel="tag">JavaScript</a>
+  </span>
+
+
+        
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2021/10/15/react17%E5%AD%A6%E4%B9%A0/#comments" class="article-comment-link">评论</a></span>
+        
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <h2 id="为什么学习React17"><a href="#为什么学习React17" class="headerlink" title="为什么学习React17"></a>为什么学习React17</h2><p>​		公司使用的是vue技术栈，并且因为历史原因，以及外部因素，可能不会使用react来做生产环境的项目，最近vue3走上正轨，大家都需要抛弃vue2.x的编码思想，在vue3中，hook思想开始越发明显，所以学习react17也是想借此加深对hook的理解，同时取长补短，综合vue与react的优点，在实际的开发中更好的完成开发任务</p>
+<h2 id="useState的疑问"><a href="#useState的疑问" class="headerlink" title="useState的疑问"></a>useState的疑问</h2><p>​    关于react的useState有一个疑问，useState里面是一个对象，我想要修改对象里面的某一个字段，每次都需要<code>...state</code>,把之前的数据预先填入，这做法感觉有点傻</p>
+<h2 id="自定义hook"><a href="#自定义hook" class="headerlink" title="自定义hook"></a>自定义hook</h2><p>hook是在特定换下调用自己的代码</p>
+<p>实现自定义hook必须使用关键字<code>use</code>开头，这是ESLint的规则</p>
+<p>自定义hook一般用于需要持续监听的值，而针对纯工具函数则不需要进行处理</p>
+<h3 id="实现一个hook风格的防抖函数"><a href="#实现一个hook风格的防抖函数" class="headerlink" title="实现一个hook风格的防抖函数"></a>实现一个hook风格的防抖函数</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">const [param, setParam] = useState(&#x27;ha ha&#x27;);</span><br><span class="line">const debounceParam = useDebounce(param, 2000);</span><br><span class="line"></span><br><span class="line">useEffect(() =&gt; &#123;</span><br><span class="line">  console.log(&#x27;log log&#x27;)</span><br><span class="line">&#125;, [debounceParam]);</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * 去抖函数</span><br><span class="line"> * @param value 监听的值</span><br><span class="line"> * @param delay 防抖时间</span><br><span class="line"> * @returns 变化后变量</span><br><span class="line"> */</span><br><span class="line">export function useDebounce(value, delay) &#123;</span><br><span class="line">  // 声明一个保存防抖结果的字段</span><br><span class="line">  const [debounceValue, setDebounceValue] = useState(value);</span><br><span class="line">  useEffect(() =&gt; &#123;</span><br><span class="line">    // 每次value,delay发生变化的时候生成一个定时器</span><br><span class="line">    const timeout = setTimeout(() =&gt; &#123;</span><br><span class="line">      setDebounceValue(value);</span><br><span class="line">    &#125;, delay);</span><br><span class="line">    // 在执行下一个useEffect之前,会执行上一个useEffect的返回函数</span><br><span class="line">    return () =&gt; clearTimeout(timeout);</span><br><span class="line">  &#125;, [value, delay]);</span><br><span class="line">  return debounceValue;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>useDebounce是一个hook风格的函数</li>
+<li>每次param发生变化都会触发useDebounce中的useEffect</li>
+<li>而在2000ms时间内如果重复触发就会执行上一个effect return的函数</li>
+<li>进而不修改debounceValue，直到2000ms内无任何操作，触发setDebounceValue修改属性，改变了debounceParam</li>
+<li>第一个useEffect触发，触发打印<code>log log</code></li>
+</ul>
+<h2 id="react中使用TS做代码静态检查"><a href="#react中使用TS做代码静态检查" class="headerlink" title="react中使用TS做代码静态检查"></a>react中使用TS做代码静态检查</h2><ul>
+<li>函数类型 <code>fn: () =&gt; void</code></li>
+<li>any类型是危险的，应当尽量不用，但是对于模糊的类型，我们可以在标注类型为unknown，这样就不会对赋值做任何校验，但是ts不允许我们对unknown类型做出任何处理，所以可以吧unknown理解成为加强版any</li>
+<li>针对参数不固定，返回值不确定的场景，应当使用泛型，在方法名称后面加<T>,然后在参数上指定某一个为T，则T跟这参数的类型而变化</li>
+</ul>
+<h2 id="自定义hook-useArray"><a href="#自定义hook-useArray" class="headerlink" title="自定义hook useArray"></a>自定义hook useArray</h2><blockquote>
+<p>传入一个hook，我们返回针对这个hook的可使用的对应方法，总体来说实现一个hook还是一个比较简单</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * hook处理的Array</span><br><span class="line"> * @param value</span><br><span class="line"> * @returns</span><br><span class="line"> */</span><br><span class="line">export function useArray&lt;V&gt;(value: V[]) &#123;</span><br><span class="line">  const [arrayValue, setArrayValue] = useState(value);</span><br><span class="line">  const clear = () =&gt; &#123;</span><br><span class="line">    setArrayValue([]);</span><br><span class="line">  &#125;;</span><br><span class="line">  const add = (value: V) =&gt; &#123;</span><br><span class="line">    setArrayValue([...arrayValue, value]);</span><br><span class="line">  &#125;;</span><br><span class="line">  const removeIndex = (index: number) =&gt; &#123;</span><br><span class="line">    let value = [...arrayValue];</span><br><span class="line">    value.splice(index, 1);</span><br><span class="line">    setArrayValue(value);</span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line">  return &#123;</span><br><span class="line">    value: arrayValue,</span><br><span class="line">    add,</span><br><span class="line">    clear,</span><br><span class="line">    removeIndex,</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="关于TS中interface的属性继承"><a href="#关于TS中interface的属性继承" class="headerlink" title="关于TS中interface的属性继承"></a>关于TS中interface的属性继承</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">interface a &#123;</span><br><span class="line">  <span class="attr">a</span>: number;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">interface b <span class="keyword">extends</span> a &#123;</span><br><span class="line">  <span class="attr">b</span>: number;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> <span class="attr">c</span>: b = &#123;</span><br><span class="line">  <span class="attr">a</span>: <span class="number">1</span>,</span><br><span class="line">  <span class="attr">b</span>: <span class="number">2</span>,</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">test</span>(<span class="params">p: a</span>) &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(p);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title function_">test</span>(c); <span class="comment">// 不会报错，因为b包含了a，所以这个传入b也不会出现错误</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="useContext"><a href="#useContext" class="headerlink" title="useContext"></a>useContext</h2><blockquote>
+<p>useContext主要用于多个组件之间共享状态</p>
+</blockquote>
+<p>在<strong>parent</strong>组件中存在<strong>child1</strong>.<strong>child2</strong>，<strong>child3</strong>组件，我们希望这些组件之前都共享一个状态1</p>
+<ol>
+<li>生成createContext</li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="title class_">TestContext</span> = <span class="title class_">React</span>.<span class="title function_">createContext</span>(&#123;&#125;);</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>使用createContext.Provider包裹<strong>parent</strong>组件</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&lt;TestContext.Provider </span><br><span class="line">	value=&#123;&#123;</span><br><span class="line">		username: &#x27;我是变量&#x27;,</span><br><span class="line">	&#125;&#125;</span><br><span class="line">&gt;</span><br><span class="line">	&lt;div className=&quot;parent&quot;&gt;</span><br><span class="line">		&lt;Child1 /&gt;</span><br><span class="line">		&lt;Child2 /&gt;</span><br><span class="line">    &lt;Child3 /&gt;</span><br><span class="line">	&lt;/div&gt;</span><br><span class="line">&lt;TestContext.Provider/&gt;</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>在子组件中就可以使用useContext来获取父级创建的TestContext</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">const Child1 = () =&gt; &#123;</span><br><span class="line">	const &#123; username &#125; = useContext(TestContext);</span><br><span class="line">	return (</span><br><span class="line">		&lt;div className=&quot;child1&quot;&gt;</span><br><span class="line">      		&lt;p&gt;1 message for &#123;username&#125;&lt;/p&gt;</span><br><span class="line">		&lt;/div&gt;</span><br><span class="line">	)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>通过useContext就可以做到子组件共享一个状态，如果状态被改变，所有使用变量的都放都会发生变化</p>
+<h2 id="TS类型的一些知识"><a href="#TS类型的一些知识" class="headerlink" title="TS类型的一些知识"></a>TS类型的一些知识</h2><h3 id="Parameters"><a href="#Parameters" class="headerlink" title="Parameters"></a>Parameters</h3><blockquote>
+<p>获取函数的全部参数，并且以元祖类型进行返回,Utiltity Types</p>
+</blockquote>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">test</span>(<span class="params">a: <span class="built_in">string</span>, b: <span class="built_in">number</span>, c: <span class="built_in">number</span>[], d: <span class="built_in">any</span></span>) &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 直接继承test函数的全部参数类型</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">testPlus</span>(<span class="params">...[a, b, c, d]: Parameters&lt;<span class="keyword">typeof</span> test&gt;</span>) &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(a, b, c, d);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="联合类型"><a href="#联合类型" class="headerlink" title="联合类型"></a>联合类型</h3><figure class="highlight tsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> <span class="attr">a</span>:<span class="built_in">string</span> | <span class="built_in">number</span>; <span class="comment">// 可以是多种类型</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 抽象联合类型</span></span><br><span class="line"><span class="keyword">type</span> <span class="attr">aType</span>:<span class="built_in">string</span> | <span class="built_in">number</span>;</span><br><span class="line"><span class="keyword">let</span> <span class="attr">a</span>:aType</span><br><span class="line"></span><br><span class="line"><span class="comment">// 也可以通过interface可以实现类型功能，但是指定单个类型是无法实现的，但是interface的全部功能type都可以实现</span></span><br><span class="line"><span class="comment">// 例如：</span></span><br><span class="line"><span class="keyword">interface</span> aaa  &#123;</span><br><span class="line">	<span class="attr">a</span>:<span class="built_in">string</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> aaa = &#123;</span><br><span class="line">  <span class="attr">a</span>:<span class="built_in">string</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 以上2种效果都是一致的</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="js的typeof与ts的typeof"><a href="#js的typeof与ts的typeof" class="headerlink" title="js的typeof与ts的typeof"></a>js的typeof与ts的typeof</h3><figure class="highlight tsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// js: typeof runtime阶段运行 检查参数的类型</span></span><br><span class="line"><span class="comment">// ts: typeof 静态检查阶段运行 识别函数的参数</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="Partial与Omit关键字"><a href="#Partial与Omit关键字" class="headerlink" title="Partial与Omit关键字"></a>Partial与Omit关键字</h3><figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> <span class="title class_">Preson</span> = &#123;</span><br><span class="line">  <span class="attr">name</span>: <span class="built_in">string</span>;</span><br><span class="line">  <span class="attr">age</span>: <span class="title class_">String</span>;</span><br><span class="line">  <span class="attr">sex</span>: <span class="built_in">string</span>;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Partial关键字会将传入的类型处理成为非必填</span></span><br><span class="line"><span class="keyword">const</span> <span class="attr">xiaoMin</span>: <span class="title class_">Partial</span>&lt;<span class="title class_">Preson</span>&gt; = &#123;</span><br><span class="line">  <span class="attr">age</span>: <span class="string">&quot;非必填&quot;</span>,</span><br><span class="line">  <span class="attr">name</span>: <span class="string">&quot;非必填&quot;</span>,</span><br><span class="line">  <span class="attr">sex</span>: <span class="string">&quot;非必填&quot;</span>,</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Omit 会删除第一个参数 类型 中的第二个参数中的变量 并返回结果 例如这里删除 name age</span></span><br><span class="line"><span class="keyword">const</span> <span class="attr">shenMiRen</span>: <span class="title class_">Omit</span>&lt;<span class="title class_">Preson</span>, <span class="string">&quot;age&quot;</span> | <span class="string">&quot;name&quot;</span>&gt; = &#123; <span class="attr">sex</span>: <span class="string">&quot;男&quot;</span> &#125;;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="关于css一些不知道的"><a href="#关于css一些不知道的" class="headerlink" title="关于css一些不知道的"></a>关于css一些不知道的</h2><h4 id="关于rem"><a href="#关于rem" class="headerlink" title="关于rem"></a>关于rem</h4><p>em表示相对于父级的font-size</p>
+<p>rem表示相对于根元素html的font-size</p>
+<p>正常默认font-size为16px，那么1rem &#x3D;&#x3D;&#x3D; 16px</p>
+<p>如果希望rem的比例自定义只需要将html的font-size设置为对应的百分就行，例如设置为62.5的时候1rem &#x3D;&#x3D;&#x3D; 10px</p>
+<h3 id="关于vh"><a href="#关于vh" class="headerlink" title="关于vh"></a>关于vh</h3><p>vh的全称为viewport height，100vh就是代表视口的高度</p>
+<h2 id="emotion"><a href="#emotion" class="headerlink" title="emotion"></a>emotion</h2><blockquote>
+<p>emotion是一个css in js的方案，也就是使用js来写css代码，这样的话就可以在css中直接写逻辑</p>
+</blockquote>
+<figure class="highlight tsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> styled <span class="keyword">from</span> <span class="string">&quot;@emotion/styled&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> <span class="title class_">Row</span> = styled.<span class="property">div</span>&lt;&#123;</span><br><span class="line">  <span class="attr">gap</span>: <span class="built_in">number</span>;</span><br><span class="line">&#125;&gt;<span class="string">`</span></span><br><span class="line"><span class="string">  display: flex;</span></span><br><span class="line"><span class="string">  align-items: center;</span></span><br><span class="line"><span class="string">  &gt; * &#123;</span></span><br><span class="line"><span class="string">    margin-top: 0 !important;</span></span><br><span class="line"><span class="string">    margin-bottom: 0 !important;</span></span><br><span class="line"><span class="string">    margin-right: <span class="subst">$&#123;(props) =&gt; <span class="string">`<span class="subst">$&#123;props.gap&#125;</span>rem`</span>&#125;</span>;</span></span><br><span class="line"><span class="string">  &#125;</span></span><br><span class="line"><span class="string">`</span>;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="自定义hook-useAsync的实现"><a href="#自定义hook-useAsync的实现" class="headerlink" title="自定义hook useAsync的实现"></a>自定义hook useAsync的实现</h2><blockquote>
+<p>useAsync可以理解为针对请求体再次封装，经过封装之后的请求体，自带请求进度，以及针对catch更加优雅的处理方式</p>
+</blockquote>
+<figure class="highlight tsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; useState &#125; <span class="keyword">from</span> <span class="string">&quot;react&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">interface</span> <span class="title class_">State</span>&lt;D&gt; &#123;</span><br><span class="line">  <span class="attr">error</span>: <span class="title class_">Error</span> | <span class="literal">null</span>;</span><br><span class="line">  <span class="attr">data</span>: D | <span class="literal">null</span>;</span><br><span class="line">  <span class="attr">status</span>: <span class="string">&quot;idle&quot;</span> | <span class="string">&quot;loading&quot;</span> | <span class="string">&quot;error&quot;</span> | <span class="string">&quot;success&quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 建立初始化的值</span></span><br><span class="line"><span class="keyword">const</span> <span class="attr">defaultState</span>: <span class="title class_">State</span>&lt;<span class="literal">null</span>&gt; = &#123;</span><br><span class="line">  <span class="attr">data</span>: <span class="literal">null</span>,</span><br><span class="line">  <span class="attr">error</span>: <span class="literal">null</span>,</span><br><span class="line">  <span class="attr">status</span>: <span class="string">&quot;idle&quot;</span>,</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 实现函数</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> useAsync = &lt;D&gt;<span class="function">(<span class="params">initState?: State&lt;D&gt;</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// 默认状态</span></span><br><span class="line">  <span class="keyword">const</span> [state, setState] = useState&lt;<span class="title class_">State</span>&lt;D&gt;&gt;(&#123;</span><br><span class="line">    ...defaultState,</span><br><span class="line">    ...initState,</span><br><span class="line">  &#125;);</span><br><span class="line">  <span class="comment">// 请求成功的调用</span></span><br><span class="line">  <span class="keyword">const</span> <span class="title function_">setData</span> = (<span class="params">data: D</span>) =&gt; &#123;</span><br><span class="line">    <span class="title function_">setState</span>(&#123;</span><br><span class="line">      data,</span><br><span class="line">      <span class="attr">status</span>: <span class="string">&quot;success&quot;</span>,</span><br><span class="line">      <span class="attr">error</span>: <span class="literal">null</span>,</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;;</span><br><span class="line">  <span class="comment">// 请求失败的调用</span></span><br><span class="line">  <span class="keyword">const</span> <span class="title function_">setError</span> = (<span class="params">error: <span class="built_in">Error</span></span>) =&gt; &#123;</span><br><span class="line">    <span class="title function_">setState</span>(&#123;</span><br><span class="line">      <span class="attr">data</span>: <span class="literal">null</span>,</span><br><span class="line">      <span class="attr">error</span>: error,</span><br><span class="line">      <span class="attr">status</span>: <span class="string">&quot;error&quot;</span>,</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;;</span><br><span class="line">  <span class="comment">// 请求开始的调用</span></span><br><span class="line">  <span class="keyword">const</span> <span class="title function_">setLoading</span> = (<span class="params"></span>) =&gt; &#123;</span><br><span class="line">    <span class="title function_">setState</span>(&#123;</span><br><span class="line">      <span class="attr">data</span>: <span class="literal">null</span>,</span><br><span class="line">      <span class="attr">error</span>: <span class="literal">null</span>,</span><br><span class="line">      <span class="attr">status</span>: <span class="string">&quot;loading&quot;</span>,</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;;</span><br><span class="line">  <span class="comment">// 对外实际执行的函数</span></span><br><span class="line">  <span class="keyword">const</span> <span class="title function_">run</span> = (<span class="params">promise: <span class="built_in">Promise</span>&lt;D&gt;</span>) =&gt; &#123;</span><br><span class="line">    <span class="keyword">if</span> (!promise || !promise.<span class="property">then</span>) &#123;</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">Error</span>(<span class="string">&quot;请传入 promise 类型数据&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="title function_">setLoading</span>();</span><br><span class="line">    <span class="keyword">return</span> promise</span><br><span class="line">      .<span class="title function_">then</span>(<span class="function">(<span class="params">data</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="title function_">setData</span>(data);</span><br><span class="line">      &#125;)</span><br><span class="line">      .<span class="title function_">catch</span>(<span class="function">(<span class="params">err</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="title function_">setError</span>(err);</span><br><span class="line">      &#125;);</span><br><span class="line">  &#125;;</span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    <span class="attr">isIdle</span>: state.<span class="property">status</span> == <span class="string">&quot;idle&quot;</span>,</span><br><span class="line">    <span class="attr">isLoading</span>: state.<span class="property">status</span> == <span class="string">&quot;loading&quot;</span>,</span><br><span class="line">    <span class="attr">isError</span>: state.<span class="property">status</span> == <span class="string">&quot;error&quot;</span>,</span><br><span class="line">    <span class="attr">isSuccess</span>: state.<span class="property">status</span> == <span class="string">&quot;success&quot;</span>,</span><br><span class="line">    run,</span><br><span class="line">    setData,</span><br><span class="line">    setLoading,</span><br><span class="line">    setError,</span><br><span class="line">    ...state,</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>使用阶段</strong></p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 逻辑顶部应用相关逻辑</span></span><br><span class="line">  <span class="keyword">const</span> projectData = useAsync&lt;any[]&gt;(); <span class="comment">// 泛型为后台返回的数据的类型</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//  启动请求，传入请求体</span></span><br><span class="line">projectData.<span class="title function_">run</span>(request);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 请求完成后，projectData中的数据状态会被同步更新</span></span><br><span class="line"><span class="keyword">let</span> &#123; data, isLoading,isError,...other&#125; = projectData </span><br></pre></td></tr></table></figure>
+
+<h2 id="react中实现捕捉边界错误"><a href="#react中实现捕捉边界错误" class="headerlink" title="react中实现捕捉边界错误"></a>react中实现捕捉边界错误</h2><blockquote>
+<p>关于错误边界的概念在react官网中是这样描述的，组件内的JavaScript错误会导致React的内部状态被破坏，并且在下一次的渲染时会产生<strong>可能无法追踪的错误</strong>，但是部分ui的JavaScript错误不应该导致整个应用的崩溃，所以react16中引入了错误边界的概念，</p>
+<p>错误边界是一种react组件，最终组件可以捕获发生在其朱组件树任何位置的JavaScript错误，并打印错误，同时展示降级ui，而并不会渲染发生崩溃的子组件树，错误边界在渲染期间，生命周期方法和整个组件数的构造函数中捕获错误</p>
+</blockquote>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="title class_">React</span>, &#123; <span class="title class_">ReactNode</span> &#125; <span class="keyword">from</span> <span class="string">&quot;react&quot;</span>;</span><br><span class="line"></span><br><span class="line">type <span class="title class_">FallBackRender</span> = <span class="function">(<span class="params">props: &#123; error: <span class="built_in">Error</span> | <span class="literal">null</span> &#125;</span>) =&gt;</span> <span class="title class_">React</span>.<span class="property">ReactElement</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 1 2 两种写法一致</span></span><br><span class="line">type <span class="title class_">Components1</span> = &#123; <span class="attr">children</span>: <span class="title class_">ReactNode</span>; <span class="attr">fallbackRender</span>: <span class="title class_">FallBackRender</span> &#125;;</span><br><span class="line">type <span class="title class_">Components2</span> = <span class="title class_">React</span>.<span class="property">PropsWithChildren</span>&lt;&#123; <span class="attr">fallbackRender</span>: <span class="title class_">FallBackRender</span> &#125;&gt;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">class</span> <span class="title class_">ErrorBoundary</span> <span class="keyword">extends</span> <span class="title class_ inherited__">React.Component</span>&lt;</span><br><span class="line">  <span class="title class_">Components2</span>,</span><br><span class="line">  &#123; <span class="attr">error</span>: <span class="title class_">Error</span> | <span class="literal">null</span> &#125;</span><br><span class="line">&gt; &#123;</span><br><span class="line">  state = &#123;</span><br><span class="line">    <span class="attr">error</span>: <span class="literal">null</span>,</span><br><span class="line">  &#125;;</span><br><span class="line">  <span class="comment">// 当子组件抛出异常, state中的errir就会被调用</span></span><br><span class="line">  <span class="keyword">static</span> <span class="title function_">getDerivedStateFromError</span>(<span class="params">error: <span class="built_in">Error</span></span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> &#123; error &#125;;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="title function_">render</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> &#123; error &#125; = <span class="variable language_">this</span>.<span class="property">state</span>;</span><br><span class="line">    <span class="keyword">const</span> &#123; fallbackRender, children &#125; = <span class="variable language_">this</span>.<span class="property">props</span>;</span><br><span class="line">    <span class="keyword">if</span> (error) &#123;</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;错误执行&quot;</span>, error);</span><br><span class="line">      <span class="keyword">return</span> <span class="title function_">fallbackRender</span>(error);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> children;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>使用<strong>App.tsx</strong></p>
+<figure class="highlight tsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;<span class="title class_">ErrorBoundary</span> fallbackRender=&#123;fallPageErrorFallback&#125;&gt;</span><br><span class="line">	&#123;user ? <span class="language-xml"><span class="tag">&lt;<span class="name">AuthenicatedApp</span> /&gt;</span></span> : <span class="language-xml"><span class="tag">&lt;<span class="name">UnAuthenicated</span> /&gt;</span></span>&#125;</span><br><span class="line">&lt;/<span class="title class_">ErrorBoundary</span>&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// 发生错误的时候就会渲染这个dom</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> <span class="title function_">fallPageErrorFallback</span> = (<span class="params">&#123; error &#125;: &#123; error: <span class="built_in">Error</span> | <span class="literal">null</span> &#125;</span>) =&gt; (</span><br><span class="line">  <span class="language-xml"><span class="tag">&lt;<span class="name">p</span>&gt;</span>请求失败了,错误信息&#123;error&#125;<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span></span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="阶段性结束"><a href="#阶段性结束" class="headerlink" title="阶段性结束"></a>阶段性结束</h2><p>  关于react hook的理念学习已经结束了，这段时间学习来看，确实react在很多方面更加易于理解，更加工程化，同时也学会了很多ts的知识，一直以来ts在我手中都是anyscript，本次学习让我对ts的运用更加熟练；在这个过程中也学会了很多hook相关的理念以及实例，并且可以带着这思想去优化项目代码</p>
+<p>  可惜我是一名vuer，继续学习react的实际编码，意义已经不是很大，所以关于这个课程的学习，本次告一段落；通过本次学习，非常深刻的体会到了hook的优雅，后面会深入学习vue3，在vue3中将hook与业务结合，让代码更加健壮</p>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://vkcyan.github.io/2021/10/15/react17%E5%AD%A6%E4%B9%A0/" title="React17学习记录" target="_blank" rel="external">https://vkcyan.github.io/2021/10/15/react17学习/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/vkcyan" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/vkcyan" target="_blank"><span class="text-dark">vkcyan</span><small class="ml-1x">Web Developer &amp; Product Manager</small></a></h3>
+        <div></div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="vcomments"></div>
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2021/12/01/%E7%AE%80%E6%98%93%E7%89%88Reactivity%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/" title="简易版Reactivity源码解析"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2021/06/15/JavaScript%20%E6%96%87%E4%BB%B6%E6%A0%BC%E5%BC%8F%E4%BA%92%E8%BD%AC/" title="JS文件格式相互转换"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+    <li class="toggle-toc">
+      <a class="toggle-btn " data-toggle="collapse" href="#collapseToc" aria-expanded="false" title="文章目录" role="button">    <span>[&nbsp;</span><span>文章目录</span>
+        <i class="text-collapsed icon icon-anchor"></i>
+        <i class="text-in icon icon-close"></i>
+        <span>]</span>
+      </a>
+    </li>
+    
+  </ul>
+  
+  
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-fancy btn-donate pop-onhover bg-gradient-warning" data-toggle="modal" data-target="#donateModal"><span>赏</span></button>
+  <!-- <div class="wave-icon wave-icon-danger btn-donate" data-toggle="modal" data-target="#donateModal">
+    <div class="wave-circle"><span class="icon"><i class="icon icon-bill"></i></span></div>
+  </div> -->
+  
+  
+  <div class="bar-right">
+    
+  </div>
+  </div>
+</nav>
+  
+<!-- Modal -->
+<div class="modal modal-center modal-small modal-xs-full fade" id="donateModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content donate">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <div class="modal-body">
+        <div class="donate-box">
+          <div class="donate-head">
+            <p>感谢您的支持，我会继续努力的!</p>
+          </div>
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade active in" id="alipay">
+              <div class="donate-payimg">
+                <img src="/images/donate/alipayimg.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开支付宝扫一扫，即可进行扫码打赏哦</p>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="wechatpay">
+              <div class="donate-payimg">
+                <img src="/images/donate/wechatpayimg.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开微信扫一扫，即可进行扫码打赏哦</p>
+            </div>
+          </div>
+          <div class="donate-footer">
+            <ul class="nav nav-tabs nav-justified" role="tablist">
+              <li role="presentation" class="active">
+                <a href="#alipay" id="alipay-tab" role="tab" data-toggle="tab" aria-controls="alipay" aria-expanded="true"><i class="icon icon-alipay"></i> 支付宝</a>
+              </li>
+              <li role="presentation" class="">
+                <a href="#wechatpay" role="tab" id="wechatpay-tab" data-toggle="tab" aria-controls="wechatpay" aria-expanded="false"><i class="icon icon-wepay"></i> 微信支付</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/vkcyan" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://juejin.cn/user/3720403077840519" target="_blank" title="Juejin" data-toggle=tooltip data-placement=top><i class="icon icon-juejin"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+   
+    
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/valine"></script>
+  <script type="text/javascript">
+  var GUEST = ['nick', 'mail', 'link'];
+  var meta = 'nick,mail,link';
+  meta = meta.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#vcomments',
+    verify: false,
+    notify: false,
+    appId: '',
+    appKey: '',
+    placeholder: 'Just go go',
+    avatar: 'mm',
+    meta: meta,
+    pageSize: '10' || 10,
+    visitor: false
+  });
+  </script>
+
+     
+
+
+
+
+
+
+
+</body>
+</html>

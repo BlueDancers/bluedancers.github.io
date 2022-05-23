@@ -18,17 +18,17 @@
   
   
   <title>三个案例带你理解Event Loop流程 | vkcyan Blog</title>
-  <meta name="description" content="三个案例带你理解 Event Loop 流程为什么 JavaScript 需要 Event Loop​ JavaScript 在创建之初就确认了一点，JavaScript 是一门单线程语言，因为 JavaScript 主要提供用户互动以及操作 DOM，假定存在两个线程，同时对一个 Dom 进行操作，那究竟以谁为准呢，为了避免这种复杂性，JavaScript 确认了单线程这个核心概念 ​ 在单线程中">
+  <meta name="description" content="为什么 JavaScript 需要 Event Loop JavaScript 在创建之初就确认了一点，JavaScript 是一门单线程语言，因为 JavaScript 主要提供用户互动以及操作 DOM，假定存在两个线程，同时对一个 Dom 进行操作，那究竟以谁为准呢，为了避免这种复杂性，JavaScript 确认了单线程这个核心概念  在单线程中，除了 JavaScript 本身的逻辑之外，还">
 <meta property="og:type" content="article">
 <meta property="og:title" content="三个案例带你理解Event Loop流程">
 <meta property="og:url" content="https://vkcyan.github.io/2022/03/15/%E8%81%8A%E4%B8%80%E8%81%8A%E5%AE%8F%E4%BB%BB%E5%8A%A1%E4%B8%8E%E5%BE%AE%E4%BB%BB%E5%8A%A1%E4%BB%A5%E5%8F%8AEventLoop/index.html">
 <meta property="og:site_name" content="vkcya Blog">
-<meta property="og:description" content="三个案例带你理解 Event Loop 流程为什么 JavaScript 需要 Event Loop​ JavaScript 在创建之初就确认了一点，JavaScript 是一门单线程语言，因为 JavaScript 主要提供用户互动以及操作 DOM，假定存在两个线程，同时对一个 Dom 进行操作，那究竟以谁为准呢，为了避免这种复杂性，JavaScript 确认了单线程这个核心概念 ​ 在单线程中">
+<meta property="og:description" content="为什么 JavaScript 需要 Event Loop JavaScript 在创建之初就确认了一点，JavaScript 是一门单线程语言，因为 JavaScript 主要提供用户互动以及操作 DOM，假定存在两个线程，同时对一个 Dom 进行操作，那究竟以谁为准呢，为了避免这种复杂性，JavaScript 确认了单线程这个核心概念  在单线程中，除了 JavaScript 本身的逻辑之外，还">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://www.vkcyan.top/Fr09Z8JDsWNH_CThK4l2piOyaagp.png">
 <meta property="og:image" content="http://www.vkcyan.top/FqUHDZ_5cScznXGrkeEfGhaXCWUw.png">
 <meta property="article:published_time" content="2022-03-14T16:00:00.000Z">
-<meta property="article:modified_time" content="2022-05-23T06:54:53.668Z">
+<meta property="article:modified_time" content="2022-05-23T08:02:01.480Z">
 <meta property="article:author" content="vkcyan">
 <meta property="article:tag" content="JavaScript">
 <meta name="twitter:card" content="summary">
@@ -206,7 +206,7 @@
   <div class="widget">
     <h3 class="widget-title">分类</h3>
     <div class="widget-body">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript-2022/">JavaScript-2022</a><span class="category-list-count">7</span></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript-2021/">JavaScript-2021</a><span class="category-list-count">10</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript-2022/">JavaScript-2022</a><span class="category-list-count">7</span></li></ul>
     </div>
   </div>
 
@@ -216,7 +216,7 @@
   <div class="widget">
     <h3 class="widget-title">标签</h3>
     <div class="widget-body">
-      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a><span class="tag-list-count">7</span></li></ul>
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a><span class="tag-list-count">17</span></li></ul>
     </div>
   </div>
 
@@ -235,7 +235,7 @@
   <div class="widget">
     <h3 class="widget-title">归档</h3>
     <div class="widget-body">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/05/">五月 2022</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/03/">三月 2022</a><span class="archive-list-count">7</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/05/">五月 2022</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/03/">三月 2022</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/12/">十二月 2021</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/10/">十月 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/06/">六月 2021</a><span class="archive-list-count">7</span></li></ul>
     </div>
   </div>
 
@@ -342,7 +342,7 @@
   <div class="slimContent">
     <nav id="toc" class="article-toc">
       <h3 class="toc-title">文章目录</h3>
-      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E4%B8%AA%E6%A1%88%E4%BE%8B%E5%B8%A6%E4%BD%A0%E7%90%86%E8%A7%A3-Event-Loop-%E6%B5%81%E7%A8%8B"><span class="toc-number">1.</span> <span class="toc-text">三个案例带你理解 Event Loop 流程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88-JavaScript-%E9%9C%80%E8%A6%81-Event-Loop"><span class="toc-number">1.1.</span> <span class="toc-text">为什么 JavaScript 需要 Event Loop</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9B%B8%E5%85%B3%E5%90%8D%E8%AF%8D%E4%BB%8B%E7%BB%8D"><span class="toc-number">1.2.</span> <span class="toc-text">相关名词介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF%E8%A7%A3%E6%9E%90"><span class="toc-number">1.3.</span> <span class="toc-text">事件循环解析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E4%BA%8E%E5%AE%8F%E4%BB%BB%E5%8A%A1%E4%B8%8E%E5%BE%AE%E4%BB%BB%E5%8A%A1"><span class="toc-number">1.4.</span> <span class="toc-text">关于宏任务与微任务</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BE%8B%E5%AD%90-1"><span class="toc-number">1.4.1.</span> <span class="toc-text">例子 1</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BE%8B%E5%AD%90-2"><span class="toc-number">1.4.2.</span> <span class="toc-text">例子 2</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%AC%AC%E4%B8%80%E8%BD%AE%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF"><span class="toc-number">1.4.2.1.</span> <span class="toc-text">第一轮事件循环</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E8%BD%AE%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF"><span class="toc-number">1.4.2.2.</span> <span class="toc-text">第二轮事件循环</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%AC%AC%E4%B8%89%E8%BD%AE%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF"><span class="toc-number">1.4.2.3.</span> <span class="toc-text">第三轮事件循环</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BB%93%E6%9E%9C"><span class="toc-number">1.4.2.4.</span> <span class="toc-text">结果</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%8F-x2F-%E5%BE%AE%E4%BB%BB%E5%8A%A1%E7%9A%84%E7%BB%93%E8%AE%BA"><span class="toc-number">1.4.3.</span> <span class="toc-text">宏&#x2F;微任务的结论</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8E%A8%E8%8D%90%E6%96%87%E7%AB%A0"><span class="toc-number">1.5.</span> <span class="toc-text">推荐文章</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">1.6.</span> <span class="toc-text">总结</span></a></li></ol></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88-JavaScript-%E9%9C%80%E8%A6%81-Event-Loop"><span class="toc-number">1.</span> <span class="toc-text">为什么 JavaScript 需要 Event Loop</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9B%B8%E5%85%B3%E5%90%8D%E8%AF%8D%E4%BB%8B%E7%BB%8D"><span class="toc-number">2.</span> <span class="toc-text">相关名词介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF%E8%A7%A3%E6%9E%90"><span class="toc-number">3.</span> <span class="toc-text">事件循环解析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E4%BA%8E%E5%AE%8F%E4%BB%BB%E5%8A%A1%E4%B8%8E%E5%BE%AE%E4%BB%BB%E5%8A%A1"><span class="toc-number">4.</span> <span class="toc-text">关于宏任务与微任务</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BE%8B%E5%AD%90-1"><span class="toc-number">4.1.</span> <span class="toc-text">例子 1</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BE%8B%E5%AD%90-2"><span class="toc-number">4.2.</span> <span class="toc-text">例子 2</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%AC%AC%E4%B8%80%E8%BD%AE%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF"><span class="toc-number">4.2.1.</span> <span class="toc-text">第一轮事件循环</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E8%BD%AE%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF"><span class="toc-number">4.2.2.</span> <span class="toc-text">第二轮事件循环</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%AC%AC%E4%B8%89%E8%BD%AE%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF"><span class="toc-number">4.2.3.</span> <span class="toc-text">第三轮事件循环</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BB%93%E6%9E%9C"><span class="toc-number">4.2.4.</span> <span class="toc-text">结果</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%8F-x2F-%E5%BE%AE%E4%BB%BB%E5%8A%A1%E7%9A%84%E7%BB%93%E8%AE%BA"><span class="toc-number">4.3.</span> <span class="toc-text">宏&#x2F;微任务的结论</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8E%A8%E8%8D%90%E6%96%87%E7%AB%A0"><span class="toc-number">5.</span> <span class="toc-text">推荐文章</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">6.</span> <span class="toc-text">总结</span></a></li></ol>
     </nav>
   </div>
 </aside>
@@ -412,10 +412,10 @@
     </div>
     <div class="article-entry marked-body" itemprop="articleBody">
       
-        <h1 id="三个案例带你理解-Event-Loop-流程"><a href="#三个案例带你理解-Event-Loop-流程" class="headerlink" title="三个案例带你理解 Event Loop 流程"></a>三个案例带你理解 Event Loop 流程</h1><h2 id="为什么-JavaScript-需要-Event-Loop"><a href="#为什么-JavaScript-需要-Event-Loop" class="headerlink" title="为什么 JavaScript 需要 Event Loop"></a>为什么 JavaScript 需要 Event Loop</h2><p>​ JavaScript 在创建之初就确认了一点，JavaScript 是一门单线程语言，因为 JavaScript 主要提供用户互动以及操作 DOM，假定存在两个线程，同时对一个 Dom 进行操作，那究竟以谁为准呢，为了避免这种复杂性，JavaScript 确认了单线程这个核心概念</p>
-<p>​ 在单线程中，除了 JavaScript 本身的逻辑之外，还存在一些 IO 操作，例如从服务端获取数据，在单线程中就需要等待结果的返回才能继续下面的逻辑，这时候机器是挂起状态，为了避免这个低效问题，这里就引入了同步任务与异步任务的概念，依旧是是单线程，但是有些任务不等待其运行结果</p>
-<p>​ 于是同步任务都在函数执行栈（Stack）上执行，所有的异步任务，在有了运行结果之后，就会将其放入任务队列（callback queue），如果 Stack 中任务执行完毕，就会再去检查任务队列是否存在待执行的回调任务，将其任务放入 Stack，再执行，这里就会不断循环此操作</p>
-<p>​ Stack 执行 - Stack 执行完毕 - 检查任务队列 - 将任务加入 Stack - Stack 执行，这样重复的过程就需要 Event Loop 来持续不断的循环检查任务队列，确保异步任务被准时加入到 Stack</p>
+        <h2 id="为什么-JavaScript-需要-Event-Loop"><a href="#为什么-JavaScript-需要-Event-Loop" class="headerlink" title="为什么 JavaScript 需要 Event Loop"></a>为什么 JavaScript 需要 Event Loop</h2><p> JavaScript 在创建之初就确认了一点，JavaScript 是一门单线程语言，因为 JavaScript 主要提供用户互动以及操作 DOM，假定存在两个线程，同时对一个 Dom 进行操作，那究竟以谁为准呢，为了避免这种复杂性，JavaScript 确认了单线程这个核心概念</p>
+<p> 在单线程中，除了 JavaScript 本身的逻辑之外，还存在一些 IO 操作，例如从服务端获取数据，在单线程中就需要等待结果的返回才能继续下面的逻辑，这时候机器是挂起状态，为了避免这个低效问题，这里就引入了同步任务与异步任务的概念，依旧是是单线程，但是有些任务不等待其运行结果</p>
+<p> 于是同步任务都在函数执行栈（Stack）上执行，所有的异步任务，在有了运行结果之后，就会将其放入任务队列（callback queue），如果 Stack 中任务执行完毕，就会再去检查任务队列是否存在待执行的回调任务，将其任务放入 Stack，再执行，这里就会不断循环此操作</p>
+<p> Stack 执行 - Stack 执行完毕 - 检查任务队列 - 将任务加入 Stack - Stack 执行，这样重复的过程就需要 Event Loop 来持续不断的循环检查任务队列，确保异步任务被准时加入到 Stack</p>
 <p><img src="http://www.vkcyan.top/Fr09Z8JDsWNH_CThK4l2piOyaagp.png"></p>
 <h2 id="相关名词介绍"><a href="#相关名词介绍" class="headerlink" title="相关名词介绍"></a>相关名词介绍</h2><p><strong>函数执行栈（Stask）</strong>：遵循后进先出原则，同步函数执行栈</p>
 <p><strong>webAPIs</strong>：异步任务的发起者，事件是首先进入 stack，例如 click，change，再将 callback 加入任务队列</p>
@@ -437,9 +437,8 @@
 <li><p><code>cb</code>进栈 执行 出栈 <strong>打印 2</strong></p>
 </li>
 </ol>
-<p>​</p>
-<p>​ 我们通过 event Loop 的角度进行解析，就能很轻易的解释为什么代码执行顺序是 1 3 2，这是非常简单的场景，接下来我们会分析一些更加有难度的代码</p>
-<h2 id="关于宏任务与微任务"><a href="#关于宏任务与微任务" class="headerlink" title="关于宏任务与微任务"></a>关于宏任务与微任务</h2><p>​ 通过上面的介绍，我相信大部分人都事件循环有一个基础的认知的，但是与以上我们通过简单的示例，演示了异步代码在事件循环中的运行流程，并没有涉及宏任务与微任务，这两货是什么呢，为什么要在这里出现？</p>
+<p> 我们通过 event Loop 的角度进行解析，就能很轻易的解释为什么代码执行顺序是 1 3 2，这是非常简单的场景，接下来我们会分析一些更加有难度的代码</p>
+<h2 id="关于宏任务与微任务"><a href="#关于宏任务与微任务" class="headerlink" title="关于宏任务与微任务"></a>关于宏任务与微任务</h2><p> 通过上面的介绍，我相信大部分人都事件循环有一个基础的认知的，但是与以上我们通过简单的示例，演示了异步代码在事件循环中的运行流程，并没有涉及宏任务与微任务，这两货是什么呢，为什么要在这里出现？</p>
 <p><strong>首先，宏任务（macrotask），微任务（microtask）都是异步任务</strong></p>
 <p>宏任务：<code>setTimeout</code> <code>setInterval</code> <code>setImmediate</code> <code>I/O 键盘事件</code> <code>网络事件</code> <code>UI rendering</code></p>
 <p>微任务：<code>pormise</code> <code>MutationObserver</code> <code>process.nextTick</code></p>
@@ -448,7 +447,7 @@
 
 <p>结果为 <code>script start</code> <code>script end</code> <code>promise1</code> <code>promise2</code> <code>setTimeout</code></p>
 <p>pormise 与 setTimeout 虽然都是异步任务，但是上图的代码你会发现，promise 仿佛插队了，这便是宏任务与微任务在任务队列最大的不同之处</p>
-<p>​ <strong>event Loop 在事件循环中,首先解析 script，将宏任务加入宏任务队列，将微任务加入微任务队列，栈空了之后，执行当前微任务，第一轮事件循环结束</strong></p>
+<p> <strong>event Loop 在事件循环中,首先解析 script，将宏任务加入宏任务队列，将微任务加入微任务队列，栈空了之后，执行当前微任务，第一轮事件循环结束</strong></p>
 <p><strong>在第二轮事件循环中，首先执行宏任务 callback 中的第一个，执行完毕，栈空了之后，再执行当前微任务，后面同理</strong></p>
 <img src="http://www.vkcyan.top/FqUHDZ_5cScznXGrkeEfGhaXCWUw.png" style="zoom: 50%;" />
 
@@ -493,8 +492,8 @@
 </li>
 </ul>
 <h2 id="推荐文章"><a href="#推荐文章" class="headerlink" title="推荐文章"></a>推荐文章</h2><p><a target="_blank" rel="noopener" href="https://juejin.cn/post/6969028296893792286">做一些动图，学习一下 EventLoop</a> 通过动图看 Event Loop 更加便于理解</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>​ JavaScript 单线程语言的特性注定其需要异步队列，让网页交互体验上更加友好，对于开发来说，需要尽量了解其特性</p>
-<p>​ 首先我们需要了解事件循环机制，搞懂代码执行栈 异步队列的概念，再后面搞懂宏任务与微任务，读懂异步队列的运行机制，这样基本上就可以解决大部分 Event Loop 问题，了解宏任务 微任务 将会对代码执行顺序有更加底层的理解，这样就可以解决</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p> JavaScript 单线程语言的特性注定其需要异步队列，让网页交互体验上更加友好，对于开发来说，需要尽量了解其特性</p>
+<p> 首先我们需要了解事件循环机制，搞懂代码执行栈 异步队列的概念，再后面搞懂宏任务与微任务，读懂异步队列的运行机制，这样基本上就可以解决大部分 Event Loop 问题，了解宏任务 微任务 将会对代码执行顺序有更加底层的理解，这样就可以解决</p>
 
       
     </div>
@@ -554,6 +553,10 @@
       <a href="/2022/03/15/%E6%B5%8F%E8%A7%88%E5%99%A8%E8%AF%BB%E5%8F%96xls%E7%94%9F%E6%88%90%E4%BA%8C%E7%BB%B4%E7%A0%81%E5%B9%B6%E4%B8%8B%E8%BD%BD/" title="浏览器读取xls并生成二维码下载到本地"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
     </li>
     
+    
+    <li class="next">
+      <a href="/2021/12/15/promise%E7%9A%84%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/" title="基于PromiseA+，从零实现Promise"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
     
     
     <li class="toggle-toc">

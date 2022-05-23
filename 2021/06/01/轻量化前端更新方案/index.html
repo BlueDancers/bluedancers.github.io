@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>轻量化前端更新方案 | vkcyan Blog</title>
+  <meta name="description" content="前言​		一句话介绍：它是可以一行命令将代码更新到服务器的脚本 ​		轻量级更新方案最开始源于掘金的文章，后来我们从零实现了一个更新脚本，并且已在是生产环境中进行使用很长时间，算是非常稳定的版本，个人认为轻量化更新方案是非常使用小型开发团队 ​		现在我们切换到了gitlab的CI&#x2F;CD。所以这种方案已经不再是我们的主流方案，但是一路使用过来，非常稳定的解决了更新问题，还是非常不错的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="轻量化前端更新方案">
+<meta property="og:url" content="https://vkcyan.github.io/2021/06/01/%E8%BD%BB%E9%87%8F%E5%8C%96%E5%89%8D%E7%AB%AF%E6%9B%B4%E6%96%B0%E6%96%B9%E6%A1%88/index.html">
+<meta property="og:site_name" content="vkcya Blog">
+<meta property="og:description" content="前言​		一句话介绍：它是可以一行命令将代码更新到服务器的脚本 ​		轻量级更新方案最开始源于掘金的文章，后来我们从零实现了一个更新脚本，并且已在是生产环境中进行使用很长时间，算是非常稳定的版本，个人认为轻量化更新方案是非常使用小型开发团队 ​		现在我们切换到了gitlab的CI&#x2F;CD。所以这种方案已经不再是我们的主流方案，但是一路使用过来，非常稳定的解决了更新问题，还是非常不错的">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://images.591wsh.com/2021/10/18/thumb_1634545950362.png">
+<meta property="og:image" content="https://images.591wsh.com/2021/10/18/thumb_1634545950362.png">
+<meta property="article:published_time" content="2021-05-31T16:00:00.000Z">
+<meta property="article:modified_time" content="2022-05-23T08:04:51.111Z">
+<meta property="article:author" content="vkcyan">
+<meta property="article:tag" content="JavaScript">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://images.591wsh.com/2021/10/18/thumb_1634545950362.png">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://vkcyan.github.io/2021/06/01/%E8%BD%BB%E9%87%8F%E5%8C%96%E5%89%8D%E7%AB%AF%E6%9B%B4%E6%96%B0%E6%96%B9%E6%A1%88/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="vkcya Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+
+<body class="main-center theme-black" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/vkcyan" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">vkcyan</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Web Developer &amp; Product Manager</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> HeFei, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-books">
+          <a href="/books">
+            
+            <i class="icon icon-book-fill"></i>
+            
+            <span class="menu-title">书单</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">友链</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/vkcyan" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://juejin.cn/user/3720403077840519" target="_blank" title="Juejin" data-toggle=tooltip data-placement=top><i class="icon icon-juejin"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>故不积跬步，无以至千里；不积小流，无以成江海。</p><br/>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript-2021/">JavaScript-2021</a><span class="category-list-count">10</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript-2022/">JavaScript-2022</a><span class="category-list-count">7</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a><span class="tag-list-count">17</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/JavaScript/" style="font-size: 13px;">JavaScript</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/05/">五月 2022</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/03/">三月 2022</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/12/">十二月 2021</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/10/">十月 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/06/">六月 2021</a><span class="archive-list-count">7</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2022/05/23/%E9%92%88%E5%AF%B9%E5%85%8D%E7%99%BB%E5%BD%95%E7%9A%84%E4%B8%80%E4%BA%9B%E5%AE%9E%E8%B7%B5%E4%B8%8E%E6%80%9D%E8%80%83/" class="title">(no title)</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-05-23T06:29:52.233Z" itemprop="datePublished">2022-05-23</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/JavaScript-2022/">JavaScript-2022</a>
+              </p>
+              <p class="item-title">
+                <a href="/2022/03/15/JS%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" class="title">JS数据结构与算法</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-03-14T16:00:00.000Z" itemprop="datePublished">2022-03-15</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/JavaScript-2022/">JavaScript-2022</a>
+              </p>
+              <p class="item-title">
+                <a href="/2022/03/15/Vue3%20%E4%BD%BF%E7%94%A8jsx%E5%BC%80%E5%8F%91%E6%8C%87%E5%8D%97/" class="title">Vue3 + jsx开发指南</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-03-14T16:00:00.000Z" itemprop="datePublished">2022-03-15</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/JavaScript-2022/">JavaScript-2022</a>
+              </p>
+              <p class="item-title">
+                <a href="/2022/03/15/vite%E9%85%8D%E7%BD%AEalias/" class="title">Vite配置alias（设置别名）</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-03-14T16:00:00.000Z" itemprop="datePublished">2022-03-15</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/JavaScript-2022/">JavaScript-2022</a>
+              </p>
+              <p class="item-title">
+                <a href="/2022/03/15/vue3.x%20%E9%A2%84%E6%B8%B2%E6%9F%93%20Unable%20to%20prerender%20all%20routes%E9%94%99%E8%AF%AF%E6%8E%92%E6%9F%A5/" class="title">Vue3.x 预渲染 Unable to prerender all routes错误排查</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-03-14T16:00:00.000Z" itemprop="datePublished">2022-03-15</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<aside
+  class="sidebar sidebar-toc collapse  in "
+  id="collapseToc"
+  itemscope
+  itemtype="http://schema.org/WPSideBar"
+>
+  <div class="slimContent">
+    <nav id="toc" class="article-toc">
+      <h3 class="toc-title">文章目录</h3>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83%E6%B5%81%E7%A8%8B"><span class="toc-number">2.</span> <span class="toc-text">核心流程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8"><span class="toc-number">3.</span> <span class="toc-text">如何使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83%E4%BB%A3%E7%A0%81"><span class="toc-number">4.</span> <span class="toc-text">核心代码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-number">5.</span> <span class="toc-text">配置文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A7%A6%E5%8F%91%E5%91%BD%E4%BB%A4"><span class="toc-number">6.</span> <span class="toc-text">触发命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BE%9D%E8%B5%96%E7%89%88%E6%9C%AC"><span class="toc-number">7.</span> <span class="toc-text">依赖版本</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9E%E9%99%85%E4%BD%BF%E7%94%A8"><span class="toc-number">8.</span> <span class="toc-text">实际使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%80%E5%90%8E"><span class="toc-number">9.</span> <span class="toc-text">最后</span></a></li></ol>
+    </nav>
+  </div>
+</aside>
+
+<script>
+  // 移动端不显示菜单
+  if (
+    navigator.userAgent.match(
+      /(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i
+    )
+  ) {
+    let self = document.querySelector(".sidebar-toc");
+    var parent = self.parentElement;
+    parent.removeChild(self);
+  } else {
+  }
+</script>
+
+
+
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-轻量化前端更新方案" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      轻量化前端更新方案
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2021/06/01/%E8%BD%BB%E9%87%8F%E5%8C%96%E5%89%8D%E7%AB%AF%E6%9B%B4%E6%96%B0%E6%96%B9%E6%A1%88/" class="article-date">
+	  <time datetime="2021-05-31T16:00:00.000Z" itemprop="datePublished">2021-06-01</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/JavaScript-2021/">JavaScript-2021</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/JavaScript/" rel="tag">JavaScript</a>
+  </span>
+
+
+        
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2021/06/01/%E8%BD%BB%E9%87%8F%E5%8C%96%E5%89%8D%E7%AB%AF%E6%9B%B4%E6%96%B0%E6%96%B9%E6%A1%88/#comments" class="article-comment-link">评论</a></span>
+        
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <p><img src="https://images.591wsh.com/2021/10/18/thumb_1634545950362.png"></p>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>​		一句话介绍：它是可以一行命令将代码更新到服务器的脚本</p>
+<p>​		轻量级更新方案最开始源于掘金的文章，后来我们从零实现了一个更新脚本，并且已在是生产环境中进行使用很长时间，算是非常稳定的版本，个人认为轻量化更新方案是非常使用小型开发团队</p>
+<p>​		现在我们切换到了gitlab的CI&#x2F;CD。所以这种方案已经不再是我们的主流方案，但是一路使用过来，非常稳定的解决了更新问题，还是非常不错的</p>
+<p>优点： 快速，稳定，自动备份指定文件夹（灵活性高，但是需要自己实现）</p>
+<p>缺点：需要手动回滚（自动回滚需要编码），相对来说没那么规范，没有留下记录，敏感数据存储在电脑中，配置文件可以<code>git</code>忽略</p>
+<h2 id="核心流程"><a href="#核心流程" class="headerlink" title="核心流程"></a>核心流程</h2><ol>
+<li>确认并打包项目</li>
+<li>通过<code>node-ssh</code>连接线上服务器</li>
+<li>将打包代码指定名称进行压缩</li>
+<li>备份之前的代码，删除以前的代码包，并解压压缩包</li>
+<li>删除本次打包代码，断开ssh链接</li>
+</ol>
+<h2 id="如何使用"><a href="#如何使用" class="headerlink" title="如何使用"></a>如何使用</h2><p><a target="_blank" rel="noopener" href="https://github.com/vkcyan/code-fragment/tree/master/%E8%BD%BB%E9%87%8F%E5%8C%96%E5%89%8D%E7%AB%AF%E6%9B%B4%E6%96%B0%E6%96%B9%E6%A1%88">代码地址</a></p>
+<ol>
+<li><p>将仓库文件放入项目</p>
+</li>
+<li><p>安装依赖</p>
+</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install node-ssh inquirer archiver -D</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>修改<code>upload.config.js</code>内容</li>
+<li>增加脚本命令</li>
+</ol>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">&quot;upload&quot;</span><span class="punctuation">:</span> <span class="string">&quot;node build/upload.js&quot;</span></span><br></pre></td></tr></table></figure>
+
+<ol start="5">
+<li>运行命名，验证是否功能正常</li>
+</ol>
+<h2 id="核心代码"><a href="#核心代码" class="headerlink" title="核心代码"></a>核心代码</h2><p><code>build/upload.js</code></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> fs = <span class="built_in">require</span>(<span class="string">&#x27;fs&#x27;</span>)</span><br><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">&#x27;path&#x27;</span>)</span><br><span class="line"><span class="keyword">const</span> &#123; <span class="title class_">NodeSSH</span> &#125; = <span class="built_in">require</span>(<span class="string">&#x27;node-ssh&#x27;</span>)</span><br><span class="line"><span class="keyword">const</span> archiver = <span class="built_in">require</span>(<span class="string">&#x27;archiver&#x27;</span>)</span><br><span class="line"><span class="keyword">const</span> inquirer = <span class="built_in">require</span>(<span class="string">&#x27;inquirer&#x27;</span>)</span><br><span class="line"><span class="keyword">const</span> exec = <span class="built_in">require</span>(<span class="string">&#x27;child_process&#x27;</span>).<span class="property">exec</span></span><br><span class="line"><span class="keyword">const</span> ssh = <span class="keyword">new</span> <span class="title class_">NodeSSH</span>()</span><br><span class="line"><span class="keyword">const</span> uploadFun = <span class="built_in">require</span>(<span class="string">&#x27;../upload.js&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 获取当前平台</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">let</span> objName = process.<span class="property">argv</span>[<span class="number">2</span>] <span class="comment">// 更新名字</span></span><br><span class="line"><span class="keyword">let</span> startTime = <span class="literal">null</span> <span class="comment">// 程序开始更新的时间</span></span><br><span class="line"><span class="comment">// 获取上传服务器配置</span></span><br><span class="line"><span class="keyword">let</span> config = <span class="title function_">uploadFun</span>(objName)</span><br><span class="line"><span class="keyword">const</span> verifyList = [</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="attr">type</span>: <span class="string">&#x27;input&#x27;</span>,</span><br><span class="line">    <span class="attr">message</span>: <span class="string">&#x27;您正在更新到线上环境,请确认接口域名&#x27;</span>,</span><br><span class="line">    <span class="attr">name</span>: <span class="string">&#x27;objName&#x27;</span>,</span><br><span class="line">  &#125;,</span><br><span class="line">]</span><br><span class="line">inquirer.<span class="title function_">prompt</span>(verifyList).<span class="title function_">then</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="title function_">uploadBuild</span>()</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">uploadBuild</span>(<span class="params"></span>) &#123;</span><br><span class="line">  startTime = <span class="keyword">new</span> <span class="title class_">Date</span>()</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">`<span class="subst">$&#123;objName&#125;</span>开始更新`</span>)</span><br><span class="line">  <span class="keyword">let</span> buildcmd = <span class="title function_">exec</span>(config.<span class="property">buildScript</span>, <span class="function">(<span class="params">error, stdout, stderr</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (!error) &#123;</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;打包完成&#x27;</span>, stdout)</span><br><span class="line">      <span class="title function_">app</span>()</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">error</span>(<span class="string">&#x27;打包出现错误&#x27;</span>, stderr)</span><br><span class="line">      process.<span class="title function_">exit</span>(<span class="number">0</span>)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;)</span><br><span class="line">  buildcmd.<span class="property">stdout</span>.<span class="title function_">on</span>(<span class="string">&#x27;data&#x27;</span>, <span class="function">(<span class="params">data</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(data.<span class="title function_">toString</span>())</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 通过ssh链接服务器</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">app</span>(<span class="params"></span>) &#123;</span><br><span class="line">  ssh</span><br><span class="line">    .<span class="title function_">connect</span>(&#123;</span><br><span class="line">      <span class="attr">host</span>: config.<span class="property">host</span>,</span><br><span class="line">      <span class="attr">username</span>: config.<span class="property">username</span>,</span><br><span class="line">      <span class="attr">password</span>: config.<span class="property">password</span>,</span><br><span class="line">    &#125;)</span><br><span class="line">    .<span class="title function_">then</span>(<span class="function">(<span class="params">res</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="comment">// 上传代码压缩包</span></span><br><span class="line">      <span class="title function_">uploadData</span>()</span><br><span class="line">    &#125;)</span><br><span class="line">    .<span class="title function_">catch</span>(<span class="function">(<span class="params">err</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(err)</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 上传代码 压缩现有代码</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">uploadData</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="comment">// 创建文件输出流</span></span><br><span class="line">  <span class="keyword">let</span> output = fs.<span class="title function_">createWriteStream</span>(<span class="string">`<span class="subst">$&#123;path.join(__dirname, <span class="string">&#x27;../&#x27;</span>)&#125;</span><span class="subst">$&#123;config.buildPath&#125;</span>/<span class="subst">$&#123;config.objname&#125;</span>.zip`</span>)</span><br><span class="line">  <span class="comment">// 设置压缩级别</span></span><br><span class="line">  <span class="keyword">let</span> archive = <span class="title function_">archiver</span>(<span class="string">&#x27;zip&#x27;</span>, &#123;</span><br><span class="line">    <span class="attr">zlib</span>: &#123;</span><br><span class="line">      <span class="attr">level</span>: <span class="number">8</span>,</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;)</span><br><span class="line">  <span class="comment">// 存档警告</span></span><br><span class="line">  archive.<span class="title function_">on</span>(<span class="string">&#x27;warning&#x27;</span>, <span class="keyword">function</span>(<span class="params">err</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (err.<span class="property">code</span> === <span class="string">&#x27;ENOENT&#x27;</span>) &#123;</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">warn</span>(<span class="string">&#x27;stat故障和其他非阻塞错误&#x27;</span>)</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="keyword">throw</span> err</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;)</span><br><span class="line">  <span class="comment">// 存档出错</span></span><br><span class="line">  archive.<span class="title function_">on</span>(<span class="string">&#x27;error&#x27;</span>, <span class="keyword">function</span>(<span class="params">err</span>) &#123;</span><br><span class="line">    <span class="keyword">throw</span> err</span><br><span class="line">  &#125;)</span><br><span class="line">  <span class="comment">// 通过管道方法将输出流存档到文件</span></span><br><span class="line">  archive.<span class="title function_">pipe</span>(output)</span><br><span class="line">  archive.<span class="title function_">directory</span>(<span class="string">`<span class="subst">$&#123;path.join(__dirname, <span class="string">&#x27;../&#x27;</span>)&#125;</span><span class="subst">$&#123;config.buildPath&#125;</span>/<span class="subst">$&#123;config.buildobj&#125;</span>`</span>, <span class="string">&#x27;/&#x27;</span>)</span><br><span class="line">  archive.<span class="title function_">finalize</span>()</span><br><span class="line">  <span class="comment">// 文件输出流结束</span></span><br><span class="line">  output.<span class="title function_">on</span>(<span class="string">&#x27;close&#x27;</span>, <span class="keyword">function</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">`总共 <span class="subst">$&#123;(archive.pointer() / <span class="number">1024</span> / <span class="number">1024</span>).toFixed(<span class="number">2</span>)&#125;</span> MB,完成源代码压缩`</span>)</span><br><span class="line">    ssh</span><br><span class="line">      .<span class="title function_">putFile</span>(</span><br><span class="line">        <span class="string">`<span class="subst">$&#123;path.join(__dirname, <span class="string">&#x27;../&#x27;</span>)&#125;</span><span class="subst">$&#123;config.buildPath&#125;</span>/<span class="subst">$&#123;config.objname&#125;</span>.zip`</span>,</span><br><span class="line">        <span class="string">`<span class="subst">$&#123;config.uploadDir&#125;</span>/<span class="subst">$&#123;config.objname&#125;</span>.zip`</span></span><br><span class="line">      )</span><br><span class="line">      .<span class="title function_">then</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;程序zip上传成功,判断线上是否需要备份&#x27;</span>)</span><br><span class="line">        <span class="title function_">runcmd</span>()</span><br><span class="line">      &#125;)</span><br><span class="line">      .<span class="title function_">catch</span>(<span class="function">(<span class="params">err</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(err)</span><br><span class="line">      &#125;)</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 执行ssh命令 判断当前是否存在备份</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">runcmd</span>(<span class="params"></span>) &#123;</span><br><span class="line">  ssh</span><br><span class="line">    .<span class="title function_">execCommand</span>(<span class="string">&#x27;ls&#x27;</span>, &#123;</span><br><span class="line">      <span class="attr">cwd</span>: config.<span class="property">uploadDir</span>,</span><br><span class="line">    &#125;)</span><br><span class="line">    .<span class="title function_">then</span>(<span class="function">(<span class="params">res</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> (res.<span class="property">stdout</span>) &#123;</span><br><span class="line">        <span class="keyword">let</span> fileList = res.<span class="property">stdout</span>.<span class="title function_">split</span>(<span class="string">&#x27;\n&#x27;</span>)</span><br><span class="line">        <span class="keyword">if</span> (config.<span class="property">objname</span> == config.<span class="property">backObject</span>) &#123;</span><br><span class="line">          <span class="keyword">if</span> (fileList.<span class="title function_">includes</span>(config.<span class="property">objname</span>)) &#123;</span><br><span class="line">            <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;当前更新为线上正常环境,开始进行备份&#x27;</span>)</span><br><span class="line">            <span class="title function_">backupData</span>()</span><br><span class="line">          &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;当前更新为线上正常环境,并且是第一次,将跳过备份&#x27;</span>)</span><br><span class="line">            <span class="title function_">cmdunzip</span>()</span><br><span class="line">          &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">          <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;当前为测试环境,无需备份,直接解压上传压缩包&#x27;</span>)</span><br><span class="line">          <span class="title function_">cmdunzip</span>()</span><br><span class="line">        &#125;</span><br><span class="line">      &#125; <span class="keyword">else</span> <span class="keyword">if</span> (res.<span class="property">stderr</span>) &#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;查询指定目录失败&#x27;</span>)</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;ssh链接发生了错误&#x27;</span>)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 备份项目</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">backupData</span>(<span class="params"></span>) &#123;</span><br><span class="line">  ssh</span><br><span class="line">    .<span class="title function_">execCommand</span>(<span class="string">`mv <span class="subst">$&#123;config.objname&#125;</span> backup/<span class="subst">$&#123;config.objname&#125;</span>_backup<span class="subst">$&#123;<span class="keyword">new</span> <span class="built_in">Date</span>().getTime()&#125;</span>`</span>, &#123;</span><br><span class="line">      <span class="attr">cwd</span>: config.<span class="property">uploadDir</span>,</span><br><span class="line">    &#125;)</span><br><span class="line">    .<span class="title function_">then</span>(<span class="function">(<span class="params">res</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> (res.<span class="property">stderr</span>) &#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;备份发生错误&#x27;</span>, res.<span class="property">stderr</span>)</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;完成备份,解压最新代码&#x27;</span>)</span><br><span class="line">        <span class="title function_">cmdunzip</span>()</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">    .<span class="title function_">catch</span>(<span class="function">(<span class="params">err</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;备份发生未知链接错误&#x27;</span>, err)</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 解压最新代码zip</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">cmdunzip</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="comment">// 解压程序</span></span><br><span class="line">  ssh</span><br><span class="line">    .<span class="title function_">execCommand</span>(</span><br><span class="line">      <span class="string">`rm -rf <span class="subst">$&#123;config.objname&#125;</span> &amp;&amp; unzip -o -d <span class="subst">$&#123;config.uploadDir&#125;</span>/<span class="subst">$&#123;config.objname&#125;</span> <span class="subst">$&#123;config.objname&#125;</span>.zip  &amp;&amp; rm -f <span class="subst">$&#123;config.objname&#125;</span>.zip`</span>,</span><br><span class="line">      &#123;</span><br><span class="line">        <span class="attr">cwd</span>: config.<span class="property">uploadDir</span>,</span><br><span class="line">      &#125;</span><br><span class="line">    )</span><br><span class="line">    .<span class="title function_">then</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">`项目包完成解压,<span class="subst">$&#123;config.objname&#125;</span>项目部署成功了!`</span>)</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">`项目更新时长<span class="subst">$&#123;(<span class="keyword">new</span> <span class="built_in">Date</span>().getTime() - startTime.getTime()) / <span class="number">1000</span>&#125;</span>s`</span>)</span><br><span class="line">      <span class="keyword">return</span> <span class="title function_">deletelocalFile</span>().<span class="title function_">then</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;本地缓存zip清除完毕&#x27;</span>)</span><br><span class="line">      &#125;)</span><br><span class="line">    &#125;)</span><br><span class="line">    .<span class="title function_">then</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">      ssh</span><br><span class="line">        .<span class="title function_">execCommand</span>(<span class="string">`rm -rf <span class="subst">$&#123;config.objname&#125;</span>/static/.DS_Store`</span>, &#123;</span><br><span class="line">          <span class="attr">cwd</span>: config.<span class="property">uploadDir</span>,</span><br><span class="line">        &#125;)</span><br><span class="line">        .<span class="title function_">then</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">          <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;线上项目.DS_Store删除完成&#x27;</span>)</span><br><span class="line">          ssh.<span class="title function_">dispose</span>()</span><br><span class="line">          process.<span class="title function_">exit</span>(<span class="number">0</span>)</span><br><span class="line">        &#125;)</span><br><span class="line">        .<span class="title function_">catch</span>(<span class="function">(<span class="params">err</span>) =&gt;</span> &#123;</span><br><span class="line">          <span class="variable language_">console</span>.<span class="title function_">log</span>(err)</span><br><span class="line">        &#125;)</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    .<span class="title function_">catch</span>(<span class="function">(<span class="params">err</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;解压出现错误&#x27;</span>, err)</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> *删除本地生成的压缩包</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">deletelocalFile</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">    fs.<span class="title function_">unlink</span>(<span class="string">`<span class="subst">$&#123;path.join(__dirname, <span class="string">&#x27;../&#x27;</span>)&#125;</span><span class="subst">$&#123;config.buildPath&#125;</span>/<span class="subst">$&#123;config.objname&#125;</span>.zip`</span>, <span class="function">(<span class="params">err</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> (err) &#123;</span><br><span class="line">        <span class="title function_">reject</span>(err)</span><br><span class="line">        <span class="keyword">throw</span> err</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="title function_">resolve</span>()</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="配置文件"><a href="#配置文件" class="headerlink" title="配置文件"></a>配置文件</h2><p><code>upload.config.js</code></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 打包核心配置文件</span></span><br><span class="line"><span class="keyword">let</span> <span class="title class_">Available</span> = [<span class="string">&#x27;dist-a&#x27;</span>, <span class="string">&#x27;dist-b&#x27;</span>] <span class="comment">// dist-a 环境a代码包 dist-b 环境b代码包 npm run upload dist-a</span></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 获取更新配置</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> &#123;<span class="type">String</span>&#125; objName 当前更新名称</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@returns</span></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="variable language_">module</span>.<span class="property">exports</span> = <span class="function">(<span class="params">objName</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">if</span> (!<span class="title class_">Available</span>.<span class="title function_">includes</span>(objName)) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;当前项目不存在您输入的更新命令,请检查更新名称&#x27;</span>)</span><br><span class="line">    process.<span class="title function_">exit</span>(<span class="number">0</span>)</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    <span class="attr">host</span>: <span class="string">&#x27;xx.xx.xx.xx&#x27;</span>, <span class="comment">// 服务器地址</span></span><br><span class="line">    <span class="attr">username</span>: <span class="string">&#x27;root&#x27;</span>,</span><br><span class="line">    <span class="attr">password</span>: <span class="string">&#x27;xxxxxxxxxx&#x27;</span>,</span><br><span class="line">    <span class="attr">buildPath</span>: <span class="string">&#x27;&#x27;</span>, <span class="comment">// 本地打包项目地址(多层路径用这个)</span></span><br><span class="line">    <span class="attr">buildobj</span>: <span class="string">&#x27;dist&#x27;</span>, <span class="comment">// 本地打包文件名称</span></span><br><span class="line">    <span class="attr">uploadDir</span>: <span class="string">&#x27;/xx/xx/xx&#x27;</span>, <span class="comment">// 服务端项目地址</span></span><br><span class="line">    <span class="attr">objname</span>: objName, <span class="comment">// 打包项目名称</span></span><br><span class="line">    <span class="attr">backObject</span>: <span class="string">&#x27;objName&#x27;</span>, <span class="comment">// 备份的文件夹名称</span></span><br><span class="line">    <span class="attr">buildScript</span>: <span class="string">&#x27;npm run build&#x27;</span> <span class="comment">// 更新命令</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="触发命令"><a href="#触发命令" class="headerlink" title="触发命令"></a>触发命令</h2><p>最后在package.json增加一行命令，运行前面的脚本文件</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">&quot;scripts&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">   <span class="comment">// ......</span></span><br><span class="line">   <span class="attr">&quot;upload&quot;</span><span class="punctuation">:</span> <span class="string">&quot;node build/upload.js&quot;</span></span><br><span class="line"> <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="依赖版本"><a href="#依赖版本" class="headerlink" title="依赖版本"></a>依赖版本</h2><p>​		因为更新脚本是在项目里面的，所以需要额外安装依赖</p>
+<p>推荐版本号</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">&quot;node-ssh&quot;</span><span class="punctuation">:</span> <span class="string">&quot;^12.0.0&quot;</span><span class="punctuation">,</span></span><br><span class="line"><span class="attr">&quot;inquirer&quot;</span><span class="punctuation">:</span> <span class="string">&quot;^7.3.3&quot;</span><span class="punctuation">,</span></span><br><span class="line"><span class="attr">&quot;archiver&quot;</span><span class="punctuation">:</span> <span class="string">&quot;^3.1.1&quot;</span><span class="punctuation">,</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="实际使用"><a href="#实际使用" class="headerlink" title="实际使用"></a>实际使用</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm run upload xxxx // 线上代码文件夹名称</span><br></pre></td></tr></table></figure>
+
+<p> upload 命令后面的字符串就是服务器上的文件夹名称，这里为了防止更新命名敲错了，需要首先在<code>upload.config.js</code>中进行更新白名单声明，如果配置都正确的情况下，你就可以看到，这就代表成功了~</p>
+<p><img src="https://images.591wsh.com/2021/10/18/thumb_1634545950362.png"></p>
+<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>​	脚本文件还存在很高的上限，可以优化一下备份部分的备份代码生成规则，再增加一个回滚代码的脚本，就可以实现线上的无感知回滚了</p>
+<p>​	如果使用中遇到了什么问题，请到QQ群 530496237，一起吹吹水</p>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://vkcyan.github.io/2021/06/01/%E8%BD%BB%E9%87%8F%E5%8C%96%E5%89%8D%E7%AB%AF%E6%9B%B4%E6%96%B0%E6%96%B9%E6%A1%88/" title="轻量化前端更新方案" target="_blank" rel="external">https://vkcyan.github.io/2021/06/01/轻量化前端更新方案/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/vkcyan" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/vkcyan" target="_blank"><span class="text-dark">vkcyan</span><small class="ml-1x">Web Developer &amp; Product Manager</small></a></h3>
+        <div></div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="vcomments"></div>
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2021/06/01/%E5%8D%95%E5%9F%9F%E5%90%8D%E4%B8%8B%E9%80%9A%E8%BF%87%E5%AD%90%E8%B7%AF%E7%94%B1%E5%8C%BA%E5%88%86%E9%A1%B9%E7%9B%AE%E7%9A%84%E5%AE%9E%E7%8E%B0%E6%96%B9%E6%A1%88/" title="同域名下通过一级路由区分实现“前端微构架”"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+    </li>
+    
+    
+    
+    <li class="toggle-toc">
+      <a class="toggle-btn " data-toggle="collapse" href="#collapseToc" aria-expanded="false" title="文章目录" role="button">    <span>[&nbsp;</span><span>文章目录</span>
+        <i class="text-collapsed icon icon-anchor"></i>
+        <i class="text-in icon icon-close"></i>
+        <span>]</span>
+      </a>
+    </li>
+    
+  </ul>
+  
+  
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-fancy btn-donate pop-onhover bg-gradient-warning" data-toggle="modal" data-target="#donateModal"><span>赏</span></button>
+  <!-- <div class="wave-icon wave-icon-danger btn-donate" data-toggle="modal" data-target="#donateModal">
+    <div class="wave-circle"><span class="icon"><i class="icon icon-bill"></i></span></div>
+  </div> -->
+  
+  
+  <div class="bar-right">
+    
+  </div>
+  </div>
+</nav>
+  
+<!-- Modal -->
+<div class="modal modal-center modal-small modal-xs-full fade" id="donateModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content donate">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <div class="modal-body">
+        <div class="donate-box">
+          <div class="donate-head">
+            <p>感谢您的支持，我会继续努力的!</p>
+          </div>
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade active in" id="alipay">
+              <div class="donate-payimg">
+                <img src="/images/donate/alipayimg.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开支付宝扫一扫，即可进行扫码打赏哦</p>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="wechatpay">
+              <div class="donate-payimg">
+                <img src="/images/donate/wechatpayimg.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开微信扫一扫，即可进行扫码打赏哦</p>
+            </div>
+          </div>
+          <div class="donate-footer">
+            <ul class="nav nav-tabs nav-justified" role="tablist">
+              <li role="presentation" class="active">
+                <a href="#alipay" id="alipay-tab" role="tab" data-toggle="tab" aria-controls="alipay" aria-expanded="true"><i class="icon icon-alipay"></i> 支付宝</a>
+              </li>
+              <li role="presentation" class="">
+                <a href="#wechatpay" role="tab" id="wechatpay-tab" data-toggle="tab" aria-controls="wechatpay" aria-expanded="false"><i class="icon icon-wepay"></i> 微信支付</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/vkcyan" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://juejin.cn/user/3720403077840519" target="_blank" title="Juejin" data-toggle=tooltip data-placement=top><i class="icon icon-juejin"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+   
+    
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/valine"></script>
+  <script type="text/javascript">
+  var GUEST = ['nick', 'mail', 'link'];
+  var meta = 'nick,mail,link';
+  meta = meta.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#vcomments',
+    verify: false,
+    notify: false,
+    appId: '',
+    appKey: '',
+    placeholder: 'Just go go',
+    avatar: 'mm',
+    meta: meta,
+    pageSize: '10' || 10,
+    visitor: false
+  });
+  </script>
+
+     
+
+
+
+
+
+
+
+</body>
+</html>

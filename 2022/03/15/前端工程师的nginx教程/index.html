@@ -18,12 +18,12 @@
   
   
   <title>写给前端新人的nginx教程 | vkcyan Blog</title>
-  <meta name="description" content="写给前端新人的nginx教程前言​	我相信大部分前端新手是接触不到部署相关的工作的，一般都是将代码包交给后端，或者通过CI，FTP完成代码的更新，至于代码如何部署，如何从域名到前端代码包，很多前端仔没有实际操作过，自然是不知道的，这篇文章就是要帮助未接触过部署的人学会在服务器上线部署一个前端项目，在这个主线中带大家慢慢的熟悉nginx ​	记得在2017年暑假，那时候大二还没开学，当时我只会写一点">
+  <meta name="description" content="前言​	我相信大部分前端新手是接触不到部署相关的工作的，一般都是将代码包交给后端，或者通过CI，FTP完成代码的更新，至于代码如何部署，如何从域名到前端代码包，很多前端仔没有实际操作过，自然是不知道的，这篇文章就是要帮助未接触过部署的人学会在服务器上线部署一个前端项目，在这个主线中带大家慢慢的熟悉nginx ​	记得在2017年暑假，那时候大二还没开学，当时我只会写一点简单代码，linux和运维完">
 <meta property="og:type" content="article">
 <meta property="og:title" content="写给前端新人的nginx教程">
 <meta property="og:url" content="https://vkcyan.github.io/2022/03/15/%E5%89%8D%E7%AB%AF%E5%B7%A5%E7%A8%8B%E5%B8%88%E7%9A%84nginx%E6%95%99%E7%A8%8B/index.html">
 <meta property="og:site_name" content="vkcya Blog">
-<meta property="og:description" content="写给前端新人的nginx教程前言​	我相信大部分前端新手是接触不到部署相关的工作的，一般都是将代码包交给后端，或者通过CI，FTP完成代码的更新，至于代码如何部署，如何从域名到前端代码包，很多前端仔没有实际操作过，自然是不知道的，这篇文章就是要帮助未接触过部署的人学会在服务器上线部署一个前端项目，在这个主线中带大家慢慢的熟悉nginx ​	记得在2017年暑假，那时候大二还没开学，当时我只会写一点">
+<meta property="og:description" content="前言​	我相信大部分前端新手是接触不到部署相关的工作的，一般都是将代码包交给后端，或者通过CI，FTP完成代码的更新，至于代码如何部署，如何从域名到前端代码包，很多前端仔没有实际操作过，自然是不知道的，这篇文章就是要帮助未接触过部署的人学会在服务器上线部署一个前端项目，在这个主线中带大家慢慢的熟悉nginx ​	记得在2017年暑假，那时候大二还没开学，当时我只会写一点简单代码，linux和运维完">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://www.vkcyan.top/FkugXnbgmCdIOX-iAYI3UYUjmv7a.png">
 <meta property="og:image" content="http://www.vkcyan.top/FtVofGcUY5HFXsoI2PpMqNNXberG.png">
@@ -34,7 +34,7 @@
 <meta property="og:image" content="http://www.vkcyan.top/Fq0nB1GSEzI1FJN-f0sf66YXVl1T.png">
 <meta property="og:image" content="http://www.vkcyan.top/FjjTa2vHly5zv0-wvUdExapUmAhd.png">
 <meta property="article:published_time" content="2022-03-14T16:00:00.000Z">
-<meta property="article:modified_time" content="2022-05-23T06:55:30.056Z">
+<meta property="article:modified_time" content="2022-05-23T08:02:07.710Z">
 <meta property="article:author" content="vkcyan">
 <meta property="article:tag" content="JavaScript">
 <meta name="twitter:card" content="summary">
@@ -212,7 +212,7 @@
   <div class="widget">
     <h3 class="widget-title">分类</h3>
     <div class="widget-body">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript-2022/">JavaScript-2022</a><span class="category-list-count">7</span></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript-2021/">JavaScript-2021</a><span class="category-list-count">10</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript-2022/">JavaScript-2022</a><span class="category-list-count">7</span></li></ul>
     </div>
   </div>
 
@@ -222,7 +222,7 @@
   <div class="widget">
     <h3 class="widget-title">标签</h3>
     <div class="widget-body">
-      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a><span class="tag-list-count">7</span></li></ul>
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a><span class="tag-list-count">17</span></li></ul>
     </div>
   </div>
 
@@ -241,7 +241,7 @@
   <div class="widget">
     <h3 class="widget-title">归档</h3>
     <div class="widget-body">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/05/">五月 2022</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/03/">三月 2022</a><span class="archive-list-count">7</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/05/">五月 2022</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/03/">三月 2022</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/12/">十二月 2021</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/10/">十月 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/06/">六月 2021</a><span class="archive-list-count">7</span></li></ul>
     </div>
   </div>
 
@@ -348,7 +348,7 @@
   <div class="slimContent">
     <nav id="toc" class="article-toc">
       <h3 class="toc-title">文章目录</h3>
-      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%86%99%E7%BB%99%E5%89%8D%E7%AB%AF%E6%96%B0%E4%BA%BA%E7%9A%84nginx%E6%95%99%E7%A8%8B"><span class="toc-number">1.</span> <span class="toc-text">写给前端新人的nginx教程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E7%BD%AE%E7%9F%A5%E8%AF%86"><span class="toc-number">1.2.</span> <span class="toc-text">前置知识</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%90%AD%E5%BB%BA%E7%8E%AF%E5%A2%83"><span class="toc-number">1.3.</span> <span class="toc-text">搭建环境</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%9E%E6%8E%A5%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="toc-number">1.3.1.</span> <span class="toc-text">连接服务器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85nginx"><span class="toc-number">1.3.2.</span> <span class="toc-text">安装nginx</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#nginx%E7%9B%B8%E5%85%B3%E6%96%87%E4%BB%B6%E8%B7%AF%E5%BE%84"><span class="toc-number">1.3.3.</span> <span class="toc-text">nginx相关文件路径</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9C%A86666%E7%AB%AF%E5%8F%A3%E4%B8%8A%E6%90%AD%E5%BB%BA%E4%B8%80%E4%B8%AA%E7%AB%99%E7%82%B9"><span class="toc-number">1.4.</span> <span class="toc-text">在6666端口上搭建一个站点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%83%A8%E7%BD%B2%E4%B8%80%E4%B8%AAvue%E9%A1%B9%E7%9B%AE"><span class="toc-number">1.5.</span> <span class="toc-text">部署一个vue项目</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%91%E5%AE%9A%E5%9F%9F%E5%90%8D"><span class="toc-number">1.6.</span> <span class="toc-text">绑定域名</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A2%9E%E5%8A%A0https%E6%94%AF%E6%8C%81"><span class="toc-number">1.7.</span> <span class="toc-text">增加https支持</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%93%E8%AF%AD"><span class="toc-number">1.8.</span> <span class="toc-text">结语</span></a></li></ol></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E7%BD%AE%E7%9F%A5%E8%AF%86"><span class="toc-number">2.</span> <span class="toc-text">前置知识</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%90%AD%E5%BB%BA%E7%8E%AF%E5%A2%83"><span class="toc-number">3.</span> <span class="toc-text">搭建环境</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%9E%E6%8E%A5%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="toc-number">3.1.</span> <span class="toc-text">连接服务器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85nginx"><span class="toc-number">3.2.</span> <span class="toc-text">安装nginx</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#nginx%E7%9B%B8%E5%85%B3%E6%96%87%E4%BB%B6%E8%B7%AF%E5%BE%84"><span class="toc-number">3.3.</span> <span class="toc-text">nginx相关文件路径</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9C%A86666%E7%AB%AF%E5%8F%A3%E4%B8%8A%E6%90%AD%E5%BB%BA%E4%B8%80%E4%B8%AA%E7%AB%99%E7%82%B9"><span class="toc-number">4.</span> <span class="toc-text">在6666端口上搭建一个站点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%83%A8%E7%BD%B2%E4%B8%80%E4%B8%AAvue%E9%A1%B9%E7%9B%AE"><span class="toc-number">5.</span> <span class="toc-text">部署一个vue项目</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%91%E5%AE%9A%E5%9F%9F%E5%90%8D"><span class="toc-number">6.</span> <span class="toc-text">绑定域名</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A2%9E%E5%8A%A0https%E6%94%AF%E6%8C%81"><span class="toc-number">7.</span> <span class="toc-text">增加https支持</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%93%E8%AF%AD"><span class="toc-number">8.</span> <span class="toc-text">结语</span></a></li></ol>
     </nav>
   </div>
 </aside>
@@ -418,7 +418,7 @@
     </div>
     <div class="article-entry marked-body" itemprop="articleBody">
       
-        <h1 id="写给前端新人的nginx教程"><a href="#写给前端新人的nginx教程" class="headerlink" title="写给前端新人的nginx教程"></a>写给前端新人的nginx教程</h1><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>​	我相信大部分前端新手是接触不到部署相关的工作的，一般都是将代码包交给后端，或者通过CI，FTP完成代码的更新，至于代码如何部署，如何从域名到前端代码包，很多前端仔没有实际操作过，自然是不知道的，这篇文章就是要帮助未接触过部署的人学会在服务器上线部署一个前端项目，在这个主线中带大家慢慢的熟悉nginx</p>
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>​	我相信大部分前端新手是接触不到部署相关的工作的，一般都是将代码包交给后端，或者通过CI，FTP完成代码的更新，至于代码如何部署，如何从域名到前端代码包，很多前端仔没有实际操作过，自然是不知道的，这篇文章就是要帮助未接触过部署的人学会在服务器上线部署一个前端项目，在这个主线中带大家慢慢的熟悉nginx</p>
 <p>​	记得在2017年暑假，那时候大二还没开学，当时我只会写一点简单代码，linux和运维完全没接触过，一冲动在阿里云购买了一个服务器，外加一个域名，好像还是<code>xiaowuasy.top</code>,现在已经不能访问了；那时候单纯的兴趣使然，想搭建一个网站，因为实力不足，也不知道求助别人，前前后后折腾了一个月，最终竟然成功在服务器上面部署了wordpress服务，后面域名备案也成功了；</p>
 <p>​		这段经历是曲折的，依稀记得在盛夏的傍晚，我坐在慢慢暗下来的客厅，头上还残留着因为紧张流下的细汗，眼睛因为专注而干涩，面对不太看得懂的文档，一遍一遍尝试；我自然不希望大家在这上面浪费时间，这也是写这篇文章的初衷</p>
 <h2 id="前置知识"><a href="#前置知识" class="headerlink" title="前置知识"></a>前置知识</h2><ul>
