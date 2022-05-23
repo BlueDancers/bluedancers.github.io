@@ -1,0 +1,1190 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>新产品流程 | vkcyan Blog</title>
+  <meta name="description" content="思维导图管控产品失败（降低不确定性）的方法不确定性、累计成本与开发阶段的关系 标准的决策框架 产品开发流程基本阶段 探索（Exploration） 筛选（Screening） 商业评估（Business Evaluation） 开发（Development） 测试（Testing） 商业化（Commercialization）  常见产品开发流程 门径管理流程（Stage - Gate@） 集成产">
+<meta property="og:type" content="article">
+<meta property="og:title" content="新产品流程">
+<meta property="og:url" content="https://vkcyan.github.io/2022/03/18/%E6%96%B0%E4%BA%A7%E5%93%81%E6%B5%81%E7%A8%8B/index.html">
+<meta property="og:site_name" content="vkcya Blog">
+<meta property="og:description" content="思维导图管控产品失败（降低不确定性）的方法不确定性、累计成本与开发阶段的关系 标准的决策框架 产品开发流程基本阶段 探索（Exploration） 筛选（Screening） 商业评估（Business Evaluation） 开发（Development） 测试（Testing） 商业化（Commercialization）  常见产品开发流程 门径管理流程（Stage - Gate@） 集成产">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://www.vkcyan.top/image-20220324204825223.png">
+<meta property="og:image" content="http://www.vkcyan.top/image-20220324204830469.png">
+<meta property="og:image" content="http://www.vkcyan.top/image-20220326140418592.png">
+<meta property="og:image" content="http://www.vkcyan.top/image-20220326142104796.png">
+<meta property="og:image" content="http://www.vkcyan.top/image-20220328174347453.png">
+<meta property="og:image" content="http://www.vkcyan.top/image-20220407142631200.png">
+<meta property="og:image" content="http://www.vkcyan.top/image-20220407145126882.png">
+<meta property="og:image" content="http://www.vkcyan.top/image-20220407164034697.png">
+<meta property="og:image" content="http://www.vkcyan.top/image-20220407185511266.png">
+<meta property="og:image" content="http://www.vkcyan.top/image-20220408195943522.png">
+<meta property="og:image" content="http://www.vkcyan.top/image-20220408205133131.png">
+<meta property="og:image" content="http://www.vkcyan.top/image-20220408205936546.png">
+<meta property="og:image" content="http://www.vkcyan.top/image-20220408210819352.png">
+<meta property="og:image" content="http://www.vkcyan.top/image-20220409112819570.png">
+<meta property="article:published_time" content="2022-03-17T16:00:00.000Z">
+<meta property="article:modified_time" content="2022-05-23T08:33:50.399Z">
+<meta property="article:author" content="vkcyan">
+<meta property="article:tag" content="NPDP">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://www.vkcyan.top/image-20220324204825223.png">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://vkcyan.github.io/2022/03/18/%E6%96%B0%E4%BA%A7%E5%93%81%E6%B5%81%E7%A8%8B/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="vkcya Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+
+<body class="main-center theme-black" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/vkcyan" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">vkcyan</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Web Developer &amp; Product Manager</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> HeFei, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-books">
+          <a href="/books">
+            
+            <i class="icon icon-book-fill"></i>
+            
+            <span class="menu-title">书单</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">友链</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/vkcyan" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://juejin.cn/user/3720403077840519" target="_blank" title="Juejin" data-toggle=tooltip data-placement=top><i class="icon icon-juejin"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>故不积跬步，无以至千里；不积小流，无以成江海。</p><br/>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript-2021/">JavaScript-2021</a><span class="category-list-count">10</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript-2022/">JavaScript-2022</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%BA%A7%E5%93%81%E7%BB%8F%E7%90%86/">产品经理</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/">数据结构与算法</a><span class="category-list-count">9</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a><span class="tag-list-count">17</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NPDP/" rel="tag">NPDP</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag">数据结构</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a><span class="tag-list-count">2</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/JavaScript/" style="font-size: 14px;">JavaScript</a> <a href="/tags/NPDP/" style="font-size: 13.33px;">NPDP</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="font-size: 13.67px;">数据结构</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 13px;">算法</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/05/">五月 2022</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/03/">三月 2022</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/12/">十二月 2021</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/10/">十月 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/06/">六月 2021</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/03/">三月 2021</a><span class="archive-list-count">9</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2022/05/23/%E9%92%88%E5%AF%B9%E5%85%8D%E7%99%BB%E5%BD%95%E7%9A%84%E4%B8%80%E4%BA%9B%E5%AE%9E%E8%B7%B5%E4%B8%8E%E6%80%9D%E8%80%83/" class="title">(no title)</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-05-23T06:29:52.233Z" itemprop="datePublished">2022-05-23</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E4%BA%A7%E5%93%81%E7%BB%8F%E7%90%86/">产品经理</a>
+              </p>
+              <p class="item-title">
+                <a href="/2022/03/18/NPDP%E4%BA%A7%E5%93%81%E7%BB%8F%E7%90%86%E4%BB%8B%E7%BB%8D/" class="title">NPDP产品经理国际资格认证</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-03-17T16:00:00.000Z" itemprop="datePublished">2022-03-18</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E4%BA%A7%E5%93%81%E7%BB%8F%E7%90%86/">产品经理</a>
+              </p>
+              <p class="item-title">
+                <a href="/2022/03/18/%E5%B7%A5%E5%85%B7%E4%B8%8E%E7%BB%A9%E6%95%88%E5%BA%A6%E9%87%8F/" class="title">工具与绩效度量</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-03-17T16:00:00.000Z" itemprop="datePublished">2022-03-18</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E4%BA%A7%E5%93%81%E7%BB%8F%E7%90%86/">产品经理</a>
+              </p>
+              <p class="item-title">
+                <a href="/2022/03/18/%E6%96%87%E5%8C%96%E3%80%81%E7%BB%84%E7%BB%87%E4%B8%8E%E5%9B%A2%E9%98%9F/" class="title">文化、组织与团队</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-03-17T16:00:00.000Z" itemprop="datePublished">2022-03-18</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E4%BA%A7%E5%93%81%E7%BB%8F%E7%90%86/">产品经理</a>
+              </p>
+              <p class="item-title">
+                <a href="/2022/03/18/%E6%96%B0%E4%BA%A7%E5%93%81%E5%BC%80%E5%8F%91%E6%88%98%E7%95%A5/" class="title">新产品开发战略</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-03-17T16:00:00.000Z" itemprop="datePublished">2022-03-18</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<aside
+  class="sidebar sidebar-toc collapse  in "
+  id="collapseToc"
+  itemscope
+  itemtype="http://schema.org/WPSideBar"
+>
+  <div class="slimContent">
+    <nav id="toc" class="article-toc">
+      <h3 class="toc-title">文章目录</h3>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%9D%E7%BB%B4%E5%AF%BC%E5%9B%BE"><span class="toc-number">1.</span> <span class="toc-text">思维导图</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AE%A1%E6%8E%A7%E4%BA%A7%E5%93%81%E5%A4%B1%E8%B4%A5%EF%BC%88%E9%99%8D%E4%BD%8E%E4%B8%8D%E7%A1%AE%E5%AE%9A%E6%80%A7%EF%BC%89%E7%9A%84%E6%96%B9%E6%B3%95"><span class="toc-number">2.</span> <span class="toc-text">管控产品失败（降低不确定性）的方法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8D%E7%A1%AE%E5%AE%9A%E6%80%A7%E3%80%81%E7%B4%AF%E8%AE%A1%E6%88%90%E6%9C%AC%E4%B8%8E%E5%BC%80%E5%8F%91%E9%98%B6%E6%AE%B5%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="toc-number">2.1.</span> <span class="toc-text">不确定性、累计成本与开发阶段的关系</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A0%87%E5%87%86%E7%9A%84%E5%86%B3%E7%AD%96%E6%A1%86%E6%9E%B6"><span class="toc-number">2.2.</span> <span class="toc-text">标准的决策框架</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%A7%E5%93%81%E5%BC%80%E5%8F%91%E6%B5%81%E7%A8%8B%E5%9F%BA%E6%9C%AC%E9%98%B6%E6%AE%B5"><span class="toc-number">3.</span> <span class="toc-text">产品开发流程基本阶段</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E4%BA%A7%E5%93%81%E5%BC%80%E5%8F%91%E6%B5%81%E7%A8%8B"><span class="toc-number">4.</span> <span class="toc-text">常见产品开发流程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A8%A1%E7%B3%8A%E5%89%8D%E7%AB%AFFFE"><span class="toc-number">5.</span> <span class="toc-text">模糊前端FFE</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%97%A8%E5%BE%84%E7%AE%A1%E7%90%86%E6%B5%81%E7%A8%8B"><span class="toc-number">6.</span> <span class="toc-text">门径管理流程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%98%B6%E6%AE%B5-%E5%85%B3%E5%8F%A3%E6%A6%82%E5%BF%B5"><span class="toc-number">7.</span> <span class="toc-text">阶段-关口概念</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E9%98%B6%E6%AE%B5"><span class="toc-number">7.1.</span> <span class="toc-text">什么是阶段</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E5%85%B3%E5%8D%A1"><span class="toc-number">7.2.</span> <span class="toc-text">什么是关卡</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%98%B6%E6%AE%B5-%E5%85%B3%E5%8F%A3%EF%BC%88Stage-Gate%EF%BC%89%E6%96%B0%E4%BA%A7%E5%93%81%E5%BC%80%E5%8F%91%E8%BF%87%E7%A8%8B"><span class="toc-number">8.</span> <span class="toc-text">阶段 - 关口（Stage - Gate）新产品开发过程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%80%91%E5%B8%83%E6%A8%A1%E5%9E%8B"><span class="toc-number">9.</span> <span class="toc-text">瀑布模型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9B%86%E6%88%90%E4%BA%A7%E5%93%81%E5%BC%80%E5%8F%91IPD"><span class="toc-number">10.</span> <span class="toc-text">集成产品开发IPD</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%89%8D%E8%BA%AB-%E5%B9%B6%E8%A1%8C%E5%B7%A5%E7%A8%8B"><span class="toc-number">10.1.</span> <span class="toc-text">前身 - 并行工程</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%90%AB%E4%B9%89"><span class="toc-number">10.1.1.</span> <span class="toc-text">含义</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%BB%E8%A6%81%E7%89%B9%E5%BE%81"><span class="toc-number">10.1.2.</span> <span class="toc-text">主要特征</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E5%81%9A%E6%B3%95"><span class="toc-number">10.1.3.</span> <span class="toc-text">具体做法</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%91%E5%B1%95-%E9%9B%86%E6%88%90%E4%BA%A7%E5%93%81%E5%BC%80%E5%8F%91IPD"><span class="toc-number">10.2.</span> <span class="toc-text">发展 - 集成产品开发IPD</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%90%AB%E4%B9%89-1"><span class="toc-number">10.2.1.</span> <span class="toc-text">含义</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#IPD%E7%AE%A1%E7%90%86%E7%9A%84%E7%B2%BE%E9%AB%93"><span class="toc-number">10.3.</span> <span class="toc-text">IPD管理的精髓</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9B%86%E6%88%90%E4%BA%A7%E5%93%81%E5%BC%80%E5%8F%91%E7%B3%BB%E7%BB%9F%E5%88%86%E7%BA%A7"><span class="toc-number">10.4.</span> <span class="toc-text">集成产品开发系统分级</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B2%BE%E7%9B%8A%E4%BA%A7%E5%93%81%E5%BC%80%E5%8F%91"><span class="toc-number">11.</span> <span class="toc-text">精益产品开发</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B2%BE%E7%9B%8A%E5%BC%80%E5%8F%91%E7%9A%84%E5%8E%9F%E5%88%99%EF%BC%88%E6%8F%90%E5%8D%87%E7%94%9F%E4%BA%A7%E6%95%88%E7%8E%87%EF%BC%89"><span class="toc-number">11.1.</span> <span class="toc-text">精益开发的原则（提升生产效率）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%BD%9C%E5%9C%A8%E7%9A%84%E6%B5%AA%E8%B4%B9%E6%9D%A5%E6%BA%90%E5%8C%85%E6%8B%AC"><span class="toc-number">11.2.</span> <span class="toc-text">潜在的浪费来源包括</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9B%B4%E6%8E%A5%E6%95%88%E7%9B%8A"><span class="toc-number">11.3.</span> <span class="toc-text">直接效益</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%87%86%E6%97%B6%E5%88%B6"><span class="toc-number">11.4.</span> <span class="toc-text">准时制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8D%95%E4%BB%B6%E6%B5%81"><span class="toc-number">11.5.</span> <span class="toc-text">单件流</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5WHY%E6%B3%95%EF%BC%88%E5%88%A8%E6%A0%B9%E9%97%AE%E5%BA%95%E6%B3%95%EF%BC%89"><span class="toc-number">11.6.</span> <span class="toc-text">5WHY法（刨根问底法）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E7%81%AF%E6%B3%95"><span class="toc-number">11.7.</span> <span class="toc-text">安灯法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%8E%B0%E5%9C%BA%E7%8E%B0%E7%89%A9"><span class="toc-number">11.8.</span> <span class="toc-text">现场现物</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9E%84%E5%BB%BA%E5%AD%A6%E4%B9%A0%E5%9E%8B%E7%BB%84%E7%BB%87"><span class="toc-number">11.9.</span> <span class="toc-text">构建学习型组织</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B2%BE%E7%9B%8A%E4%BA%A7%E5%93%81%E5%BC%80%E5%8F%91%E8%BF%87%E7%A8%8B%E7%9A%84%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5"><span class="toc-number">11.10.</span> <span class="toc-text">精益产品开发过程的核心概念</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B2%BE%E7%9B%8A%E4%BA%A7%E5%93%81%E5%BC%80%E5%8F%91%E7%9A%84%E4%BC%98%E5%8A%A3%E5%8A%BF"><span class="toc-number">11.11.</span> <span class="toc-text">精益产品开发的优劣势</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BC%98%E5%8A%BF"><span class="toc-number">11.11.1.</span> <span class="toc-text">优势</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8A%A3%E5%8A%BF"><span class="toc-number">11.11.2.</span> <span class="toc-text">劣势</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%8F%E6%8D%B7%E5%BC%80%E5%8F%91"><span class="toc-number">12.</span> <span class="toc-text">敏捷开发</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%A0%E7%BB%9F%E6%96%B9%E6%B3%95VS%E6%95%8F%E6%8D%B7%E6%96%B9%E6%B3%95"><span class="toc-number">12.1.</span> <span class="toc-text">传统方法VS敏捷方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%A0%E7%BB%9FVS%E6%95%8F%E6%8D%B7%E4%B9%8B%E5%AE%A2%E6%88%B7%E4%BA%92%E5%8A%A8%E5%AF%B9%E6%AF%94"><span class="toc-number">12.2.</span> <span class="toc-text">传统VS敏捷之客户互动对比</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A1%AE%E5%AE%9A%E6%80%A7%E9%A1%B9%E7%9B%AEVS%E4%B8%8D%E7%A1%AE%E5%AE%9A%E6%80%A7%E9%A1%B9%E7%9B%AE"><span class="toc-number">12.3.</span> <span class="toc-text">确定性项目VS不确定性项目</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E7%B1%BB%E5%9E%8B"><span class="toc-number">12.4.</span> <span class="toc-text">生命周期类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Stacy%E6%96%AF%E6%B3%B0%E8%A5%BF%E5%9B%BE"><span class="toc-number">12.5.</span> <span class="toc-text">Stacy斯泰西图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%8F%E6%8D%B7%E5%AE%A3%E8%A8%80"><span class="toc-number">12.6.</span> <span class="toc-text">敏捷宣言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%8F%E6%8D%B7%E5%BC%80%E5%8F%91%E5%8D%81%E4%BA%8C%E5%A4%A7%E5%8E%9F%E5%88%99"><span class="toc-number">12.7.</span> <span class="toc-text">敏捷开发十二大原则</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%8F%E6%8D%B7Scrum%E6%A1%86%E6%9E%B6"><span class="toc-number">12.8.</span> <span class="toc-text">敏捷Scrum框架</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%8F%E6%8D%B7%E5%AE%9E%E8%B7%B5SCRUM%E7%9A%84333555"><span class="toc-number">12.9.</span> <span class="toc-text">敏捷实践SCRUM的333555</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%8F%E6%8D%B7%E5%AE%9E%E8%B7%B5-3%E4%B8%AA%E8%A7%92%E8%89%B2"><span class="toc-number">12.10.</span> <span class="toc-text">敏捷实践 - 3个角色</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%8F%E6%8D%B7%E5%AE%9E%E8%B7%B5-%E7%94%A8%E6%88%B7%E6%95%85%E4%BA%8B"><span class="toc-number">12.11.</span> <span class="toc-text">敏捷实践 - 用户故事</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%8F%E6%8D%B7%E5%AE%9E%E8%B7%B5-%E4%BA%A7%E5%93%81%E4%BB%A3%E5%8A%9E%E5%88%97%E8%A1%A8"><span class="toc-number">12.12.</span> <span class="toc-text">敏捷实践 - 产品代办列表</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">13.</span> <span class="toc-text"></span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%87%A0%E7%A7%8D%E5%BC%80%E5%8F%91%E6%B5%81%E7%A8%8B%E7%9A%84%E5%AF%B9%E6%AF%94"><span class="toc-number">14.</span> <span class="toc-text">几种开发流程的对比</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%80%91%E5%B8%83%E6%A8%A1%E5%9E%8B-VS-%E6%95%8F%E6%8D%B7%E6%B5%81%E7%A8%8B"><span class="toc-number">14.1.</span> <span class="toc-text">瀑布模型 VS 敏捷流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%8F%E6%8D%B7%E4%B8%8E%E7%B2%BE%E7%9B%8A"><span class="toc-number">14.2.</span> <span class="toc-text">敏捷与精益</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%97%A8%E5%BE%84%E7%AE%A1%E7%90%86-VS-%E6%95%8F%E6%8D%B7"><span class="toc-number">14.3.</span> <span class="toc-text">门径管理 VS 敏捷</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9B%86%E6%88%90%E4%BA%A7%E5%93%81%E5%BC%80%E5%8F%91%E4%B8%8E%E5%85%B6%E4%BB%96%E6%B5%81%E7%A8%8B%E5%AF%B9%E6%AF%94"><span class="toc-number">14.4.</span> <span class="toc-text">集成产品开发与其他流程对比</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%80%E5%8F%91%E6%B5%81%E7%A8%8B%E7%9A%84%E6%B2%BB%E7%90%86"><span class="toc-number">14.5.</span> <span class="toc-text">开发流程的治理</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">15.</span> <span class="toc-text">总结</span></a></li></ol>
+    </nav>
+  </div>
+</aside>
+
+<script>
+  // 移动端不显示菜单
+  if (
+    navigator.userAgent.match(
+      /(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i
+    )
+  ) {
+    let self = document.querySelector(".sidebar-toc");
+    var parent = self.parentElement;
+    parent.removeChild(self);
+  } else {
+  }
+</script>
+
+
+
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-新产品流程" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      新产品流程
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2022/03/18/%E6%96%B0%E4%BA%A7%E5%93%81%E6%B5%81%E7%A8%8B/" class="article-date">
+	  <time datetime="2022-03-17T16:00:00.000Z" itemprop="datePublished">2022-03-18</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/%E4%BA%A7%E5%93%81%E7%BB%8F%E7%90%86/">产品经理</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/NPDP/" rel="tag">NPDP</a>
+  </span>
+
+
+        
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/03/18/%E6%96%B0%E4%BA%A7%E5%93%81%E6%B5%81%E7%A8%8B/#comments" class="article-comment-link">评论</a></span>
+        
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <h2 id="思维导图"><a href="#思维导图" class="headerlink" title="思维导图"></a>思维导图</h2><h2 id="管控产品失败（降低不确定性）的方法"><a href="#管控产品失败（降低不确定性）的方法" class="headerlink" title="管控产品失败（降低不确定性）的方法"></a>管控产品失败（降低不确定性）的方法</h2><h3 id="不确定性、累计成本与开发阶段的关系"><a href="#不确定性、累计成本与开发阶段的关系" class="headerlink" title="不确定性、累计成本与开发阶段的关系"></a>不确定性、累计成本与开发阶段的关系</h3><p><img src="http://www.vkcyan.top/image-20220324204825223.png" alt="image-20220324204825223"></p>
+<h3 id="标准的决策框架"><a href="#标准的决策框架" class="headerlink" title="标准的决策框架"></a>标准的决策框架</h3><p><img src="http://www.vkcyan.top/image-20220324204830469.png" alt="image-20220324204830469"></p>
+<h2 id="产品开发流程基本阶段"><a href="#产品开发流程基本阶段" class="headerlink" title="产品开发流程基本阶段"></a>产品开发流程基本阶段</h2><ul>
+<li>探索（Exploration）</li>
+<li>筛选（Screening）</li>
+<li>商业评估（Business Evaluation）</li>
+<li>开发（Development）</li>
+<li>测试（Testing）</li>
+<li>商业化（Commercialization）</li>
+</ul>
+<h2 id="常见产品开发流程"><a href="#常见产品开发流程" class="headerlink" title="常见产品开发流程"></a>常见产品开发流程</h2><ul>
+<li>门径管理流程（Stage - Gate@）</li>
+<li>集成产品开发（IPD）</li>
+<li>精益开发（Lean）</li>
+<li>敏捷开发（Agil）</li>
+<li>设计思维（Design Thinking）</li>
+</ul>
+<h2 id="模糊前端FFE"><a href="#模糊前端FFE" class="headerlink" title="模糊前端FFE"></a>模糊前端FFE</h2><p>​	模糊前段（Fuzzy front end，FFE）：产品开发项目的前端是一个早期极端的起点，在进入正式的产品开发流程前，组织在该阶段识别机会，形成概念。</p>
+<p>​	该阶段包括创意生成阶段，初始概念发展阶段和高级业务阶段。</p>
+<p>​	是项目中定义最不确定的一个阶段</p>
+<p>​	注：创意阶段可能有5个，概念开发阶段经过淘汰与融合变成了2个，最后立项分析，确定要做的项目</p>
+<img src="http://www.vkcyan.top/image-20220326140418592.png" alt="image-20220326140418592" style="zoom:80%;" />
+
+
+
+<h2 id="门径管理流程"><a href="#门径管理流程" class="headerlink" title="门径管理流程"></a>门径管理流程</h2><img src="http://www.vkcyan.top/image-20220326142104796.png" alt="image-20220326142104796" style="zoom:67%;" />
+
+
+
+<h2 id="阶段-关口概念"><a href="#阶段-关口概念" class="headerlink" title="阶段-关口概念"></a>阶段-关口概念</h2><h3 id="什么是阶段"><a href="#什么是阶段" class="headerlink" title="什么是阶段"></a>什么是阶段</h3><p>产品开发流程中的一个确认区域，包括：</p>
+<p>活动：项目负责人及团队成员依照项目计划必须完成的工作</p>
+<p>综合分析：通过跨职能部门及团队成员依照项目计划必须完成的工作</p>
+<p>可交付成果：是综合分析结果的呈现，这是团队必须完成的并在关口时所以提交的内容</p>
+<h3 id="什么是关卡"><a href="#什么是关卡" class="headerlink" title="什么是关卡"></a>什么是关卡</h3><p>基本上，他是产品开发流程中的一个确认节点，在该阶段时需要做出有关项目未来的关键决策。包括</p>
+<p>可交付成果：关口评审点的输入内容（阶段中的可交付成果）。它是前阶段行为的结果，是实现确定的，在每个关口都有一个可交付成功的标准清单</p>
+<p>标准：判断项目是继续还是停止以及优先级决策的标准，这些标准通过以分数呈现，包括财务和定向标准</p>
+<p>输出：关口评审结果。关口必须有明确的输出包括一个决策（继续或者停止）以及下一个阶段的路径</p>
+<h2 id="阶段-关口（Stage-Gate）新产品开发过程"><a href="#阶段-关口（Stage-Gate）新产品开发过程" class="headerlink" title="阶段 - 关口（Stage - Gate）新产品开发过程"></a>阶段 - 关口（Stage - Gate）新产品开发过程</h2><blockquote>
+<p>根据需要，可灵活裁剪与添加</p>
+</blockquote>
+<p>分为六个阶段，由来自公司内部不同职能领域的人员一起完成：</p>
+<p>发现（Discovery）：寻找新机会和新产品创意</p>
+<p>筛选（Scoping）：也叫观察，初步评选市场机会、技术需求以及能力的可获得性</p>
+<p>立项分析（Business Case）：也叫构建产品框架，建立在筛选阶段之上的一个关键阶段，包括更为深入的技术，市场和商业可行性分析</p>
+<p>开发（Development）：产品设计，原生制造，生产设计，制造准备和上市规划</p>
+<p>测试与修正（Testing and Validation）：也翻译成测试与确认，测试产品以及商业化计划的所有方面，以修正所有假设和结论，和证实对产品的预期和总结</p>
+<p>上市（Launch）：也翻译为投放市场，产品的完整商业化，包括规模制造以及商业化上市</p>
+<p>阶段：一个确定区域，包括 活动，综合分析，可交付成果</p>
+<p>关卡：一个确定阶段，必须又明确的输出包括一个决策（继续或者停止等）以及下一阶段的路径。包括：可交付成果，标准，输出</p>
+<h2 id="瀑布模型"><a href="#瀑布模型" class="headerlink" title="瀑布模型"></a>瀑布模型</h2><ul>
+<li>要求：了解要设计产品需要什么功能、目的、用户需求</li>
+<li>设计：确定完成项目所需的软件与硬件，之后被转化为物理设计</li>
+<li>实施：根据项目要求和设计规范编写实际代码</li>
+<li>验证：确保产品符合顾客的期望</li>
+<li>维护：通过客户确定产品设计中的不足或错误，进行修正</li>
+</ul>
+<p><img src="http://www.vkcyan.top/image-20220328174347453.png" alt="image-20220328174347453"></p>
+<h2 id="集成产品开发IPD"><a href="#集成产品开发IPD" class="headerlink" title="集成产品开发IPD"></a>集成产品开发IPD</h2><blockquote>
+<p>integrated Product Development，PID </p>
+</blockquote>
+<h3 id="前身-并行工程"><a href="#前身-并行工程" class="headerlink" title="前身 - 并行工程"></a>前身 - 并行工程</h3><h4 id="含义"><a href="#含义" class="headerlink" title="含义"></a>含义</h4><p>​	在产品的设计与制造流程中，跨职能团队采用并行模式进行工作，而不是各个功能的顺序依次开发，从而促使团队全面考虑产品生命周期中从概念到实施的全部元素，包括质量、成本、维护等方面</p>
+<h4 id="主要特征"><a href="#主要特征" class="headerlink" title="主要特征"></a>主要特征</h4><ol>
+<li>并行交叉：并行工程强调产品设计与工艺过程设计、生产准备、采购等活动交叉进行<ol>
+<li>按部件并行交叉，将一个产品分成若干部分，使其各部件能并行进行交叉开发</li>
+<li>各个组件的设计、采购、生产等各种互动尽可能的交叉并行</li>
+</ol>
+</li>
+<li>尽早开始工作，目的就是争取时间</li>
+</ol>
+<h4 id="具体做法"><a href="#具体做法" class="headerlink" title="具体做法"></a>具体做法</h4><p>​	在产品开发的初期，组织多种可协同工作的项目组，使得有关人员从一开始就获得有关项目的最新消息，积极研究涉及本部门的工作任务，并将需求提供给设计人员，使得许多问题在开发早期就得到了解决从而保证设计质量，减少返工与浪费</p>
+<h3 id="发展-集成产品开发IPD"><a href="#发展-集成产品开发IPD" class="headerlink" title="发展 - 集成产品开发IPD"></a>发展 - 集成产品开发IPD</h3><h4 id="含义-1"><a href="#含义-1" class="headerlink" title="含义"></a>含义</h4><p>​	系统综合地应用不同职能体系的成果和理念，有效、高效的开发新产品，满足客户需求的方式</p>
+<img src="http://www.vkcyan.top/image-20220407142631200.png" alt="image-20220407142631200" style="zoom:70%;" />
+
+<h3 id="IPD管理的精髓"><a href="#IPD管理的精髓" class="headerlink" title="IPD管理的精髓"></a>IPD管理的精髓</h3><ul>
+<li>IPD基于<strong>并行工程</strong>发展而来</li>
+<li>IPD首先<strong>是一个商业流程，关注商业结果</strong>，将产品开发作为一项投资进行审慎管理</li>
+<li>IPD采用<strong>跨职能团队</strong>，加强部门合作，形成合力，共同承担</li>
+<li>IPD流程分为不同的阶段，通过在决策评审点的决策实现集成组合管理团队（IPMT）和产品开发团队（PDT）<strong>互动</strong>，资源受控分配与投入，既满足项目进展的需求，又避免了投资失控的风险</li>
+<li>IPD是灵活的，发展的，<strong>持续改进设计的</strong>，在不断吸纳业界实践和解决业务问题的过程与时俱进</li>
+<li>IPD流程是<strong>基于市场的开发，关注市场需求和竞争分析</strong>，鼓励创新基于着二者之上</li>
+</ul>
+<h3 id="集成产品开发系统分级"><a href="#集成产品开发系统分级" class="headerlink" title="集成产品开发系统分级"></a>集成产品开发系统分级</h3><img src="http://www.vkcyan.top/image-20220407145126882.png" alt="image-20220407145126882" style="zoom:67%;" />
+
+
+
+<h2 id="精益产品开发"><a href="#精益产品开发" class="headerlink" title="精益产品开发"></a>精益产品开发</h2><p>定义（Lean Product Development）：创建在丰田首创的精益方法（TPS）的基础之上。目的是：从流程中去掉浪费</p>
+<h3 id="精益开发的原则（提升生产效率）"><a href="#精益开发的原则（提升生产效率）" class="headerlink" title="精益开发的原则（提升生产效率）"></a>精益开发的原则（提升生产效率）</h3><ul>
+<li>确定客户定义的价值</li>
+<li>尽最大努力探索不同的解决方案</li>
+<li>创造顺畅的产品开发流程</li>
+<li>尊重颜色的标准，以减少变异</li>
+<li>首席工程师全程参与</li>
+<li>跨职能整合</li>
+<li>学习不断改进</li>
+<li>准求卓越与不断学习的文化</li>
+<li>团队整个组织</li>
+</ul>
+<p>消除浪费 + 强化学习 + 慎重政策 + 尽快交付 + 授权团队 + 品质为先 + 全局优化 + 消除浪费 &#x3D; 精益产品</p>
+<h3 id="潜在的浪费来源包括"><a href="#潜在的浪费来源包括" class="headerlink" title="潜在的浪费来源包括"></a>潜在的浪费来源包括</h3><ul>
+<li>混乱的工作环境</li>
+<li>缺乏可用的资源</li>
+<li>缺乏明确的优先级顺序</li>
+<li>不同职能之间的沟通存在障碍</li>
+<li>糟糕的产品需求定义</li>
+<li>缺乏对可制造性的早期考虑</li>
+<li>过度设计</li>
+<li>太多无效会议</li>
+<li>太多的电子邮件</li>
+</ul>
+<h3 id="直接效益"><a href="#直接效益" class="headerlink" title="直接效益"></a>直接效益</h3><ul>
+<li>显著提升生产效能</li>
+</ul>
+<h3 id="准时制"><a href="#准时制" class="headerlink" title="准时制"></a>准时制</h3><p>准时制生产方式（Just In Time简称JIT），又称作无库存生产方式（stockless production），零库存（zero inventories），单件流（one - piece flow）或者超市市场生产方式（supermarket production）</p>
+<p>JIT的基本理念：只在需要的时候、按需要的量，生产所需的产品，故又被称为准时生产、适时生产方式。</p>
+<p>JIT的目标：彻底消除无效劳动和浪费。具体要达到以下目标</p>
+<ol>
+<li>废品量最低 2. 库存量最低 3. 准备时间最短 4. 生产提前期最短 5. 减少零件搬运，搬运量低 6. 机器损坏低 7. 事故降低</li>
+</ol>
+<h3 id="单件流"><a href="#单件流" class="headerlink" title="单件流"></a>单件流</h3><p>批量生产虽然是降低成本的生产方法，但是容易出现堆积浪费，周转麻烦，容错率低的问题</p>
+<p>单件流则有目的的降低周转问题，并且减少堆积浪费，同时增加容错率</p>
+<h3 id="5WHY法（刨根问底法）"><a href="#5WHY法（刨根问底法）" class="headerlink" title="5WHY法（刨根问底法）"></a>5WHY法（刨根问底法）</h3><img src="http://www.vkcyan.top/image-20220407164034697.png" alt="image-20220407164034697" style="zoom:67%;" />
+
+
+
+<h3 id="安灯法"><a href="#安灯法" class="headerlink" title="安灯法"></a>安灯法</h3><p>操作：产线异常，按下按钮 - 产线报警 - 领班支持</p>
+<p> 收益：</p>
+<ul>
+<li>一线员工既要动手，也要动脑</li>
+<li>鼓励员工持续成长，获得成就感</li>
+<li>公司流程优化，持续改善</li>
+</ul>
+<h3 id="现场现物"><a href="#现场现物" class="headerlink" title="现场现物"></a>现场现物</h3><p>亲临现场 - 细致观察，分析&#x2F;评估 - 找出原因</p>
+<h3 id="构建学习型组织"><a href="#构建学习型组织" class="headerlink" title="构建学习型组织"></a>构建学习型组织</h3><ul>
+<li>超越短期利益，着眼长期利益</li>
+<li>致力提升员工，合作伙伴能力</li>
+<li>继任领导延续公司文化基因</li>
+</ul>
+<p>丰田模式的核心精神是通过支持和鼓励员工持续改善工作流程</p>
+<p>让他们不断成长与进步，进而获得工作成就感和主人翁意识</p>
+<h3 id="精益产品开发过程的核心概念"><a href="#精益产品开发过程的核心概念" class="headerlink" title="精益产品开发过程的核心概念"></a>精益产品开发过程的核心概念</h3><img src="http://www.vkcyan.top/image-20220407185511266.png" alt="image-20220407185511266" style="zoom:80%;" />
+
+<h3 id="精益产品开发的优劣势"><a href="#精益产品开发的优劣势" class="headerlink" title="精益产品开发的优劣势"></a>精益产品开发的优劣势</h3><h4 id="优势"><a href="#优势" class="headerlink" title="优势"></a>优势</h4><ul>
+<li>流程的聚焦点在于信息的顺畅流动,而非严厉管控</li>
+<li>通过事件驱动方法简化合作，优化设计</li>
+<li>重视对进度、成本、消极和质量方面的风险的积极管控</li>
+<li>适用于各种规模的项目</li>
+<li>用于记录学习和进展、判定优先级和解决问题的工具是简单的，可视化的</li>
+</ul>
+<h4 id="劣势"><a href="#劣势" class="headerlink" title="劣势"></a>劣势</h4><ul>
+<li>参与人员必须是相当敬业并且经验丰富的</li>
+<li>需要改变组织的结构和文化</li>
+<li>需要强有力的供应商管理</li>
+<li>组织有意愿且有能力接受项目目标的和方向上的变化</li>
+</ul>
+<h2 id="敏捷开发"><a href="#敏捷开发" class="headerlink" title="敏捷开发"></a>敏捷开发</h2><h3 id="传统方法VS敏捷方法"><a href="#传统方法VS敏捷方法" class="headerlink" title="传统方法VS敏捷方法"></a>传统方法VS敏捷方法</h3><table>
+<thead>
+<tr>
+<th>传统的写作方式</th>
+<th>敏捷的写作方式</th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>确定主题</td>
+<td>与读者互动</td>
+<td></td>
+</tr>
+<tr>
+<td>整理大纲、搭建框架</td>
+<td>确定主题</td>
+<td></td>
+</tr>
+<tr>
+<td>书写内容</td>
+<td>与读者互动。收集反馈</td>
+<td></td>
+</tr>
+<tr>
+<td>设计、排版、校对</td>
+<td>试写第一张</td>
+<td></td>
+</tr>
+<tr>
+<td>出版</td>
+<td>与读者互动，收集反馈</td>
+<td></td>
+</tr>
+<tr>
+<td>与读者见面</td>
+<td>试写第二章</td>
+<td></td>
+</tr>
+<tr>
+<td>筹集反馈</td>
+<td>…</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>设计、排班、校对</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>出版</td>
+<td></td>
+</tr>
+</tbody></table>
+<h3 id="传统VS敏捷之客户互动对比"><a href="#传统VS敏捷之客户互动对比" class="headerlink" title="传统VS敏捷之客户互动对比"></a>传统VS敏捷之客户互动对比</h3><img src="http://www.vkcyan.top/image-20220408195943522.png" alt="image-20220408195943522" style="zoom:80%;" />
+
+
+
+<h3 id="确定性项目VS不确定性项目"><a href="#确定性项目VS不确定性项目" class="headerlink" title="确定性项目VS不确定性项目"></a>确定性项目VS不确定性项目</h3><img src="http://www.vkcyan.top/image-20220408205133131.png" alt="image-20220408205133131" style="zoom:80%;" />
+
+
+
+<h3 id="生命周期类型"><a href="#生命周期类型" class="headerlink" title="生命周期类型"></a>生命周期类型</h3><img src="http://www.vkcyan.top/image-20220408205936546.png" alt="image-20220408205936546" style="zoom:80%;" />
+
+
+
+<p>增量型：楼盘 定下来不会变 但是要不断交付 </p>
+<p>敏捷性：互联网项目 不断在变化</p>
+<p>预测型：铁路建造 变化极小，有规律的项目</p>
+<p>迭代型：研发疫苗 不断变化，但是只需要交付一次 </p>
+<h3 id="Stacy斯泰西图"><a href="#Stacy斯泰西图" class="headerlink" title="Stacy斯泰西图"></a>Stacy斯泰西图</h3><img src="http://www.vkcyan.top/image-20220408210819352.png" alt="image-20220408210819352" style="zoom:80%;" />
+
+
+
+<h3 id="敏捷宣言"><a href="#敏捷宣言" class="headerlink" title="敏捷宣言"></a>敏捷宣言</h3><table>
+<thead>
+<tr>
+<th>敏捷宣言</th>
+<th>价值观</th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>个体以及互动 胜于 流程和工具</td>
+<td>以人为本</td>
+<td></td>
+</tr>
+<tr>
+<td>可工作的软件 胜过 完整的文档</td>
+<td>以价值为导向</td>
+<td></td>
+</tr>
+<tr>
+<td>客户合作 胜过 合同谈判</td>
+<td>合作共赢</td>
+<td></td>
+</tr>
+<tr>
+<td>响应变化 胜过 遵循原则</td>
+<td>拥抱变化</td>
+<td></td>
+</tr>
+</tbody></table>
+<h3 id="敏捷开发十二大原则"><a href="#敏捷开发十二大原则" class="headerlink" title="敏捷开发十二大原则"></a>敏捷开发十二大原则</h3><ul>
+<li>通过<strong>尽早和持续地交付</strong>有价值的软件来满足客户</li>
+<li><strong>欢迎对需求提出变更</strong>，敏捷过程要善于利用需求变更，帮助客户获得竞争优势</li>
+<li><strong>经常交付</strong>可用软件，并周期越短越好</li>
+<li>业务人员与开发人员必须<strong>通力合作</strong></li>
+<li>要善于激励项目人员，基于他们所需的<strong>环境和支持</strong>，并相信他们能完成任务</li>
+<li>团队内部和各个团队之间，最有效的沟通方式是<strong>面对面沟通</strong></li>
+<li><strong>可工作的软件</strong>是衡量进度的首要指标</li>
+<li>敏捷过程体长<strong>可持续</strong>的开发。项目方、开发人员和用户应该能够保持稳定恒久的进展速度</li>
+<li>对技术的<strong>精益求精</strong>以及对设计的不断完善将提高敏捷性</li>
+<li>尽量做到<strong>简洁</strong>，尽最大可能减少不必要工作，这是一门艺术</li>
+<li>最佳的架构、需求和设计出自于<strong>自组织团队</strong></li>
+<li>团队要定期<strong>回顾和反思</strong>如何能够做到更有效，并相应地调整团队的行为</li>
+</ul>
+<h3 id="敏捷Scrum框架"><a href="#敏捷Scrum框架" class="headerlink" title="敏捷Scrum框架"></a>敏捷Scrum框架</h3><img src="http://www.vkcyan.top/image-20220409112819570.png" alt="image-20220409112819570" style="zoom:80%;" />
+
+
+
+<h3 id="敏捷实践SCRUM的333555"><a href="#敏捷实践SCRUM的333555" class="headerlink" title="敏捷实践SCRUM的333555"></a>敏捷实践SCRUM的333555</h3><table>
+<thead>
+<tr>
+<th>三个支柱</th>
+<th>三个角色</th>
+<th>三个工件</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>透明性（Transparency）</td>
+<td>产品负责人（Product Owner）</td>
+<td>产品待办事项列表（Product Backlog）</td>
+</tr>
+<tr>
+<td>检查（Inspection）</td>
+<td>敏捷教练（Scrum Master）</td>
+<td>冲刺待办事项列表（Sprint Backlog）</td>
+</tr>
+<tr>
+<td>适应（Adaptation）</td>
+<td>项目团队（Scrum Team）</td>
+<td>可交付产品增量（Increment）</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th>五个事件</th>
+<th>五大价值观</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>冲刺</td>
+<td>承诺（Commitment） - 愿意对目标做出承诺</td>
+</tr>
+<tr>
+<td>冲刺规划会议</td>
+<td>专注（Focus） - 全身心都用到你承诺的工作上去</td>
+</tr>
+<tr>
+<td>每日站会</td>
+<td>开放（Openness） - 团队内所有信息对所有人开发</td>
+</tr>
+<tr>
+<td>迭代评审会议</td>
+<td>尊重（Respect） - 每个人都有他独特的价值与经验</td>
+</tr>
+<tr>
+<td>迭代回顾会议</td>
+<td>勇气（Courage） - 勇于承诺，履行承诺，敢于说不</td>
+</tr>
+</tbody></table>
+<h3 id="敏捷实践-3个角色"><a href="#敏捷实践-3个角色" class="headerlink" title="敏捷实践 - 3个角色"></a>敏捷实践 - 3个角色</h3><table>
+<thead>
+<tr>
+<th>产品负责人</th>
+<th>敏捷教练</th>
+<th>敏捷团队</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>确定产品的功能和标准<br />维护产品待办事项列表<br />指定软件的交付内容<br />代表客户利益<br />拥有最终解释权<br />平衡有竞争关系的利益相关者</td>
+<td>团队和产品主管之间的协调者，消除他们之间的障碍<br />工作职责不是管理团队<br />激发团队的创造力，给团队授权<br />提升团队生产率<br />改进工程工具的实践<br />确保团队取得进展的信息实时更新与同步<br />服务团队、教导团队、保护团队</td>
+<td>5到9个人<br />多职能部门人员组成<br />冲刺阶段，团队通过自组织的方式实现冲刺目标<br />实现目标的帆帆上有选择自主权<br />责任属于整个开发团队<br />一起成功，一起失败<br />一起调整，一起改进</td>
+</tr>
+</tbody></table>
+<h3 id="敏捷实践-用户故事"><a href="#敏捷实践-用户故事" class="headerlink" title="敏捷实践 - 用户故事"></a>敏捷实践 - 用户故事</h3><p>作为 学员 我想 看直播课 以便于 和老师互动</p>
+<p>作为老师 我想 提前排课表 以便于 合理安排事件</p>
+<p>作为xx 我想 xx 以便于xxxxx</p>
+<p>用户说出自己的问题而不是给出具体解决方案</p>
+<h3 id="敏捷实践-产品代办列表"><a href="#敏捷实践-产品代办列表" class="headerlink" title="敏捷实践 - 产品代办列表"></a>敏捷实践 - 产品代办列表</h3><p>​	待办事项是所有工作的有序列表，他以故事形式呈现给团队。价值大的排在上面。他是产品需求变更的唯一来源</p>
+<p>​	他是一个持续完善的清单，根据产品和开发环境的变化而演进。</p>
+<p>​	产品负责人Product Owner负责待办事项列表的内容，可用性和优先级</p>
+<h2 id=""><a href="#" class="headerlink" title=""></a></h2><h2 id="几种开发流程的对比"><a href="#几种开发流程的对比" class="headerlink" title="几种开发流程的对比"></a>几种开发流程的对比</h2><h3 id="瀑布模型-VS-敏捷流程"><a href="#瀑布模型-VS-敏捷流程" class="headerlink" title="瀑布模型 VS 敏捷流程"></a>瀑布模型 VS 敏捷流程</h3><table>
+<thead>
+<tr>
+<th>瀑布模型</th>
+<th>敏捷流程</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>瀑布使用阶段</td>
+<td>敏捷使用迭代</td>
+</tr>
+<tr>
+<td>瀑布使用不提供高低频率的互动（开发阶段低频率，业务测试阶段高频率）</td>
+<td>有频繁的业务互动</td>
+</tr>
+<tr>
+<td>瀑布模式一个项目经理</td>
+<td>敏捷流程是scrum master</td>
+</tr>
+<tr>
+<td>瀑布不能迭代</td>
+<td>敏捷能迭代</td>
+</tr>
+</tbody></table>
+<h3 id="敏捷与精益"><a href="#敏捷与精益" class="headerlink" title="敏捷与精益"></a>敏捷与精益</h3><p>敏捷开发：敏捷设计的初衷是再短时间内执行任务，与客户进行频繁互动，并能够对变化做出迅速相应，比较常用于软件开发</p>
+<p>精益开发：精益旨在减少浪费，提高运营效率，特别适用于制造过程中常见的重复性任务</p>
+<h3 id="门径管理-VS-敏捷"><a href="#门径管理-VS-敏捷" class="headerlink" title="门径管理 VS 敏捷"></a>门径管理 VS 敏捷</h3><table>
+<thead>
+<tr>
+<th>特征</th>
+<th>门径管理</th>
+<th>敏捷</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>模型类型</td>
+<td>宏观技术</td>
+<td>微观计划，项目管理</td>
+</tr>
+<tr>
+<td>范围</td>
+<td>创意到结束，端点到端点</td>
+<td>只有开发与测试阶段</td>
+</tr>
+<tr>
+<td>组织广度</td>
+<td>跨职能 - 技术、市场、生产</td>
+<td>技术</td>
+</tr>
+<tr>
+<td>结束点</td>
+<td>上市成为新产品</td>
+<td>已开发或测试的软件</td>
+</tr>
+<tr>
+<td>决策模型</td>
+<td>投资模型：设计高级管理层治理的继续或停止模型</td>
+<td>主要是战术性的：下一个冲刺需要的动作</td>
+</tr>
+</tbody></table>
+<h3 id="集成产品开发与其他流程对比"><a href="#集成产品开发与其他流程对比" class="headerlink" title="集成产品开发与其他流程对比"></a>集成产品开发与其他流程对比</h3><ol>
+<li>集成产品开发提供一种将产品开发中的功能，角色和行为集成起来的框架。</li>
+<li>定义为系统地、综合的应用不同职能体系的成功和理念，有效、高效地开发新产品，满足客户需求的方式</li>
+<li>集成产品开发模型的一个重要功能是“学习与持续改进”，模型表明专注于产品开发过程和技术的组织如何发展以知识为基础的学习型组织</li>
+<li>各流程模型是潜在互补的，而不是相互排斥的，应以持续学习和改进为重点，将每个模型中的元素融合为一个真正适合于产品开发的模型</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>特点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>门径管理模型</td>
+<td>宏观规划、决策基础</td>
+</tr>
+<tr>
+<td>敏捷模型</td>
+<td>微观技术和灵活性</td>
+</tr>
+<tr>
+<td>精益生产</td>
+<td>减少浪费</td>
+</tr>
+<tr>
+<td>集成产品开发</td>
+<td>学习型组织，对新产品开发的综合集成</td>
+</tr>
+</tbody></table>
+<h3 id="开发流程的治理"><a href="#开发流程的治理" class="headerlink" title="开发流程的治理"></a>开发流程的治理</h3><p>治理：用于指导项目、程序和项目组合管理中的活动框架、功能和流程。治理是采取高层级和战略性的视角，而不是陷入过程和项目细节</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>治理</th>
+<th>管理</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>职能</td>
+<td>监督、控制、整合和决策</td>
+<td>技术、组织、领导和控制</td>
+</tr>
+<tr>
+<td>关注点</td>
+<td>结果和目标</td>
+<td>方法和技术</td>
+</tr>
+<tr>
+<td>层面</td>
+<td>宏观（战略、决策角度）</td>
+<td>中观和微观（战术、执行角度）</td>
+</tr>
+<tr>
+<td>负责人</td>
+<td>董事会</td>
+<td>管理层</td>
+</tr>
+<tr>
+<td>作用</td>
+<td>为管理提供框架、功能和过程授予管理者经营权并加以监督</td>
+<td>再治理提供的框架和监督中形式经营权，实现经营目标</td>
+</tr>
+</tbody></table>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>所有流程模型均遵从一下共同原则</p>
+<ul>
+<li>关注战略一致性</li>
+<li>基于知识进行决策</li>
+<li>降低产品失败的风险</li>
+<li>剪掉将利益相关者的输入信息融入设计决策</li>
+<li>应用跨职能团队</li>
+<li>是一个结构化框架，要被整个项目所理解和应用</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>门径管理流程</th>
+<th>集成产品开发</th>
+<th>精益开发</th>
+<th>敏捷开发</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>是否对整个新产品开发流程进行管理</td>
+<td>是</td>
+<td>是</td>
+<td>是</td>
+<td>否</td>
+</tr>
+<tr>
+<td>是否专注于跨职能团队的使用</td>
+<td>是</td>
+<td>是</td>
+<td>是</td>
+<td>是</td>
+</tr>
+<tr>
+<td>能加快上市速度吗</td>
+<td>是</td>
+<td>是</td>
+<td>是</td>
+<td>是</td>
+</tr>
+<tr>
+<td>最适用什么类型的产品行业</td>
+<td>硬件、实物</td>
+<td>多产品</td>
+<td>制造 软件</td>
+<td>软件类</td>
+</tr>
+<tr>
+<td>如何降低产品失败的风险</td>
+<td>关口</td>
+<td>决策点</td>
+<td>消除浪费</td>
+<td>快速迭代</td>
+</tr>
+<tr>
+<td>是线性还是迭代</td>
+<td>线性</td>
+<td>线性</td>
+<td>线性+迭代</td>
+<td>迭代+线性</td>
+</tr>
+</tbody></table>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://vkcyan.github.io/2022/03/18/%E6%96%B0%E4%BA%A7%E5%93%81%E6%B5%81%E7%A8%8B/" title="新产品流程" target="_blank" rel="external">https://vkcyan.github.io/2022/03/18/新产品流程/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/vkcyan" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/vkcyan" target="_blank"><span class="text-dark">vkcyan</span><small class="ml-1x">Web Developer &amp; Product Manager</small></a></h3>
+        <div></div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="vcomments"></div>
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2022/03/18/%E6%96%B0%E4%BA%A7%E5%93%81%E5%BC%80%E5%8F%91%E6%88%98%E7%95%A5/" title="新产品开发战略"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2022/03/18/%E7%BB%84%E5%90%88%E7%AE%A1%E7%90%86/" title="组合管理"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+    <li class="toggle-toc">
+      <a class="toggle-btn " data-toggle="collapse" href="#collapseToc" aria-expanded="false" title="文章目录" role="button">    <span>[&nbsp;</span><span>文章目录</span>
+        <i class="text-collapsed icon icon-anchor"></i>
+        <i class="text-in icon icon-close"></i>
+        <span>]</span>
+      </a>
+    </li>
+    
+  </ul>
+  
+  
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-fancy btn-donate pop-onhover bg-gradient-warning" data-toggle="modal" data-target="#donateModal"><span>赏</span></button>
+  <!-- <div class="wave-icon wave-icon-danger btn-donate" data-toggle="modal" data-target="#donateModal">
+    <div class="wave-circle"><span class="icon"><i class="icon icon-bill"></i></span></div>
+  </div> -->
+  
+  
+  <div class="bar-right">
+    
+  </div>
+  </div>
+</nav>
+  
+<!-- Modal -->
+<div class="modal modal-center modal-small modal-xs-full fade" id="donateModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content donate">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <div class="modal-body">
+        <div class="donate-box">
+          <div class="donate-head">
+            <p>感谢您的支持，我会继续努力的!</p>
+          </div>
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade active in" id="alipay">
+              <div class="donate-payimg">
+                <img src="/images/donate/alipayimg.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开支付宝扫一扫，即可进行扫码打赏哦</p>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="wechatpay">
+              <div class="donate-payimg">
+                <img src="/images/donate/wechatpayimg.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开微信扫一扫，即可进行扫码打赏哦</p>
+            </div>
+          </div>
+          <div class="donate-footer">
+            <ul class="nav nav-tabs nav-justified" role="tablist">
+              <li role="presentation" class="active">
+                <a href="#alipay" id="alipay-tab" role="tab" data-toggle="tab" aria-controls="alipay" aria-expanded="true"><i class="icon icon-alipay"></i> 支付宝</a>
+              </li>
+              <li role="presentation" class="">
+                <a href="#wechatpay" role="tab" id="wechatpay-tab" data-toggle="tab" aria-controls="wechatpay" aria-expanded="false"><i class="icon icon-wepay"></i> 微信支付</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/vkcyan" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://juejin.cn/user/3720403077840519" target="_blank" title="Juejin" data-toggle=tooltip data-placement=top><i class="icon icon-juejin"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+   
+    
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/valine"></script>
+  <script type="text/javascript">
+  var GUEST = ['nick', 'mail', 'link'];
+  var meta = 'nick,mail,link';
+  meta = meta.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#vcomments',
+    verify: false,
+    notify: false,
+    appId: '',
+    appKey: '',
+    placeholder: 'Just go go',
+    avatar: 'mm',
+    meta: meta,
+    pageSize: '10' || 10,
+    visitor: false
+  });
+  </script>
+
+     
+
+
+
+
+
+
+
+</body>
+</html>
