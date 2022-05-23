@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>写给前端新人的nginx教程 | vkcyan Blog</title>
+  <meta name="description" content="写给前端新人的nginx教程前言​	我相信大部分前端新手是接触不到部署相关的工作的，一般都是将代码包交给后端，或者通过CI，FTP完成代码的更新，至于代码如何部署，如何从域名到前端代码包，很多前端仔没有实际操作过，自然是不知道的，这篇文章就是要帮助未接触过部署的人学会在服务器上线部署一个前端项目，在这个主线中带大家慢慢的熟悉nginx ​	记得在2017年暑假，那时候大二还没开学，当时我只会写一点">
+<meta property="og:type" content="article">
+<meta property="og:title" content="写给前端新人的nginx教程">
+<meta property="og:url" content="https://vkcyan.github.io/2022/03/15/%E5%89%8D%E7%AB%AF%E5%B7%A5%E7%A8%8B%E5%B8%88%E7%9A%84nginx%E6%95%99%E7%A8%8B/index.html">
+<meta property="og:site_name" content="vkcya Blog">
+<meta property="og:description" content="写给前端新人的nginx教程前言​	我相信大部分前端新手是接触不到部署相关的工作的，一般都是将代码包交给后端，或者通过CI，FTP完成代码的更新，至于代码如何部署，如何从域名到前端代码包，很多前端仔没有实际操作过，自然是不知道的，这篇文章就是要帮助未接触过部署的人学会在服务器上线部署一个前端项目，在这个主线中带大家慢慢的熟悉nginx ​	记得在2017年暑假，那时候大二还没开学，当时我只会写一点">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://www.vkcyan.top/FkugXnbgmCdIOX-iAYI3UYUjmv7a.png">
+<meta property="og:image" content="http://www.vkcyan.top/FtVofGcUY5HFXsoI2PpMqNNXberG.png">
+<meta property="og:image" content="http://www.vkcyan.top/FiqSDRnFVl2vLwpIGa7FMtv7QPkY.png">
+<meta property="og:image" content="http://www.vkcyan.top/Ft5oDDtWUipvEf-tFA5XNcR8N87L.png">
+<meta property="og:image" content="http://www.vkcyan.top/FsVXXP3i-gLk0rNFYdlPWxCGPBxl.png">
+<meta property="og:image" content="http://www.vkcyan.top/Fv_L-8z8yfwLO0N69zahJp0L2vhf.png">
+<meta property="og:image" content="http://www.vkcyan.top/Fq0nB1GSEzI1FJN-f0sf66YXVl1T.png">
+<meta property="og:image" content="http://www.vkcyan.top/FjjTa2vHly5zv0-wvUdExapUmAhd.png">
+<meta property="article:published_time" content="2022-03-14T16:00:00.000Z">
+<meta property="article:modified_time" content="2022-05-23T06:55:30.056Z">
+<meta property="article:author" content="vkcyan">
+<meta property="article:tag" content="JavaScript">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://www.vkcyan.top/FkugXnbgmCdIOX-iAYI3UYUjmv7a.png">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://vkcyan.github.io/2022/03/15/%E5%89%8D%E7%AB%AF%E5%B7%A5%E7%A8%8B%E5%B8%88%E7%9A%84nginx%E6%95%99%E7%A8%8B/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="vkcya Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+
+<body class="main-center theme-black" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/vkcyan" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">vkcyan</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Web Developer &amp; Product Manager</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> HeFei, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-books">
+          <a href="/books">
+            
+            <i class="icon icon-book-fill"></i>
+            
+            <span class="menu-title">书单</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">友链</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/vkcyan" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://juejin.cn/user/3720403077840519" target="_blank" title="Juejin" data-toggle=tooltip data-placement=top><i class="icon icon-juejin"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>故不积跬步，无以至千里；不积小流，无以成江海。</p><br/>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript-2022/">JavaScript-2022</a><span class="category-list-count">7</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a><span class="tag-list-count">7</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/JavaScript/" style="font-size: 13px;">JavaScript</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/05/">五月 2022</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/03/">三月 2022</a><span class="archive-list-count">7</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2022/05/23/%E9%92%88%E5%AF%B9%E5%85%8D%E7%99%BB%E5%BD%95%E7%9A%84%E4%B8%80%E4%BA%9B%E5%AE%9E%E8%B7%B5%E4%B8%8E%E6%80%9D%E8%80%83/" class="title">(no title)</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-05-23T06:29:52.233Z" itemprop="datePublished">2022-05-23</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/JavaScript-2022/">JavaScript-2022</a>
+              </p>
+              <p class="item-title">
+                <a href="/2022/03/15/JS%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" class="title">JS数据结构与算法</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-03-14T16:00:00.000Z" itemprop="datePublished">2022-03-15</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/JavaScript-2022/">JavaScript-2022</a>
+              </p>
+              <p class="item-title">
+                <a href="/2022/03/15/Vue3%20%E4%BD%BF%E7%94%A8jsx%E5%BC%80%E5%8F%91%E6%8C%87%E5%8D%97/" class="title">Vue3 + jsx开发指南</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-03-14T16:00:00.000Z" itemprop="datePublished">2022-03-15</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/JavaScript-2022/">JavaScript-2022</a>
+              </p>
+              <p class="item-title">
+                <a href="/2022/03/15/vite%E9%85%8D%E7%BD%AEalias/" class="title">Vite配置alias（设置别名）</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-03-14T16:00:00.000Z" itemprop="datePublished">2022-03-15</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/JavaScript-2022/">JavaScript-2022</a>
+              </p>
+              <p class="item-title">
+                <a href="/2022/03/15/vue3.x%20%E9%A2%84%E6%B8%B2%E6%9F%93%20Unable%20to%20prerender%20all%20routes%E9%94%99%E8%AF%AF%E6%8E%92%E6%9F%A5/" class="title">Vue3.x 预渲染 Unable to prerender all routes错误排查</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-03-14T16:00:00.000Z" itemprop="datePublished">2022-03-15</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+  <aside class="sidebar sidebar-toc collapse   in  " id="collapseToc" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    <nav id="toc" class="article-toc">
+      <h3 class="toc-title">文章目录</h3>
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%86%99%E7%BB%99%E5%89%8D%E7%AB%AF%E6%96%B0%E4%BA%BA%E7%9A%84nginx%E6%95%99%E7%A8%8B"><span class="toc-number">1.</span> <span class="toc-text">写给前端新人的nginx教程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E7%BD%AE%E7%9F%A5%E8%AF%86"><span class="toc-number">1.2.</span> <span class="toc-text">前置知识</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%90%AD%E5%BB%BA%E7%8E%AF%E5%A2%83"><span class="toc-number">1.3.</span> <span class="toc-text">搭建环境</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%9E%E6%8E%A5%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="toc-number">1.3.1.</span> <span class="toc-text">连接服务器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85nginx"><span class="toc-number">1.3.2.</span> <span class="toc-text">安装nginx</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#nginx%E7%9B%B8%E5%85%B3%E6%96%87%E4%BB%B6%E8%B7%AF%E5%BE%84"><span class="toc-number">1.3.3.</span> <span class="toc-text">nginx相关文件路径</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9C%A86666%E7%AB%AF%E5%8F%A3%E4%B8%8A%E6%90%AD%E5%BB%BA%E4%B8%80%E4%B8%AA%E7%AB%99%E7%82%B9"><span class="toc-number">1.4.</span> <span class="toc-text">在6666端口上搭建一个站点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%83%A8%E7%BD%B2%E4%B8%80%E4%B8%AAvue%E9%A1%B9%E7%9B%AE"><span class="toc-number">1.5.</span> <span class="toc-text">部署一个vue项目</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%91%E5%AE%9A%E5%9F%9F%E5%90%8D"><span class="toc-number">1.6.</span> <span class="toc-text">绑定域名</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A2%9E%E5%8A%A0https%E6%94%AF%E6%8C%81"><span class="toc-number">1.7.</span> <span class="toc-text">增加https支持</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%93%E8%AF%AD"><span class="toc-number">1.8.</span> <span class="toc-text">结语</span></a></li></ol></li></ol>
+    </nav>
+  </div>
+</aside>
+
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-前端工程师的nginx教程" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      写给前端新人的nginx教程
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2022/03/15/%E5%89%8D%E7%AB%AF%E5%B7%A5%E7%A8%8B%E5%B8%88%E7%9A%84nginx%E6%95%99%E7%A8%8B/" class="article-date">
+	  <time datetime="2022-03-14T16:00:00.000Z" itemprop="datePublished">2022-03-15</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/JavaScript-2022/">JavaScript-2022</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/JavaScript/" rel="tag">JavaScript</a>
+  </span>
+
+
+        
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/03/15/%E5%89%8D%E7%AB%AF%E5%B7%A5%E7%A8%8B%E5%B8%88%E7%9A%84nginx%E6%95%99%E7%A8%8B/#comments" class="article-comment-link">评论</a></span>
+        
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <h1 id="写给前端新人的nginx教程"><a href="#写给前端新人的nginx教程" class="headerlink" title="写给前端新人的nginx教程"></a>写给前端新人的nginx教程</h1><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>​	我相信大部分前端新手是接触不到部署相关的工作的，一般都是将代码包交给后端，或者通过CI，FTP完成代码的更新，至于代码如何部署，如何从域名到前端代码包，很多前端仔没有实际操作过，自然是不知道的，这篇文章就是要帮助未接触过部署的人学会在服务器上线部署一个前端项目，在这个主线中带大家慢慢的熟悉nginx</p>
+<p>​	记得在2017年暑假，那时候大二还没开学，当时我只会写一点简单代码，linux和运维完全没接触过，一冲动在阿里云购买了一个服务器，外加一个域名，好像还是<code>xiaowuasy.top</code>,现在已经不能访问了；那时候单纯的兴趣使然，想搭建一个网站，因为实力不足，也不知道求助别人，前前后后折腾了一个月，最终竟然成功在服务器上面部署了wordpress服务，后面域名备案也成功了；</p>
+<p>​		这段经历是曲折的，依稀记得在盛夏的傍晚，我坐在慢慢暗下来的客厅，头上还残留着因为紧张流下的细汗，眼睛因为专注而干涩，面对不太看得懂的文档，一遍一遍尝试；我自然不希望大家在这上面浪费时间，这也是写这篇文章的初衷</p>
+<h2 id="前置知识"><a href="#前置知识" class="headerlink" title="前置知识"></a>前置知识</h2><ul>
+<li>一个云服务器，阿里云，腾讯云，xx云都行，首次购买或者学生认证都是有很大的优惠（本文以阿里云为例子）</li>
+<li>了解linux基础命令，也就是对各种文件的增删改查</li>
+<li>本教程基于CentOS 7.5系统，如果是图形化界面，或者其他系统，命令可能不完全一致，但是流程都是一致的，建议看对应教程</li>
+</ul>
+<p>如果linux基础命令不会。下面的也不用看了，立刻去学</p>
+<h2 id="搭建环境"><a href="#搭建环境" class="headerlink" title="搭建环境"></a>搭建环境</h2><h3 id="连接服务器"><a href="#连接服务器" class="headerlink" title="连接服务器"></a>连接服务器</h3><p>通过<strong>远程工具</strong>（CRT，Xshell）或者自带的<strong>远程连接</strong>进入自己的服务器，连接方式选择<strong>公网ip</strong></p>
+<p><img src="http://www.vkcyan.top/FkugXnbgmCdIOX-iAYI3UYUjmv7a.png" alt="image-20220113105611506"></p>
+<h3 id="安装nginx"><a href="#安装nginx" class="headerlink" title="安装nginx"></a>安装nginx</h3><blockquote>
+<p>CentOS自带yum命令，这个命令很关键，自行了解</p>
+</blockquote>
+<p>执行命令</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install nginx // 终于遇到需要确认的，直接确认即可</span><br></pre></td></tr></table></figure>
+
+<p>安装完成后,主机中便有了nginx服务，相关命令如下，启动完成后</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nginx</span><br></pre></td></tr></table></figure>
+
+<p>启动完成后，浏览器访问<strong>公网IP</strong>,就可以访问到nginx的默认主页</p>
+<p><img src="http://www.vkcyan.top/FtVofGcUY5HFXsoI2PpMqNNXberG.png"></p>
+<p>到这一步就算是nginx部署成功了</p>
+<h3 id="nginx相关文件路径"><a href="#nginx相关文件路径" class="headerlink" title="nginx相关文件路径"></a>nginx相关文件路径</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/etc/nginx/ // 配置文件</span><br><span class="line">/usr/share/nginx/ // 默认前端代码存放处</span><br></pre></td></tr></table></figure>
+
+<p>​	默认配置在<code>/etc/nginx/nginx.conf</code>,nginx根据默认配置，监听80端口，80端口指定了&#x2F;usr&#x2F;share&#x2F;nginx&#x2F;html这个文件夹，于是你访问公网ip -&gt; 公网ip:80 -&gt; &#x2F;usr&#x2F;share&#x2F;nginx&#x2F;html,于是”Welcome to <strong>CentOS</strong>“便呈现在你的面前</p>
+<p>​	如果你希望不显示默认的页面，而是显示你自己写的项目，直接替换<code>/etc/nginx/nginx.conf</code>中的<strong>root</strong>,字段为自己程序包的路径</p>
+<img src="http://www.vkcyan.top/FiqSDRnFVl2vLwpIGa7FMtv7QPkY.png" style="zoom: 33%;" />
+
+
+
+
+
+
+
+<h2 id="在6666端口上搭建一个站点"><a href="#在6666端口上搭建一个站点" class="headerlink" title="在6666端口上搭建一个站点"></a>在6666端口上搭建一个站点</h2><p>​	我们的代码除了部署在默认80端口上面，还可以其他端口上，例如8888，7777，等等</p>
+<p>​	接下来我们就在一个自定义的端口上面部署一个站点</p>
+<p>​	这里我们需要注意<code>nginx.conf</code>中的一行配置</p>
+<blockquote>
+<p>含义：在&#x2F;etc&#x2F;nginx&#x2F;conf.d下面所有nginx的配置文件都会自动生效</p>
+</blockquote>
+<img src="http://www.vkcyan.top/Ft5oDDtWUipvEf-tFA5XNcR8N87L.png" style="zoom:33%;" />
+
+
+
+<p>根据配置文件的提示我们到目标文件夹下面，建立test.conf，名字无所谓，配置文件里面是通配符匹配的</p>
+<p>并通过vi 写入内容</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen       7777;</span><br><span class="line">    server_name  _;</span><br><span class="line"></span><br><span class="line">    root	/usr/share/nginx/test;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>再去文件夹<code>/usr/share/nginx/test</code>下建立一个index.html</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> <span class="built_in">test</span> </span><br><span class="line"><span class="built_in">cd</span> <span class="built_in">test</span></span><br><span class="line">vi index.html</span><br></pre></td></tr></table></figure>
+
+<p>将一下内容放入index.html种</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">&quot;en&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;UTF-8&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">&quot;X-UA-Compatible&quot;</span> <span class="attr">content</span>=<span class="string">&quot;IE=edge&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">&quot;viewport&quot;</span> <span class="attr">content</span>=<span class="string">&quot;width=device-width, initial-scale=1.0&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">title</span>&gt;</span>Document<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span>&gt;</span>我是7777端口<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p>最后重启nginx</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nginx -s reload</span><br></pre></td></tr></table></figure>
+
+
+
+<p>访问我们部署的项目ip:7777</p>
+<p>然后你会发现访问不了，最终访问超时(&#x3D;&#x3D;)，这是因为服务器限制了可访问端口，此时需要到云管理后台设置安全组</p>
+<img src="http://www.vkcyan.top/FsVXXP3i-gLk0rNFYdlPWxCGPBxl.png" style="zoom:50%;" />
+
+<p>在阿里云后台增加安全组规则</p>
+<p><img src="http://www.vkcyan.top/Fv_L-8z8yfwLO0N69zahJp0L2vhf.png"></p>
+<p>之后就可以正常访问了！</p>
+<p><img src="http://www.vkcyan.top/Fq0nB1GSEzI1FJN-f0sf66YXVl1T.png">至此，便完成了第一个nginx项目的部署</p>
+<h2 id="部署一个vue项目"><a href="#部署一个vue项目" class="headerlink" title="部署一个vue项目"></a>部署一个vue项目</h2><p>​	通过上面的例子，我们已经可以完成一个自定义站点的部署了，那么真实项目呢，例如将一个vue项目部署到3006端口</p>
+<ol>
+<li>首先编写xxx.conf</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen       3006;</span><br><span class="line">    server_name  _;</span><br><span class="line">    </span><br><span class="line">		 <span class="comment"># 开启gzip相关配置</span></span><br><span class="line">    gzip on;</span><br><span class="line">    gzip_static on;</span><br><span class="line">    gzip_min_length 2k;</span><br><span class="line">    gzip_buffers 4 8k;</span><br><span class="line">    gzip_types text/plain application/x-javascript text/css application/xml text/javascript application/x-httpd-php image/x-icon application/javascript;</span><br><span class="line">    gzip_comp_level 9;</span><br><span class="line">    gzip_disable <span class="string">&quot;MSIE [1-6]\.&quot;</span>;</span><br><span class="line">		<span class="comment"># 站点代码路径</span></span><br><span class="line">    root         /usr/share/nginx/client;</span><br><span class="line">		<span class="comment"># 单页应用必须设置（刷新404问题）</span></span><br><span class="line">    location / &#123;</span><br><span class="line">    	try_files <span class="variable">$uri</span> <span class="variable">$uri</span>/ /index.html;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<ol start="2">
+<li><p>将打包之后的代码，通过FTP上传代码到目标文件夹<code>/usr/share/nginx/client</code>（注意文件夹名称）</p>
+<p><a target="_blank" rel="noopener" href="https://www.filezilla.cn/">ftp</a></p>
+</li>
+<li><p>重启nginx <code>nginx -s reload</code></p>
+</li>
+</ol>
+<p>这边完成了一个站点的部署！是不是很简单</p>
+<p><img src="http://www.vkcyan.top/FjjTa2vHly5zv0-wvUdExapUmAhd.png"></p>
+<h2 id="绑定域名"><a href="#绑定域名" class="headerlink" title="绑定域名"></a>绑定域名</h2><p>​	直接拿<strong>ip+端口</strong>给别人访问是不太好的，大家都给自己站点绑定上一个好记忆的域名，那么nginx如何绑定域名呢？</p>
+<ol>
+<li>购买一个域名<a target="_blank" rel="noopener" href="https://wanwang.aliyun.com/domain/%EF%BC%8C%E5%A4%87%E6%A1%88%E5%9F%9F%E5%90%8D%EF%BC%8C%E8%BF%99%E4%B8%AA%E6%B5%81%E7%A8%8B%E5%BE%88%E9%BA%BB%E7%83%A6%EF%BC%8C%E9%9C%80%E8%A6%8110-30%E5%A4%A9">https://wanwang.aliyun.com/domain/，备案域名，这个流程很麻烦，需要10-30天</a></li>
+<li>备案完成后，域名就可以使用了</li>
+</ol>
+<p>我们需要去修改我们的nginx配置，将server_name的值修改为需要绑定的域名即可；</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen       3006;</span><br><span class="line">    server_name  xxx.com;</span><br><span class="line">// ....</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="增加https支持"><a href="#增加https支持" class="headerlink" title="增加https支持"></a>增加https支持</h2><ol>
+<li>申请一个https证书，<a target="_blank" rel="noopener" href="https://yundunnext.console.aliyun.com/?spm=a2c4g.11186623.0.0.4a7b9d1d55eAnw&p=cas#/certExtend/free">数字证书管理</a>，以阿里云为例子，国内云厂商都有</li>
+<li>将证书放在服务器中你可以记得住的文件夹里面</li>
+<li>修改nginx配置</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">server &#123; // <span class="comment"># 将当前域名的http自动打到https</span></span><br><span class="line">        listen  80;</span><br><span class="line">        server_name     xxx.com;</span><br><span class="line">        rewrite ^(.*)$  https://$host<span class="variable">$1</span> permanent;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">server &#123;</span><br><span class="line">    listen       443 ssl http2;</span><br><span class="line">    server_name  xxx.com;</span><br><span class="line">    ssl_certificate xxxx/yy.pem; <span class="comment"># 证书</span></span><br><span class="line">    ssl_certificate_key xxxx/yy.key; <span class="comment"># 证书秘钥</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># ssl验证相关配置</span></span><br><span class="line">    ssl_session_timeout  5m;    <span class="comment">#缓存有效期</span></span><br><span class="line">    ssl_ciphers ECDHE-RSA-AES128-GCM-SHA256:ECDHE:ECDH:AES:HIGH:!NULL:!aNULL:!MD5:!ADH:!RC4;    <span class="comment">#加密算法</span></span><br><span class="line">    ssl_protocols TLSv1 TLSv1.1 TLSv1.2;    <span class="comment">#安全链接可选的加密协议</span></span><br><span class="line">    ssl_prefer_server_ciphers on;   <span class="comment">#使用服务器端的首选算法</span></span><br><span class="line">    <span class="comment">#charset koi8-r;</span></span><br><span class="line">    <span class="comment">#access_log  /var/log/nginx/host.access.log  main;</span></span><br><span class="line">    </span><br><span class="line">		root   /usr/share/nginx/client;</span><br><span class="line">    location / &#123;   </span><br><span class="line">    		try_files <span class="variable">$uri</span> <span class="variable">$uri</span>/ /index.html;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><p>​	虽然部署一个站点，仅仅是用到nginx，但是涉及到的知识点还是很多的</p>
+<p>​	如果遇到了错误，一定要仔细检查报错信息，问题百度百度基本都能得到答案，如果实在搞不定，直接重做云服务器系统，重头再来；遇到问题并把它解决了，便成了你的技能</p>
+<p>​	一个有经验的开发人员部署一个站点，可能半小时就弄完了，想要熟练的话，一定要多练习多实践，从0到1部署一个项目还是一件很酷的事情！</p>
+<p>如果搭建中遇到了解决不了的问题，请到QQ群 530496237，大佬解答疑惑~</p>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://vkcyan.github.io/2022/03/15/%E5%89%8D%E7%AB%AF%E5%B7%A5%E7%A8%8B%E5%B8%88%E7%9A%84nginx%E6%95%99%E7%A8%8B/" title="写给前端新人的nginx教程" target="_blank" rel="external">https://vkcyan.github.io/2022/03/15/前端工程师的nginx教程/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/vkcyan" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/vkcyan" target="_blank"><span class="text-dark">vkcyan</span><small class="ml-1x">Web Developer &amp; Product Manager</small></a></h3>
+        <div></div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="vcomments"></div>
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2022/03/15/vue3.x%20%E9%A2%84%E6%B8%B2%E6%9F%93%20Unable%20to%20prerender%20all%20routes%E9%94%99%E8%AF%AF%E6%8E%92%E6%9F%A5/" title="Vue3.x 预渲染 Unable to prerender all routes错误排查"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2022/03/15/%E6%B5%8F%E8%A7%88%E5%99%A8%E8%AF%BB%E5%8F%96xls%E7%94%9F%E6%88%90%E4%BA%8C%E7%BB%B4%E7%A0%81%E5%B9%B6%E4%B8%8B%E8%BD%BD/" title="浏览器读取xls并生成二维码下载到本地"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+    <li class="toggle-toc">
+      <a class="toggle-btn " data-toggle="collapse" href="#collapseToc" aria-expanded="false" title="文章目录" role="button">    <span>[&nbsp;</span><span>文章目录</span>
+        <i class="text-collapsed icon icon-anchor"></i>
+        <i class="text-in icon icon-close"></i>
+        <span>]</span>
+      </a>
+    </li>
+    
+  </ul>
+  
+  
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-fancy btn-donate pop-onhover bg-gradient-warning" data-toggle="modal" data-target="#donateModal"><span>赏</span></button>
+  <!-- <div class="wave-icon wave-icon-danger btn-donate" data-toggle="modal" data-target="#donateModal">
+    <div class="wave-circle"><span class="icon"><i class="icon icon-bill"></i></span></div>
+  </div> -->
+  
+  
+  <div class="bar-right">
+    
+  </div>
+  </div>
+</nav>
+  
+<!-- Modal -->
+<div class="modal modal-center modal-small modal-xs-full fade" id="donateModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content donate">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <div class="modal-body">
+        <div class="donate-box">
+          <div class="donate-head">
+            <p>感谢您的支持，我会继续努力的!</p>
+          </div>
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade active in" id="alipay">
+              <div class="donate-payimg">
+                <img src="/images/donate/alipayimg.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开支付宝扫一扫，即可进行扫码打赏哦</p>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="wechatpay">
+              <div class="donate-payimg">
+                <img src="/images/donate/wechatpayimg.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开微信扫一扫，即可进行扫码打赏哦</p>
+            </div>
+          </div>
+          <div class="donate-footer">
+            <ul class="nav nav-tabs nav-justified" role="tablist">
+              <li role="presentation" class="active">
+                <a href="#alipay" id="alipay-tab" role="tab" data-toggle="tab" aria-controls="alipay" aria-expanded="true"><i class="icon icon-alipay"></i> 支付宝</a>
+              </li>
+              <li role="presentation" class="">
+                <a href="#wechatpay" role="tab" id="wechatpay-tab" data-toggle="tab" aria-controls="wechatpay" aria-expanded="false"><i class="icon icon-wepay"></i> 微信支付</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/vkcyan" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://juejin.cn/user/3720403077840519" target="_blank" title="Juejin" data-toggle=tooltip data-placement=top><i class="icon icon-juejin"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+   
+    
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/valine"></script>
+  <script type="text/javascript">
+  var GUEST = ['nick', 'mail', 'link'];
+  var meta = 'nick,mail,link';
+  meta = meta.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#vcomments',
+    verify: false,
+    notify: false,
+    appId: '',
+    appKey: '',
+    placeholder: 'Just go go',
+    avatar: 'mm',
+    meta: meta,
+    pageSize: '10' || 10,
+    visitor: false
+  });
+  </script>
+
+     
+
+
+
+
+
+
+
+</body>
+</html>
