@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>上瘾模型如何应用到产品 | vkcyan Blog</title>
+  <meta name="description" content="前言​	为什么有些产品有抓住我们的注意力，而其他产品却不能？是什么让我们出于习惯而建立与产品的联系？是否有一种潜在模式能够通过技术将用户紧紧吸引，欲罢不能。 ​	这是《上瘾》的引言，我相信看到上面这些话的时候，你的脑海中一定出现了让你上瘾的产品，比如抖音，这样现象级的产品是如何被设计出来的呢？《上瘾》通过大量实验案例，社会调研，总结并抽象了用户上瘾的产品设计原则。最后提炼出一个通用模型，掌握这样的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="上瘾模型如何应用到产品">
+<meta property="og:url" content="https://vkcyan.github.io/2022/05/23/%E4%B8%8A%E7%98%BE%E6%A8%A1%E5%9E%8B%E5%A6%82%E4%BD%95%E5%BA%94%E7%94%A8%E5%88%B0%E4%BA%A7%E5%93%81/index.html">
+<meta property="og:site_name" content="vkcya Blog">
+<meta property="og:description" content="前言​	为什么有些产品有抓住我们的注意力，而其他产品却不能？是什么让我们出于习惯而建立与产品的联系？是否有一种潜在模式能够通过技术将用户紧紧吸引，欲罢不能。 ​	这是《上瘾》的引言，我相信看到上面这些话的时候，你的脑海中一定出现了让你上瘾的产品，比如抖音，这样现象级的产品是如何被设计出来的呢？《上瘾》通过大量实验案例，社会调研，总结并抽象了用户上瘾的产品设计原则。最后提炼出一个通用模型，掌握这样的">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://www.vkcyan.top/1.png">
+<meta property="og:image" content="http://www.vkcyan.top/2.png">
+<meta property="og:image" content="http://www.vkcyan.top/3.png">
+<meta property="og:image" content="http://www.vkcyan.top/4.png">
+<meta property="og:image" content="http://www.vkcyan.top/5.png">
+<meta property="og:image" content="http://www.vkcyan.top/6.png">
+<meta property="article:published_time" content="2022-05-22T16:00:00.000Z">
+<meta property="article:modified_time" content="2022-05-23T10:51:27.523Z">
+<meta property="article:author" content="vkcyan">
+<meta property="article:tag" content="产品日常">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://www.vkcyan.top/1.png">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://vkcyan.github.io/2022/05/23/%E4%B8%8A%E7%98%BE%E6%A8%A1%E5%9E%8B%E5%A6%82%E4%BD%95%E5%BA%94%E7%94%A8%E5%88%B0%E4%BA%A7%E5%93%81/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="vkcya Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+
+<body class="main-center theme-black" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/vkcyan" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">vkcyan</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Web Developer &amp; Product Manager</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> HeFei, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-books">
+          <a href="/books">
+            
+            <i class="icon icon-book-fill"></i>
+            
+            <span class="menu-title">书单</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">友链</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/vkcyan" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://juejin.cn/user/3720403077840519" target="_blank" title="Juejin" data-toggle=tooltip data-placement=top><i class="icon icon-juejin"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>故不积跬步，无以至千里；不积小流，无以成江海。</p><br/>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript-2021/">JavaScript-2021</a><span class="category-list-count">10</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript-2022/">JavaScript-2022</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%BA%A7%E5%93%81%E7%BB%8F%E7%90%86/">产品经理</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/">数据结构与算法</a><span class="category-list-count">9</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a><span class="tag-list-count">17</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NPDP/" rel="tag">NPDP</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%A7%E5%93%81%E6%97%A5%E5%B8%B8/" rel="tag">产品日常</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag">数据结构</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a><span class="tag-list-count">2</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/JavaScript/" style="font-size: 14px;">JavaScript</a> <a href="/tags/NPDP/" style="font-size: 13.5px;">NPDP</a> <a href="/tags/%E4%BA%A7%E5%93%81%E6%97%A5%E5%B8%B8/" style="font-size: 13px;">产品日常</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="font-size: 13.75px;">数据结构</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 13.25px;">算法</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/05/">五月 2022</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/03/">三月 2022</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/12/">十二月 2021</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/10/">十月 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/06/">六月 2021</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/03/">三月 2021</a><span class="archive-list-count">9</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2022/05/23/%E9%92%88%E5%AF%B9%E5%85%8D%E7%99%BB%E5%BD%95%E7%9A%84%E4%B8%80%E4%BA%9B%E5%AE%9E%E8%B7%B5%E4%B8%8E%E6%80%9D%E8%80%83/" class="title">(no title)</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-05-23T06:29:52.233Z" itemprop="datePublished">2022-05-23</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E4%BA%A7%E5%93%81%E7%BB%8F%E7%90%86/">产品经理</a>
+              </p>
+              <p class="item-title">
+                <a href="/2022/05/23/%E4%B8%8A%E7%98%BE%E6%A8%A1%E5%9E%8B%E5%A6%82%E4%BD%95%E5%BA%94%E7%94%A8%E5%88%B0%E4%BA%A7%E5%93%81/" class="title">上瘾模型如何应用到产品</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-05-22T16:00:00.000Z" itemprop="datePublished">2022-05-23</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E4%BA%A7%E5%93%81%E7%BB%8F%E7%90%86/">产品经理</a>
+              </p>
+              <p class="item-title">
+                <a href="/2022/03/18/NPDP%E4%BA%A7%E5%93%81%E7%BB%8F%E7%90%86%E4%BB%8B%E7%BB%8D/" class="title">NPDP产品经理国际资格认证</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-03-17T16:00:00.000Z" itemprop="datePublished">2022-03-18</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E4%BA%A7%E5%93%81%E7%BB%8F%E7%90%86/">产品经理</a>
+              </p>
+              <p class="item-title">
+                <a href="/2022/03/18/%E5%B7%A5%E5%85%B7%E4%B8%8E%E7%BB%A9%E6%95%88%E5%BA%A6%E9%87%8F/" class="title">工具与绩效度量</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-03-17T16:00:00.000Z" itemprop="datePublished">2022-03-18</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E4%BA%A7%E5%93%81%E7%BB%8F%E7%90%86/">产品经理</a>
+              </p>
+              <p class="item-title">
+                <a href="/2022/03/18/%E6%96%87%E5%8C%96%E3%80%81%E7%BB%84%E7%BB%87%E4%B8%8E%E5%9B%A2%E9%98%9F/" class="title">文化、组织与团队</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-03-17T16:00:00.000Z" itemprop="datePublished">2022-03-18</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<aside
+  class="sidebar sidebar-toc collapse  in "
+  id="collapseToc"
+  itemscope
+  itemtype="http://schema.org/WPSideBar"
+>
+  <div class="slimContent">
+    <nav id="toc" class="article-toc">
+      <h3 class="toc-title">文章目录</h3>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%8A%E7%98%BE%E6%A8%A1%E5%9E%8B%E6%98%AF%E4%BB%80%E4%B9%88"><span class="toc-number">2.</span> <span class="toc-text">上瘾模型是什么</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A7%A6%E5%8F%91"><span class="toc-number">2.1.</span> <span class="toc-text">触发</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%86%85%E9%83%A8%E8%A7%A6%E5%8F%91"><span class="toc-number">2.1.1.</span> <span class="toc-text">内部触发</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A4%96%E9%83%A8%E8%A7%A6%E5%8F%91"><span class="toc-number">2.1.2.</span> <span class="toc-text">外部触发</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A1%8C%E5%8A%A8"><span class="toc-number">2.2.</span> <span class="toc-text">行动</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8A%A8%E6%9C%BA"><span class="toc-number">2.2.1.</span> <span class="toc-text">动机</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%83%BD%E5%8A%9B"><span class="toc-number">2.2.2.</span> <span class="toc-text">能力</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%9A%E5%8F%98%E7%9A%84%E5%A5%96%E5%8A%B1"><span class="toc-number">2.3.</span> <span class="toc-text">多变的奖励</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%8C%8E%E7%89%A9%E5%A5%96%E5%8A%B1"><span class="toc-number">2.3.1.</span> <span class="toc-text">猎物奖励</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%A4%BE%E4%BA%A4%E5%A5%96%E5%8A%B1"><span class="toc-number">2.3.2.</span> <span class="toc-text">社交奖励</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%87%AA%E6%88%91%E5%A5%96%E5%8A%B1"><span class="toc-number">2.3.3.</span> <span class="toc-text">自我奖励</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A4%9A%E5%8F%98%E6%80%A7"><span class="toc-number">2.3.4.</span> <span class="toc-text">多变性</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8A%95%E5%85%A5"><span class="toc-number">2.4.</span> <span class="toc-text">投入</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%86%85%E5%AE%B9"><span class="toc-number">2.4.1.</span> <span class="toc-text">内容</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E8%B5%84%E6%96%99"><span class="toc-number">2.4.2.</span> <span class="toc-text">数据资料</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B3%E6%B3%A8%E8%80%85"><span class="toc-number">2.4.3.</span> <span class="toc-text">关注者</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BF%A1%E8%AA%89"><span class="toc-number">2.4.4.</span> <span class="toc-text">信誉</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%8A%80%E8%83%BD"><span class="toc-number">2.4.5.</span> <span class="toc-text">技能</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">2.5.</span> <span class="toc-text">总结</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B0%86%E4%B8%8A%E7%98%BE%E6%A8%A1%E5%9E%8B%E5%BA%94%E7%94%A8%E5%88%B0%E4%BA%A7%E5%93%81%E4%B8%AD"><span class="toc-number">3.</span> <span class="toc-text">将上瘾模型应用到产品中</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BB%A5%E5%86%85%E9%83%A8%E8%A7%A6%E5%8F%91%E4%B8%BA%E8%B5%B7%E7%82%B9"><span class="toc-number">3.0.1.</span> <span class="toc-text">以内部触发为起点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%AE%BE%E8%AE%A1%E5%A4%9A%E5%8F%98%E7%9A%84%E5%A5%96%E5%8A%B1"><span class="toc-number">3.0.2.</span> <span class="toc-text">设计多变的奖励</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%94%A8%E6%88%B7%E5%8F%AF%E4%BB%A5%E6%8A%95%E5%85%A5%E4%BB%80%E4%B9%88"><span class="toc-number">3.0.3.</span> <span class="toc-text">用户可以投入什么</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%A9%E7%94%A8%E5%A4%96%E9%83%A8%E8%A7%A6%E5%8F%91%E6%8E%A8%E5%B9%BF"><span class="toc-number">3.0.4.</span> <span class="toc-text">利用外部触发推广</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%87%8D%E5%A4%8D%E6%B5%8B%E8%AF%95%E8%BF%AD%E4%BB%A3%E4%BC%98%E5%8C%96"><span class="toc-number">3.0.5.</span> <span class="toc-text">重复测试迭代优化</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AF%B9%E6%8A%BD%E5%A5%96%E5%8A%A9%E6%89%8B%E5%B0%8F%E7%A8%8B%E5%BA%8F%E7%9A%84%E4%B8%8A%E7%98%BE%E6%A8%A1%E5%9E%8B%E5%88%86%E6%9E%90"><span class="toc-number">4.</span> <span class="toc-text">对抽奖助手小程序的上瘾模型分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="toc-number">5.</span> <span class="toc-text">参考资料</span></a></li></ol>
+    </nav>
+  </div>
+</aside>
+
+<script>
+  // 移动端不显示菜单
+  if (
+    navigator.userAgent.match(
+      /(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i
+    )
+  ) {
+    let self = document.querySelector(".sidebar-toc");
+    var parent = self.parentElement;
+    parent.removeChild(self);
+  } else {
+  }
+</script>
+
+
+
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-上瘾模型如何应用到产品" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      上瘾模型如何应用到产品
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2022/05/23/%E4%B8%8A%E7%98%BE%E6%A8%A1%E5%9E%8B%E5%A6%82%E4%BD%95%E5%BA%94%E7%94%A8%E5%88%B0%E4%BA%A7%E5%93%81/" class="article-date">
+	  <time datetime="2022-05-22T16:00:00.000Z" itemprop="datePublished">2022-05-23</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/%E4%BA%A7%E5%93%81%E7%BB%8F%E7%90%86/">产品经理</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/%E4%BA%A7%E5%93%81%E6%97%A5%E5%B8%B8/" rel="tag">产品日常</a>
+  </span>
+
+
+        
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/05/23/%E4%B8%8A%E7%98%BE%E6%A8%A1%E5%9E%8B%E5%A6%82%E4%BD%95%E5%BA%94%E7%94%A8%E5%88%B0%E4%BA%A7%E5%93%81/#comments" class="article-comment-link">评论</a></span>
+        
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>​	为什么有些产品有抓住我们的注意力，而其他产品却不能？是什么让我们出于习惯而建立与产品的联系？是否有一种潜在模式能够通过技术将用户紧紧吸引，欲罢不能。</p>
+<p>​	这是《上瘾》的引言，我相信看到上面这些话的时候，你的脑海中一定出现了让你上瘾的产品，比如抖音，这样现象级的产品是如何被设计出来的呢？《上瘾》通过大量实验案例，社会调研，总结并抽象了用户上瘾的产品设计原则。最后提炼出一个通用模型，掌握这样的通用模型，你就会得到一个产品设计框架。</p>
+<p>当你从0到1设计产品的时候，或者分析市面上的产品，你就可以将上瘾模型应用到你的产品。</p>
+<h2 id="上瘾模型是什么"><a href="#上瘾模型是什么" class="headerlink" title="上瘾模型是什么"></a>上瘾模型是什么</h2><p>触发 行动 多变的奖励 投入</p>
+<p><img src="http://www.vkcyan.top/1.png" alt="1"></p>
+<h3 id="触发"><a href="#触发" class="headerlink" title="触发"></a>触发</h3><p> <img src="http://www.vkcyan.top/2.png" alt="2"></p>
+<h4 id="内部触发"><a href="#内部触发" class="headerlink" title="内部触发"></a>内部触发</h4><p>​	内部触发是用户与产品建立的感情链接，不需要被打广告，不需要被通知，我主动去使用，就好像短视频APP，没有给我钱，也没有被推广，但是我们每天都高频使用，内部触发是给予用户情感的满足，让产品融入到了生活，是用户内心真实情感的触发，获得快乐、认同与安慰，具体类型会在行动中说明</p>
+<p>下班后无聊，打开短视频APP</p>
+<p>自拍几张照片，发布到社交平台</p>
+<p>​	这就是发生在我们身边的日常，我们选择某个产品是因为它能够为我们带来快乐或者解决烦恼，这就是为什么说要洞察用户的用户需求，而内部触发就是研究用户需求，而且是最深处的情感需求</p>
+<p>​    所以常说做产品是发现用户需求，要去思考，我们的产品能够为用户解决什么问题，这自然是需要深入了解用户的痛苦与挣扎，然后设计出给予用户安慰的产品。</p>
+<h4 id="外部触发"><a href="#外部触发" class="headerlink" title="外部触发"></a>外部触发</h4><p>指用户在非主动情况下接收的信息，有清晰的动作指令进行行动召唤</p>
+<p>付费型触发：电梯广告 APP中推广</p>
+<p>回馈型触发：某某软件因为做的好，被APP Store上了推荐位</p>
+<p>人际型触发：小明觉得某个软件特别有意思，推荐给小红</p>
+<p>自主型触发：小明毕业了需要找工作，下载了一个BOOS直聘</p>
+<p>​	一般会采用简单重复或者“经典+创新”的方式来完成外部触发，效果更加好，例如蜜雪冰城 还有很多老歌+新词的电梯广告 </p>
+<h3 id="行动"><a href="#行动" class="headerlink" title="行动"></a>行动</h3><p> <img src="http://www.vkcyan.top/3.png" alt="3"></p>
+<p>​	用户完成触发后，就会来到产品中，让用户开始使用产品就是行动，而长时间高频率的行动才能养成用户习惯</p>
+<p><strong>用户行为模型公式：行动 &#x3D; 动机 * 能力 *触发</strong></p>
+<p>​	如果一个用户想完成一个行动，这三者是缺一不可的。例如，周末你打算找你朋友开黑王者荣耀，但是朋友突然有事，你放弃了周末打王者</p>
+<p>动机：渴望快乐 能力：有手机 有网络 有时间 触发：和朋友一起玩做王者荣耀</p>
+<p>然后因为朋友突然放弃了，缺少触发条件，放弃</p>
+<p>亦或者网络太差，缺少能力，放弃</p>
+<p>亦或者由于某种突发紧急事件，没心情去体会游戏里面的快乐，缺少动机，放弃</p>
+<h4 id="动机"><a href="#动机" class="headerlink" title="动机"></a>动机</h4><p>能够驱使用户采取行动的核心动机无非就是以下三种</p>
+<p>-    追求快乐，逃避痛苦</p>
+<p>-    追求希望，逃避恐惧</p>
+<p>-    追求认同，逃避排斥</p>
+<p>​	补充：相对与失去快乐，人们更加害怕痛苦，就像捡到100块钱，你会很快乐，但是你丢失一百块钱，你会非常痛苦，这远比捡到100块情绪更加激烈，这在产品中常常表现为厌恶损失心理</p>
+<h4 id="能力"><a href="#能力" class="headerlink" title="能力"></a>能力</h4><p>能力是行动的门槛，福格教授提出六要素</p>
+<p>-    时间：完成这件事情需要的时间</p>
+<p>-    金钱：从事这件事情需要的经济投入</p>
+<p>-    体力：完成这件事所消耗的体力</p>
+<p>-    脑力：完成这件事所消耗的脑力</p>
+<p>-    社会偏差：他人对这项活动的接受度</p>
+<p>-    非常规性：该活动与常规活动的匹配程度或矛盾程度</p>
+<p>​	一个行动需要的能力越少，用户就越轻松使用你的产品，所以我们反复强调降低用户使用门槛，从而减少因为能力问题而造成的流失</p>
+<h3 id="多变的奖励"><a href="#多变的奖励" class="headerlink" title="多变的奖励"></a>多变的奖励</h3><p><img src="http://www.vkcyan.top/4.png" alt="4"></p>
+<p>​    用户通过触发进入产品，并做出了行动，但是如果用户在你的产品中没有得到物质或者精神的奖励，用户自然会离你而去</p>
+<h4 id="猎物奖励"><a href="#猎物奖励" class="headerlink" title="猎物奖励"></a>猎物奖励</h4><p>​	猎物奖励就是获取自己想要的资源，刷抖音，寻找带来满足的视频，刷知乎，发现自己感兴趣的问题与回答，这就像原始人类追逐猎物一样，抓住他会充满获得感的</p>
+<h4 id="社交奖励"><a href="#社交奖励" class="headerlink" title="社交奖励"></a>社交奖励</h4><p>​    社交奖励即为被认同，被赞美，被尊重，人类是情感动物，对社交奖励非常上瘾，会陶醉到社交带来的快乐中，这是及其有效的奖励方式，所以社交类产品经久不衰的原因，他的本质是获得一种社会认同</p>
+<h4 id="自我奖励"><a href="#自我奖励" class="headerlink" title="自我奖励"></a>自我奖励</h4><p>​    自我奖励主要为使用产品时候的成就感，满足感，控制感。比如你喜欢收集手办，没人让你收集，收集了也没钱，但是让自己快乐了，同时找到了志同道合的朋友，我把我的手办发布到社区，被点赞，被评论这就很快乐，还有例如蚂蚁森林浇水，这都会带来内心的满足，从而实现自我价值</p>
+<h4 id="多变性"><a href="#多变性" class="headerlink" title="多变性"></a>多变性</h4><p>​    灵长动物大都喜欢新奇的东西，一件事情，如果已经经历过很多次，再次经历将会失去兴趣，你的大脑不会获取快乐，因为你已经可以预感到下一步的行动，预感到你将会得到什么，大数据精准推荐、千人千面都是为了满足用户喜欢新奇的心理</p>
+<p>​    如果某一次刷新知乎，推荐的都是你看过的或者不感兴趣的问答，那你自然不会上瘾，反之，如果你总是给用户带来新奇感，用户必定会进行更多的行动，来获取更多奖励，所以多变性是奖励的核心概念</p>
+<p>​    最后补充一点，除了让用户经常获得奖励之外，让用户在第一次接触你的东西就有一个好印象也是关键点，例如首次打开小红书，QQ，他的登录背景视频是美好切令人向往的，让你感受到产品倡导的价值，如果恰好这也是你向往的，这个产品毫无疑问会吸引了你的注意力，你将会继续使用他</p>
+<h3 id="投入"><a href="#投入" class="headerlink" title="投入"></a>投入</h3><p> <img src="http://www.vkcyan.top/5.png" alt="5"></p>
+<p>​	想象一个简单的场景，小明经过朋友推荐下载了王者荣耀，玩了1年时间，在游戏中达到了王者段位，期间在王者荣耀中购买了大量付费皮肤，同时认识了游戏好友；这时候出来了另一个竞品，不比王者荣耀逊色</p>
+<p>​	但是该竞品想吸引小明，难度是极大的，因为小明已经在王者荣耀中投入太多，时间，皮肤，游戏好友，对局资料，绝活英雄，这都会让小明无法脱离。</p>
+<p>​    投入是上瘾模型闭环的最后一步，当用户通过触发，采取了行动，并获得了奖励，这时候如果能让用户进一步进行投入，那么这个产品在用户心中的地址将会达到顶峰</p>
+<h4 id="内容"><a href="#内容" class="headerlink" title="内容"></a>内容</h4><p>​    在微信上添加好友，添加群，这都是内容，随着使用的时间越长，你就会越离不开微信，让你换掉微信，那真的比登天还难</p>
+<h4 id="数据资料"><a href="#数据资料" class="headerlink" title="数据资料"></a>数据资料</h4><p>​    以作者为例子，作为一名前端开发者，我的开源代码都存放在GitHub，随着我工作年限越长，我越舍不得离开GitHub，我的大量资料都在github中，对我而言，他有很高的价值</p>
+<h4 id="关注者"><a href="#关注者" class="headerlink" title="关注者"></a>关注者</h4><p>​    小红是一位大厂产品经理，通过长期在知乎发表高质量文章获得了20w关注，随着人数的变多，小红将会越来越离不开知乎，微博，小红书 B站社区都是这样，关注者对于当事人来说是不可忽视的隐形价值</p>
+<h4 id="信誉"><a href="#信誉" class="headerlink" title="信誉"></a>信誉</h4><p>​    小明觉得咸鱼不错，经常在咸鱼上售卖一些东西，你已经售卖一些东西，在未来会越来越关注你的信用情况，你就会花更多的经历去经营他</p>
+<h4 id="技能"><a href="#技能" class="headerlink" title="技能"></a>技能</h4><p>​    以我自己举例子，学习编程的时候，使用的是vscode（编程开发软件），至今我已经使用了5年，已经对他产生了依赖，通过他学会了编辑技能，投入了很大的时间成本，学习成本，尽管竞品某些细节更好，但者依旧很难让我行动起来去换掉vscode</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>​	至此我们走完了上瘾模型，我们回顾一下，首先通过外部或者内部触发来让用户进入行动阶段，在行动中给予用户多变的奖励，最后让用户不断投入，时间，金钱，内容，或者资料，也可以为用户到来价值 信誉 关注这，经过这样的闭环后，用户将会越来越依赖你的产品</p>
+<p>​	似乎这个模型很棒，是一个值得思考的方法论，但是一个有价值的产品是一切的前提，如果产品没有挠到用户痒点，或者本身就是伪需求，那上瘾模型也无济于事，他不是救命稻草，而是锦上添花，让你的产品变的更加好。</p>
+<p>​	屏幕前的你此时此刻是否脑海中已经想到了很多，或者是对产品的理解，或者是对你正在进行中的项目产生了新的想法；后续内容提供了基于上瘾模型的产品设计模板，通过这样的模板可以分析别人的项目，也可以构建你准备开发或者正在进行中的项目</p>
+<h2 id="将上瘾模型应用到产品中"><a href="#将上瘾模型应用到产品中" class="headerlink" title="将上瘾模型应用到产品中"></a>将上瘾模型应用到产品中</h2><h4 id="以内部触发为起点"><a href="#以内部触发为起点" class="headerlink" title="以内部触发为起点"></a>以内部触发为起点</h4><p>​    如果一款产品无法让用户内部触发，这就意味着用户感知不到其价值，产品的本质是满足客户需求，帮助用户解决问题；在这阶段我们需要研究、定位我们的客户群体，提炼特性，描述用户画像，通过丰田5Why法，深入了解用户的核心诉求，保证内部触发的合理性</p>
+<h4 id="设计多变的奖励"><a href="#设计多变的奖励" class="headerlink" title="设计多变的奖励"></a>设计多变的奖励</h4><p>​    一款产品可以为用户带来什么？这是极其重要的问题，我们通过内部触发确定我们的用户群体，下一步就需要思考给予用户什么奖励，猎物奖励更好，还是社交奖励更好，同时要在奖励环节中贯彻多变性原则，这里再次强调：多变性是奖励的关键</p>
+<p>注：如何给用户第一次良好的体验，让用户感知到价值，引导其内部触发，这也是关键的一环，其中越是生命周期短的产品，首次的啊哈时刻（一个用户对产品感知最强的点）必须要越早出现</p>
+<h4 id="用户可以投入什么"><a href="#用户可以投入什么" class="headerlink" title="用户可以投入什么"></a>用户可以投入什么</h4><p>​    用户可以在你的产品中生产什么样的内容，数据资料，还是关注者，找准类型，同时要研究用户心理，找到用户可能想投入的实际，再引导用户去完成</p>
+<h4 id="利用外部触发推广"><a href="#利用外部触发推广" class="headerlink" title="利用外部触发推广"></a>利用外部触发推广</h4><p>​    上瘾模型一旦形成，便需要源源不断的用户进入其中，这里可以根据自身的产品类型来选择外部触发方式，例如自身有钱，可以付费完成触发，或者通过社群进行人际型触发，具体触发方式需要根据产品特性来决定</p>
+<h4 id="重复测试迭代优化"><a href="#重复测试迭代优化" class="headerlink" title="重复测试迭代优化"></a>重复测试迭代优化</h4><p>​	当用户进行上瘾模型，并产生依赖之后，我们就需要不断检查每个环节是否符合预期，是否存在短板，根据实际数据进行测试，并进行优化迭代，不断完善上瘾模型</p>
+<h2 id="对抽奖助手小程序的上瘾模型分析"><a href="#对抽奖助手小程序的上瘾模型分析" class="headerlink" title="对抽奖助手小程序的上瘾模型分析"></a>对抽奖助手小程序的上瘾模型分析</h2><p><img src="http://www.vkcyan.top/6.png" alt="6"></p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p>参考文章：<a target="_blank" rel="noopener" href="http://www.woshipm.com/pd/5386132.html">http://www.woshipm.com/pd/5386132.html</a></p>
+<p>参考书籍：上瘾：让用户养成使用习惯的四大产品逻辑 尼尔·埃亚尔 瑞安·胡佛</p>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://vkcyan.github.io/2022/05/23/%E4%B8%8A%E7%98%BE%E6%A8%A1%E5%9E%8B%E5%A6%82%E4%BD%95%E5%BA%94%E7%94%A8%E5%88%B0%E4%BA%A7%E5%93%81/" title="上瘾模型如何应用到产品" target="_blank" rel="external">https://vkcyan.github.io/2022/05/23/上瘾模型如何应用到产品/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/vkcyan" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/vkcyan" target="_blank"><span class="text-dark">vkcyan</span><small class="ml-1x">Web Developer &amp; Product Manager</small></a></h3>
+        <div></div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="vcomments"></div>
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2022/05/23/%E9%92%88%E5%AF%B9%E5%85%8D%E7%99%BB%E5%BD%95%E7%9A%84%E4%B8%80%E4%BA%9B%E5%AE%9E%E8%B7%B5%E4%B8%8E%E6%80%9D%E8%80%83/" title="(no title)"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2022/03/18/NPDP%E4%BA%A7%E5%93%81%E7%BB%8F%E7%90%86%E4%BB%8B%E7%BB%8D/" title="NPDP产品经理国际资格认证"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+    <li class="toggle-toc">
+      <a class="toggle-btn " data-toggle="collapse" href="#collapseToc" aria-expanded="false" title="文章目录" role="button">    <span>[&nbsp;</span><span>文章目录</span>
+        <i class="text-collapsed icon icon-anchor"></i>
+        <i class="text-in icon icon-close"></i>
+        <span>]</span>
+      </a>
+    </li>
+    
+  </ul>
+  
+  
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-fancy btn-donate pop-onhover bg-gradient-warning" data-toggle="modal" data-target="#donateModal"><span>赏</span></button>
+  <!-- <div class="wave-icon wave-icon-danger btn-donate" data-toggle="modal" data-target="#donateModal">
+    <div class="wave-circle"><span class="icon"><i class="icon icon-bill"></i></span></div>
+  </div> -->
+  
+  
+  <div class="bar-right">
+    
+  </div>
+  </div>
+</nav>
+  
+<!-- Modal -->
+<div class="modal modal-center modal-small modal-xs-full fade" id="donateModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content donate">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <div class="modal-body">
+        <div class="donate-box">
+          <div class="donate-head">
+            <p>感谢您的支持，我会继续努力的!</p>
+          </div>
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade active in" id="alipay">
+              <div class="donate-payimg">
+                <img src="/images/donate/alipayimg.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开支付宝扫一扫，即可进行扫码打赏哦</p>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="wechatpay">
+              <div class="donate-payimg">
+                <img src="/images/donate/wechatpayimg.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开微信扫一扫，即可进行扫码打赏哦</p>
+            </div>
+          </div>
+          <div class="donate-footer">
+            <ul class="nav nav-tabs nav-justified" role="tablist">
+              <li role="presentation" class="active">
+                <a href="#alipay" id="alipay-tab" role="tab" data-toggle="tab" aria-controls="alipay" aria-expanded="true"><i class="icon icon-alipay"></i> 支付宝</a>
+              </li>
+              <li role="presentation" class="">
+                <a href="#wechatpay" role="tab" id="wechatpay-tab" data-toggle="tab" aria-controls="wechatpay" aria-expanded="false"><i class="icon icon-wepay"></i> 微信支付</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/vkcyan" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://juejin.cn/user/3720403077840519" target="_blank" title="Juejin" data-toggle=tooltip data-placement=top><i class="icon icon-juejin"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+   
+    
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/valine"></script>
+  <script type="text/javascript">
+  var GUEST = ['nick', 'mail', 'link'];
+  var meta = 'nick,mail,link';
+  meta = meta.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#vcomments',
+    verify: false,
+    notify: false,
+    appId: '',
+    appKey: '',
+    placeholder: 'Just go go',
+    avatar: 'mm',
+    meta: meta,
+    pageSize: '10' || 10,
+    visitor: false
+  });
+  </script>
+
+     
+
+
+
+
+
+
+
+</body>
+</html>
