@@ -332,7 +332,12 @@
 
   
   
-  <aside class="sidebar sidebar-toc collapse   in  " id="collapseToc" itemscope itemtype="http://schema.org/WPSideBar">
+<aside
+  class="sidebar sidebar-toc collapse  in "
+  id="collapseToc"
+  itemscope
+  itemtype="http://schema.org/WPSideBar"
+>
   <div class="slimContent">
     <nav id="toc" class="article-toc">
       <h3 class="toc-title">文章目录</h3>
@@ -340,6 +345,22 @@
     </nav>
   </div>
 </aside>
+
+<script>
+  // 移动端不显示菜单
+  if (
+    navigator.userAgent.match(
+      /(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i
+    )
+  ) {
+    let self = document.querySelector(".sidebar-toc");
+    var parent = self.parentElement;
+    parent.removeChild(self);
+  } else {
+  }
+</script>
+
+
 
 <main class="main" role="main">
   <div class="content">
