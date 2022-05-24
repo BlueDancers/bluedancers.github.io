@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://vkcyan.github.io/2022/05/24/%E9%92%88%E5%AF%B9%E5%85%8D%E7%99%BB%E5%BD%95%E7%9A%84%E4%B8%80%E4%BA%9B%E5%AE%9E%E8%B7%B5%E4%B8%8E%E6%80%9D%E8%80%83/</loc>
+    <lastmod>2022-05-24</lastmod>
+  </url>
+  <url>
+    <loc>https://vkcyan.github.io/2022/05/20/vue%E9%A1%B9%E7%9B%AE%E4%BD%BF%E7%94%A8vw%E8%BF%9B%E8%A1%8C%E7%A7%BB%E5%8A%A8%E7%AB%AF%E9%80%82%E9%85%8D/</loc>
+    <lastmod>2022-05-24</lastmod>
+  </url>
+  <url>
     <loc>https://vkcyan.github.io/2022/05/23/%E4%B8%8A%E7%98%BE%E6%A8%A1%E5%9E%8B%E5%A6%82%E4%BD%95%E5%BA%94%E7%94%A8%E5%88%B0%E4%BA%A7%E5%93%81/</loc>
     <lastmod>2022-05-23</lastmod>
   </url>
@@ -131,9 +139,5 @@
   <url>
     <loc>https://vkcyan.github.io/2022/03/15/%E8%81%8A%E4%B8%80%E8%81%8A%E5%AE%8F%E4%BB%BB%E5%8A%A1%E4%B8%8E%E5%BE%AE%E4%BB%BB%E5%8A%A1%E4%BB%A5%E5%8F%8AEventLoop/</loc>
     <lastmod>2022-05-23</lastmod>
-  </url>
-  <url>
-    <loc>https://vkcyan.github.io/2022/05/23/%E9%92%88%E5%AF%B9%E5%85%8D%E7%99%BB%E5%BD%95%E7%9A%84%E4%B8%80%E4%BA%9B%E5%AE%9E%E8%B7%B5%E4%B8%8E%E6%80%9D%E8%80%83/</loc>
-    <lastmod>2022-05-12</lastmod>
   </url>
 </urlset> 

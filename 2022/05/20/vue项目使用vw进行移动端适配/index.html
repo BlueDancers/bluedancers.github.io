@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>Vue + webpack项目的移动端适配 | vkcyan Blog</title>
+  <meta name="description" content="2022-5-20更新技术栈：vue3 + webpack5 安装插件1npm i postcss-px-to-viewport -D  增加配置新建配置文件postcss.config.js 1234567891011121314151617181920212223module.exports &#x3D; () &#x3D;&gt; &amp;#123;  return &amp;#123;    plugins: &amp;#123;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Vue + webpack项目的移动端适配">
+<meta property="og:url" content="https://vkcyan.github.io/2022/05/20/vue%E9%A1%B9%E7%9B%AE%E4%BD%BF%E7%94%A8vw%E8%BF%9B%E8%A1%8C%E7%A7%BB%E5%8A%A8%E7%AB%AF%E9%80%82%E9%85%8D/index.html">
+<meta property="og:site_name" content="vkcya Blog">
+<meta property="og:description" content="2022-5-20更新技术栈：vue3 + webpack5 安装插件1npm i postcss-px-to-viewport -D  增加配置新建配置文件postcss.config.js 1234567891011121314151617181920212223module.exports &#x3D; () &#x3D;&gt; &amp;#123;  return &amp;#123;    plugins: &amp;#123;">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-05-19T16:00:00.000Z">
+<meta property="article:modified_time" content="2022-05-24T02:13:18.332Z">
+<meta property="article:author" content="vkcyan">
+<meta property="article:tag" content="vue3 webpack5 相应式 vw">
+<meta name="twitter:card" content="summary">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://vkcyan.github.io/2022/05/20/vue%E9%A1%B9%E7%9B%AE%E4%BD%BF%E7%94%A8vw%E8%BF%9B%E8%A1%8C%E7%A7%BB%E5%8A%A8%E7%AB%AF%E9%80%82%E9%85%8D/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="vkcya Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+
+<body class="main-center theme-black" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/vkcyan" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">vkcyan</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Web Developer &amp; Product Manager</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> HeFei, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-books">
+          <a href="/books">
+            
+            <i class="icon icon-book-fill"></i>
+            
+            <span class="menu-title">书单</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">友链</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/vkcyan" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://juejin.cn/user/3720403077840519" target="_blank" title="Juejin" data-toggle=tooltip data-placement=top><i class="icon icon-juejin"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>故不积跬步，无以至千里；不积小流，无以成江海。</p><br/>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript-2021/">JavaScript-2021</a><span class="category-list-count">10</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript-2022/">JavaScript-2022</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%BA%A7%E5%93%81%E7%BB%8F%E7%90%86/">产品经理</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/">数据结构与算法</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%97%A5%E5%B8%B8%E5%BC%80%E5%8F%91/">日常开发</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%A7%BB%E5%8A%A8%E7%AB%AF/">移动端</a><span class="category-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a><span class="tag-list-count">17</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NPDP/" rel="tag">NPDP</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vue3-webpack5-%E7%9B%B8%E5%BA%94%E5%BC%8F-vw/" rel="tag">vue3 webpack5 相应式 vw</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%A7%E5%93%81%E6%97%A5%E5%B8%B8/" rel="tag">产品日常</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%85%B3%E4%BA%8EC%E7%AB%AF/" rel="tag">关于C端</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag">数据结构</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a><span class="tag-list-count">2</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/JavaScript/" style="font-size: 14px;">JavaScript</a> <a href="/tags/NPDP/" style="font-size: 13.5px;">NPDP</a> <a href="/tags/vue3-webpack5-%E7%9B%B8%E5%BA%94%E5%BC%8F-vw/" style="font-size: 13px;">vue3 webpack5 相应式 vw</a> <a href="/tags/%E4%BA%A7%E5%93%81%E6%97%A5%E5%B8%B8/" style="font-size: 13px;">产品日常</a> <a href="/tags/%E5%85%B3%E4%BA%8EC%E7%AB%AF/" style="font-size: 13px;">关于C端</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="font-size: 13.75px;">数据结构</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 13.25px;">算法</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/05/">五月 2022</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/03/">三月 2022</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/12/">十二月 2021</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/10/">十月 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/06/">六月 2021</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/03/">三月 2021</a><span class="archive-list-count">9</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E6%97%A5%E5%B8%B8%E5%BC%80%E5%8F%91/">日常开发</a>
+              </p>
+              <p class="item-title">
+                <a href="/2022/05/24/%E9%92%88%E5%AF%B9%E5%85%8D%E7%99%BB%E5%BD%95%E7%9A%84%E4%B8%80%E4%BA%9B%E5%AE%9E%E8%B7%B5%E4%B8%8E%E6%80%9D%E8%80%83/" class="title">关于免登录的一些实践与思考</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-05-23T16:00:00.000Z" itemprop="datePublished">2022-05-24</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E4%BA%A7%E5%93%81%E7%BB%8F%E7%90%86/">产品经理</a>
+              </p>
+              <p class="item-title">
+                <a href="/2022/05/23/%E4%B8%8A%E7%98%BE%E6%A8%A1%E5%9E%8B%E5%A6%82%E4%BD%95%E5%BA%94%E7%94%A8%E5%88%B0%E4%BA%A7%E5%93%81/" class="title">上瘾模型如何应用到产品</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-05-22T16:00:00.000Z" itemprop="datePublished">2022-05-23</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E7%A7%BB%E5%8A%A8%E7%AB%AF/">移动端</a>
+              </p>
+              <p class="item-title">
+                <a href="/2022/05/20/vue%E9%A1%B9%E7%9B%AE%E4%BD%BF%E7%94%A8vw%E8%BF%9B%E8%A1%8C%E7%A7%BB%E5%8A%A8%E7%AB%AF%E9%80%82%E9%85%8D/" class="title">Vue + webpack项目的移动端适配</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-05-19T16:00:00.000Z" itemprop="datePublished">2022-05-20</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E4%BA%A7%E5%93%81%E7%BB%8F%E7%90%86/">产品经理</a>
+              </p>
+              <p class="item-title">
+                <a href="/2022/03/18/NPDP%E4%BA%A7%E5%93%81%E7%BB%8F%E7%90%86%E4%BB%8B%E7%BB%8D/" class="title">NPDP产品经理国际资格认证</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-03-17T16:00:00.000Z" itemprop="datePublished">2022-03-18</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E4%BA%A7%E5%93%81%E7%BB%8F%E7%90%86/">产品经理</a>
+              </p>
+              <p class="item-title">
+                <a href="/2022/03/18/%E5%B7%A5%E5%85%B7%E4%B8%8E%E7%BB%A9%E6%95%88%E5%BA%A6%E9%87%8F/" class="title">工具与绩效度量</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-03-17T16:00:00.000Z" itemprop="datePublished">2022-03-18</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<aside
+  class="sidebar sidebar-toc collapse  in "
+  id="collapseToc"
+  itemscope
+  itemtype="http://schema.org/WPSideBar"
+>
+  <div class="slimContent">
+    <nav id="toc" class="article-toc">
+      <h3 class="toc-title">文章目录</h3>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#2022-5-20%E6%9B%B4%E6%96%B0"><span class="toc-number">1.</span> <span class="toc-text">2022-5-20更新</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E6%8F%92%E4%BB%B6"><span class="toc-number">1.1.</span> <span class="toc-text">安装插件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A2%9E%E5%8A%A0%E9%85%8D%E7%BD%AE"><span class="toc-number">1.2.</span> <span class="toc-text">增加配置</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#end"><span class="toc-number">2.</span> <span class="toc-text">end</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B3%A8%E6%84%8F"><span class="toc-number">2.0.1.</span> <span class="toc-text">注意</span></a></li></ol></li></ol></li></ol>
+    </nav>
+  </div>
+</aside>
+
+<script>
+  // 移动端不显示菜单
+  if (
+    navigator.userAgent.match(
+      /(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i
+    )
+  ) {
+    let self = document.querySelector(".sidebar-toc");
+    var parent = self.parentElement;
+    parent.removeChild(self);
+  } else {
+  }
+</script>
+
+
+
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-vue项目使用vw进行移动端适配" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Vue + webpack项目的移动端适配
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2022/05/20/vue%E9%A1%B9%E7%9B%AE%E4%BD%BF%E7%94%A8vw%E8%BF%9B%E8%A1%8C%E7%A7%BB%E5%8A%A8%E7%AB%AF%E9%80%82%E9%85%8D/" class="article-date">
+	  <time datetime="2022-05-19T16:00:00.000Z" itemprop="datePublished">2022-05-20</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/%E7%A7%BB%E5%8A%A8%E7%AB%AF/">移动端</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/vue3-webpack5-%E7%9B%B8%E5%BA%94%E5%BC%8F-vw/" rel="tag">vue3 webpack5 相应式 vw</a>
+  </span>
+
+
+        
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/05/20/vue%E9%A1%B9%E7%9B%AE%E4%BD%BF%E7%94%A8vw%E8%BF%9B%E8%A1%8C%E7%A7%BB%E5%8A%A8%E7%AB%AF%E9%80%82%E9%85%8D/#comments" class="article-comment-link">评论</a></span>
+        
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <h2 id="2022-5-20更新"><a href="#2022-5-20更新" class="headerlink" title="2022-5-20更新"></a>2022-5-20更新</h2><p>技术栈：vue3 + webpack5</p>
+<h3 id="安装插件"><a href="#安装插件" class="headerlink" title="安装插件"></a>安装插件</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm i postcss-px-to-viewport -D</span><br></pre></td></tr></table></figure>
+
+<h3 id="增加配置"><a href="#增加配置" class="headerlink" title="增加配置"></a>增加配置</h3><p>新建配置文件<code>postcss.config.js</code></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">module</span>.<span class="property">exports</span> = <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    <span class="attr">plugins</span>: &#123;</span><br><span class="line">      <span class="attr">autoprefixer</span>: &#123;&#125;,</span><br><span class="line">      <span class="string">&quot;postcss-px-to-viewport&quot;</span>: &#123;</span><br><span class="line">        <span class="attr">unitToConvert</span>: <span class="string">&quot;px&quot;</span>, <span class="comment">// 需要转换的单位，默认为&quot;px&quot;</span></span><br><span class="line">        <span class="attr">viewportWidth</span>: <span class="number">750</span>, <span class="comment">//  设计稿的视口宽度</span></span><br><span class="line">        <span class="attr">unitPrecision</span>: <span class="number">5</span>, <span class="comment">// 单位转换后保留的精度</span></span><br><span class="line">        <span class="attr">propList</span>: [<span class="string">&quot;*&quot;</span>], <span class="comment">// 能转化为vw的属性列表</span></span><br><span class="line">        <span class="attr">viewportUnit</span>: <span class="string">&quot;vw&quot;</span>, <span class="comment">//  希望使用的视口单位</span></span><br><span class="line">        <span class="attr">fontViewportUnit</span>: <span class="string">&quot;vw&quot;</span>, <span class="comment">// 字体使用的视口单位</span></span><br><span class="line">        <span class="attr">selectorBlackList</span>: [<span class="string">&quot;.ignore&quot;</span>, <span class="string">&quot;.hairlines&quot;</span>, <span class="string">&quot;.ig-&quot;</span>], <span class="comment">// 需要忽略的CSS选择器</span></span><br><span class="line">        <span class="attr">minPixelValue</span>: <span class="number">1</span>, <span class="comment">// 最小的转换数值，如果为1的话，只有大于1的值会被转换</span></span><br><span class="line">        <span class="attr">mediaQuery</span>: <span class="literal">false</span>, <span class="comment">// 媒体查询里的单位是否需要转换单位</span></span><br><span class="line">        <span class="attr">replace</span>: <span class="literal">true</span>, <span class="comment">// 是否直接更换属性值，而不添加备用属性</span></span><br><span class="line">        <span class="attr">include</span>: <span class="literal">undefined</span>, <span class="comment">// 如果设置了include，那将只有匹配到的文件才会被转换，例如只转换 &#x27;src/mobile&#x27; 下的文件 (include: /\/src\/mobile\//)</span></span><br><span class="line">        <span class="attr">landscape</span>: <span class="literal">false</span>, <span class="comment">// 是否添加根据 landscapeWidth 生成的媒体查询条件 @media (orientation: landscape)</span></span><br><span class="line">        <span class="attr">landscapeUnit</span>: <span class="string">&quot;vw&quot;</span>, <span class="comment">// 横屏时使用的单位</span></span><br><span class="line">        <span class="attr">landscapeWidth</span>: <span class="number">568</span>, <span class="comment">// 横屏时使用的视口宽度</span></span><br><span class="line">      &#125;,</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="end"><a href="#end" class="headerlink" title="end"></a>end</h2><p>以下配置已经过时，请看最新内容</p>
+<p>需要安装一下的插件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install postcss-aspect-ratio-mini postcss-px-to-viewport postcss-write-svg postcss-cssnext postcss-viewport-units cssnano cssnano-preset-advanced postcss-import postcss-url --S</span><br></pre></td></tr></table></figure>
+
+
+
+<p><code>postcss.config.js</code>配置</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">module</span>.<span class="property">exports</span> = &#123;</span><br><span class="line">  <span class="attr">plugins</span>: &#123;</span><br><span class="line">    <span class="string">&#x27;postcss-import&#x27;</span>: &#123;&#125;,</span><br><span class="line">    <span class="string">&#x27;postcss-url&#x27;</span>: &#123;&#125;,</span><br><span class="line">    <span class="string">&#x27;postcss-aspect-ratio-mini&#x27;</span>: &#123;&#125;,</span><br><span class="line">    <span class="string">&#x27;postcss-write-svg&#x27;</span>: &#123; <span class="attr">utf8</span>: <span class="literal">false</span> &#125;,</span><br><span class="line">    <span class="string">&#x27;postcss-cssnext&#x27;</span>: &#123;&#125;,</span><br><span class="line">    <span class="string">&#x27;postcss-px-to-viewport&#x27;</span>: &#123;</span><br><span class="line">      <span class="attr">viewportWidth</span>: <span class="number">750</span>, <span class="comment">// 视窗的宽度，对应的是我们设计稿的宽度，一般是750</span></span><br><span class="line">      <span class="attr">viewportHeight</span>: <span class="number">1334</span>, <span class="comment">// 视窗的高度，根据750设备的宽度来指定，一般指定1334，也可以不配置</span></span><br><span class="line">      <span class="attr">unitPrecision</span>: <span class="number">3</span>, <span class="comment">// 指定`px`转换为视窗单位值的小数位数（很多时候无法整除）</span></span><br><span class="line">      <span class="attr">viewportUnit</span>: <span class="string">&#x27;vw&#x27;</span>, <span class="comment">// 指定需要转换成的视窗单位，建议使用vw</span></span><br><span class="line">      <span class="attr">selectorBlackList</span>: [<span class="string">&#x27;.ignore&#x27;</span>, <span class="string">&#x27;.hairlines&#x27;</span>], <span class="comment">// 指定不转换为视窗单位的类，可以自定义，可以无限添加,建议定义一至两个通用的类名</span></span><br><span class="line">      <span class="attr">minPixelValue</span>: <span class="number">0</span>, <span class="comment">// 小于或等于`1px`不转换为视窗单位，你也可以设置为你想要的值</span></span><br><span class="line">      <span class="attr">mediaQuery</span>: <span class="literal">false</span> <span class="comment">// 允许在媒体查询中转换`px`</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="string">&#x27;postcss-viewport-units&#x27;</span>: &#123;</span><br><span class="line">      <span class="attr">filterRule</span>: <span class="function"><span class="params">rule</span> =&gt;</span> rule.<span class="property">nodes</span>.<span class="title function_">findIndex</span>(<span class="function"><span class="params">i</span> =&gt;</span> i.<span class="property">prop</span> === <span class="string">&#x27;content&#x27;</span>) === -<span class="number">1</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">cssnano</span>: &#123;</span><br><span class="line">      <span class="attr">preset</span>: <span class="string">&#x27;advanced&#x27;</span>,</span><br><span class="line">      <span class="attr">autoprefixer</span>: <span class="literal">false</span>,</span><br><span class="line">      <span class="string">&#x27;postcss-zindex&#x27;</span>: <span class="literal">false</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<blockquote>
+<p>这里注意假如生成的项目里面没有.postcssrc.js 说明写在package.json里面,记得把package里面的部分配置删除</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&quot;postcss&quot;: &#123;</span><br><span class="line">  &quot;plugins&quot;: &#123;</span><br><span class="line">    &quot;autoprefixer&quot;: &#123;&#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br></pre></td></tr></table></figure>
+
+
+
+<p>最后在index.html里面进行引入viewport-units-buggyfill解决兼容问题</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;script src=<span class="string">&quot;//g.alicdn.com/fdilab/lib3rd/viewport-units-buggyfill/0.6.2/??viewport-units-buggyfill.hacks.min.js,viewport-units-buggyfill.min.js&quot;</span>&gt;&lt;/script&gt;</span><br><span class="line">    <span class="language-xml"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript"></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">      <span class="variable language_">window</span>.<span class="property">onload</span> = <span class="keyword">function</span> (<span class="params"></span>) &#123; </span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">        <span class="variable language_">window</span>.<span class="property">viewportUnitsBuggyfill</span>.<span class="title function_">init</span>(&#123; <span class="attr">hacks</span>: <span class="variable language_">window</span>.<span class="property">viewportUnitsBuggyfillHacks</span> &#125;);</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">      &#125;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    </span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
+
+<h4 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h4><p>如果遇到图片无法正常显示</p>
+<p>1.img图片不显示：</p>
+<p>全局引入</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">img &#123; </span><br><span class="line">	content: normal !important;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>2.与第三方UI库兼容问题：</p>
+<p>使用postcss-px-to-viewport-opt，然后使用exclude配置项，具体参考 <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/36913200">Vue+ts下的移动端vw适配（第三方库css问题）</a></p>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://vkcyan.github.io/2022/05/20/vue%E9%A1%B9%E7%9B%AE%E4%BD%BF%E7%94%A8vw%E8%BF%9B%E8%A1%8C%E7%A7%BB%E5%8A%A8%E7%AB%AF%E9%80%82%E9%85%8D/" title="Vue + webpack项目的移动端适配" target="_blank" rel="external">https://vkcyan.github.io/2022/05/20/vue项目使用vw进行移动端适配/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/vkcyan" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/vkcyan" target="_blank"><span class="text-dark">vkcyan</span><small class="ml-1x">Web Developer &amp; Product Manager</small></a></h3>
+        <div></div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="vcomments"></div>
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2022/05/23/%E4%B8%8A%E7%98%BE%E6%A8%A1%E5%9E%8B%E5%A6%82%E4%BD%95%E5%BA%94%E7%94%A8%E5%88%B0%E4%BA%A7%E5%93%81/" title="上瘾模型如何应用到产品"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2022/03/18/NPDP%E4%BA%A7%E5%93%81%E7%BB%8F%E7%90%86%E4%BB%8B%E7%BB%8D/" title="NPDP产品经理国际资格认证"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+    <li class="toggle-toc">
+      <a class="toggle-btn " data-toggle="collapse" href="#collapseToc" aria-expanded="false" title="文章目录" role="button">    <span>[&nbsp;</span><span>文章目录</span>
+        <i class="text-collapsed icon icon-anchor"></i>
+        <i class="text-in icon icon-close"></i>
+        <span>]</span>
+      </a>
+    </li>
+    
+  </ul>
+  
+  
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-fancy btn-donate pop-onhover bg-gradient-warning" data-toggle="modal" data-target="#donateModal"><span>赏</span></button>
+  <!-- <div class="wave-icon wave-icon-danger btn-donate" data-toggle="modal" data-target="#donateModal">
+    <div class="wave-circle"><span class="icon"><i class="icon icon-bill"></i></span></div>
+  </div> -->
+  
+  
+  <div class="bar-right">
+    
+  </div>
+  </div>
+</nav>
+  
+<!-- Modal -->
+<div class="modal modal-center modal-small modal-xs-full fade" id="donateModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content donate">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <div class="modal-body">
+        <div class="donate-box">
+          <div class="donate-head">
+            <p>感谢您的支持，我会继续努力的!</p>
+          </div>
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade active in" id="alipay">
+              <div class="donate-payimg">
+                <img src="/images/donate/alipayimg.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开支付宝扫一扫，即可进行扫码打赏哦</p>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="wechatpay">
+              <div class="donate-payimg">
+                <img src="/images/donate/wechatpayimg.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开微信扫一扫，即可进行扫码打赏哦</p>
+            </div>
+          </div>
+          <div class="donate-footer">
+            <ul class="nav nav-tabs nav-justified" role="tablist">
+              <li role="presentation" class="active">
+                <a href="#alipay" id="alipay-tab" role="tab" data-toggle="tab" aria-controls="alipay" aria-expanded="true"><i class="icon icon-alipay"></i> 支付宝</a>
+              </li>
+              <li role="presentation" class="">
+                <a href="#wechatpay" role="tab" id="wechatpay-tab" data-toggle="tab" aria-controls="wechatpay" aria-expanded="false"><i class="icon icon-wepay"></i> 微信支付</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/vkcyan" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://juejin.cn/user/3720403077840519" target="_blank" title="Juejin" data-toggle=tooltip data-placement=top><i class="icon icon-juejin"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <!-- <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script> -->
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+   
+    
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/valine"></script>
+  <script type="text/javascript">
+  var GUEST = ['nick', 'mail', 'link'];
+  var meta = 'nick,mail,link';
+  meta = meta.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#vcomments',
+    verify: false,
+    notify: false,
+    appId: '',
+    appKey: '',
+    placeholder: 'Just go go',
+    avatar: 'mm',
+    meta: meta,
+    pageSize: '10' || 10,
+    visitor: false
+  });
+  </script>
+
+     
+
+
+
+
+
+
+
+</body>
+</html>
