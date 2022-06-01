@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>JavaScript设计模式 | vkcyan Blog</title>
+  <meta name="description" content="JavaScript设计模式基础JavaScript是一门经典动态类型语言，对变量类型的宽容给实际编码带来了很大灵活性。由于无需进行类型检测，我们可能尝试调用对象的任何方法，而无需去考虑它原本是否被设计拥有该方法。 ​	这一切都建立在鸭子类型的概念上，鸭子类型：如果它走起路来像鸭子，叫起来像鸭子，那他就是鸭子 ​	利用鸭子类型，我们就不必借助类型的帮助，实现一个动态语言专有原则：面向接口编程，而不">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JavaScript设计模式">
+<meta property="og:url" content="https://vkcyan.github.io/2022/05/20/JavaScript%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/index.html">
+<meta property="og:site_name" content="vkcya Blog">
+<meta property="og:description" content="JavaScript设计模式基础JavaScript是一门经典动态类型语言，对变量类型的宽容给实际编码带来了很大灵活性。由于无需进行类型检测，我们可能尝试调用对象的任何方法，而无需去考虑它原本是否被设计拥有该方法。 ​	这一切都建立在鸭子类型的概念上，鸭子类型：如果它走起路来像鸭子，叫起来像鸭子，那他就是鸭子 ​	利用鸭子类型，我们就不必借助类型的帮助，实现一个动态语言专有原则：面向接口编程，而不">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-05-19T16:00:00.000Z">
+<meta property="article:modified_time" content="2022-06-01T09:29:09.555Z">
+<meta property="article:author" content="vkcyan">
+<meta property="article:tag" content="设计模式">
+<meta name="twitter:card" content="summary">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://vkcyan.github.io/2022/05/20/JavaScript%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="vkcya Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+
+<body class="main-center theme-black" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/vkcyan" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">vkcyan</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Web Developer &amp; Product Manager</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> HeFei, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-books">
+          <a href="/books">
+            
+            <i class="icon icon-book-fill"></i>
+            
+            <span class="menu-title">书单</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">友链</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/vkcyan" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://juejin.cn/user/3720403077840519" target="_blank" title="Juejin" data-toggle=tooltip data-placement=top><i class="icon icon-juejin"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>往者不可谏，来者犹可追</p><br/>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript/">JavaScript</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript-2021/">JavaScript-2021</a><span class="category-list-count">10</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript-2022/">JavaScript-2022</a><span class="category-list-count">8</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%BA%A7%E5%93%81%E7%BB%8F%E7%90%86/">产品经理</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/">数据结构与算法</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%97%A5%E5%B8%B8%E5%BC%80%E5%8F%91/">日常开发</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%A7%BB%E5%8A%A8%E7%AB%AF/">移动端</a><span class="category-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a><span class="tag-list-count">18</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NPDP/" rel="tag">NPDP</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue3/" rel="tag">Vue3</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/h5%E8%A3%85%E4%BF%AE/" rel="tag">h5装修</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vue3/" rel="tag">vue3</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vw/" rel="tag">vw</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/webpack5/" rel="tag">webpack5</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%A7%E5%93%81%E6%97%A5%E5%B8%B8/" rel="tag">产品日常</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BD%8E%E4%BB%A3%E7%A0%81/" rel="tag">低代码</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%85%B3%E4%BA%8EC%E7%AB%AF/" rel="tag">关于C端</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%93%8D%E5%BA%94%E5%BC%8F/" rel="tag">响应式</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag">数据结构</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/JavaScript/" style="font-size: 14px;">JavaScript</a> <a href="/tags/NPDP/" style="font-size: 13.5px;">NPDP</a> <a href="/tags/Vue3/" style="font-size: 13px;">Vue3</a> <a href="/tags/h5%E8%A3%85%E4%BF%AE/" style="font-size: 13px;">h5装修</a> <a href="/tags/vue3/" style="font-size: 13px;">vue3</a> <a href="/tags/vw/" style="font-size: 13px;">vw</a> <a href="/tags/webpack5/" style="font-size: 13px;">webpack5</a> <a href="/tags/%E4%BA%A7%E5%93%81%E6%97%A5%E5%B8%B8/" style="font-size: 13px;">产品日常</a> <a href="/tags/%E4%BD%8E%E4%BB%A3%E7%A0%81/" style="font-size: 13px;">低代码</a> <a href="/tags/%E5%85%B3%E4%BA%8EC%E7%AB%AF/" style="font-size: 13px;">关于C端</a> <a href="/tags/%E5%93%8D%E5%BA%94%E5%BC%8F/" style="font-size: 13px;">响应式</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="font-size: 13.75px;">数据结构</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 13.25px;">算法</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 13px;">设计模式</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/05/">五月 2022</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/03/">三月 2022</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/12/">十二月 2021</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/10/">十月 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/06/">六月 2021</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/03/">三月 2021</a><span class="archive-list-count">9</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/JavaScript-2022/">JavaScript-2022</a>
+              </p>
+              <p class="item-title">
+                <a href="/2022/05/25/%E3%80%905000%E5%AD%97%E9%95%BF%E6%96%87%E3%80%91%EF%BC%88%E5%BC%80%E6%BA%90%EF%BC%89%20%E4%BD%8E%E4%BB%A3%E7%A0%81H5%E5%8F%AF%E8%A7%86%E5%8C%96%E6%90%AD%E5%BB%BA%E7%B3%BB%E7%BB%9F%20-%20%E6%98%93%E5%8A%A8v3.0/" class="title">【5000字长文】（开源） 低代码H5可视化搭建系统 - 易动v3.0</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-05-24T16:00:00.000Z" itemprop="datePublished">2022-05-25</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E6%97%A5%E5%B8%B8%E5%BC%80%E5%8F%91/">日常开发</a>
+              </p>
+              <p class="item-title">
+                <a href="/2022/05/24/%E9%92%88%E5%AF%B9%E5%85%8D%E7%99%BB%E5%BD%95%E7%9A%84%E4%B8%80%E4%BA%9B%E5%AE%9E%E8%B7%B5%E4%B8%8E%E6%80%9D%E8%80%83/" class="title">关于免登录的一些实践与思考</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-05-23T16:00:00.000Z" itemprop="datePublished">2022-05-24</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E4%BA%A7%E5%93%81%E7%BB%8F%E7%90%86/">产品经理</a>
+              </p>
+              <p class="item-title">
+                <a href="/2022/05/23/%E4%B8%8A%E7%98%BE%E6%A8%A1%E5%9E%8B%E5%A6%82%E4%BD%95%E5%BA%94%E7%94%A8%E5%88%B0%E4%BA%A7%E5%93%81/" class="title">上瘾模型如何应用到产品</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-05-22T16:00:00.000Z" itemprop="datePublished">2022-05-23</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/JavaScript/">JavaScript</a>
+              </p>
+              <p class="item-title">
+                <a href="/2022/05/20/JavaScript%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" class="title">JavaScript设计模式</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-05-19T16:00:00.000Z" itemprop="datePublished">2022-05-20</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E7%A7%BB%E5%8A%A8%E7%AB%AF/">移动端</a>
+              </p>
+              <p class="item-title">
+                <a href="/2022/05/20/vue%E9%A1%B9%E7%9B%AE%E4%BD%BF%E7%94%A8vw%E8%BF%9B%E8%A1%8C%E7%A7%BB%E5%8A%A8%E7%AB%AF%E9%80%82%E9%85%8D/" class="title">Vue + webpack项目的移动端适配</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-05-19T16:00:00.000Z" itemprop="datePublished">2022-05-20</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<aside
+  class="sidebar sidebar-toc collapse  in "
+  id="collapseToc"
+  itemscope
+  itemtype="http://schema.org/WPSideBar"
+>
+  <div class="slimContent">
+    <nav id="toc" class="article-toc">
+      <h3 class="toc-title">文章目录</h3>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#JavaScript%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E5%9F%BA%E7%A1%80"><span class="toc-number">1.</span> <span class="toc-text">JavaScript设计模式基础</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%9A%E6%80%81"><span class="toc-number">1.1.</span> <span class="toc-text">多态</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B0%81%E8%A3%85"><span class="toc-number">1.2.</span> <span class="toc-text">封装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8E%9F%E5%9E%8B%E7%BC%96%E7%A8%8B"><span class="toc-number">1.3.</span> <span class="toc-text">原型编程</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%9F%A5%E6%89%BE%E5%AF%B9%E8%B1%A1%E7%9A%84%E8%BF%87%E7%A8%8B"><span class="toc-number">1.3.1.</span> <span class="toc-text">原型链查找对象的过程</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%97%AD%E5%8C%85"><span class="toc-number">1.4.</span> <span class="toc-text">闭包</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%97%AD%E5%8C%85%E6%A1%88%E4%BE%8B"><span class="toc-number">1.4.1.</span> <span class="toc-text">闭包案例</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%97%AD%E5%8C%85%E4%B8%8E%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1"><span class="toc-number">1.4.2.</span> <span class="toc-text">闭包与面向对象</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AF%B9%E8%B1%A1%E7%89%88%E6%9C%AC"><span class="toc-number">1.4.3.</span> <span class="toc-text">对象版本</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%B1%BB%E7%89%88%E6%9C%AC"><span class="toc-number">1.4.4.</span> <span class="toc-text">类版本</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%AB%98%E9%98%B6%E5%87%BD%E6%95%B0"><span class="toc-number">1.5.</span> <span class="toc-text">高阶函数</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%AB%98%E9%98%B6%E5%BA%94%E7%94%A8-%E5%87%BD%E6%95%B0%E6%9F%AF%E9%87%8C%E5%8C%96"><span class="toc-number">1.5.1.</span> <span class="toc-text">高阶应用 - 函数柯里化</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F"><span class="toc-number">2.</span> <span class="toc-text">单例模式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E4%BB%A3%E7%90%86%E5%AE%9E%E7%8E%B0%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F"><span class="toc-number">2.1.</span> <span class="toc-text">使用代理实现单例模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#JavaScript%E7%9A%84%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F"><span class="toc-number">2.2.</span> <span class="toc-text">JavaScript的单例模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%83%B0%E6%80%A7%E5%8D%95%E4%BE%8B"><span class="toc-number">2.3.</span> <span class="toc-text">惰性单例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B0%8F%E7%BB%93"><span class="toc-number">2.4.</span> <span class="toc-text">小结</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F"><span class="toc-number">3.</span> <span class="toc-text">策略模式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#JavaScript%E4%B8%AD%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F%E7%9A%84%E4%BD%93%E7%8E%B0"><span class="toc-number">3.1.</span> <span class="toc-text">JavaScript中策略模式的体现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%9A%E6%80%81%E5%9C%A8%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F%E4%B8%AD%E7%9A%84%E4%BD%93%E7%8E%B0"><span class="toc-number">3.2.</span> <span class="toc-text">多态在策略模式中的体现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F%E5%9C%A8%E8%A1%A8%E5%8D%95%E6%A0%A1%E9%AA%8C%E7%9A%84%E5%BA%94%E7%94%A8"><span class="toc-number">3.3.</span> <span class="toc-text">策略模式在表单校验的应用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F%E7%9A%84%E4%BC%98%E7%BC%BA%E7%82%B9"><span class="toc-number">3.4.</span> <span class="toc-text">策略模式的优缺点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E7%AD%89%E5%85%AC%E6%B0%91%E5%87%BD%E6%95%B0%E4%B8%8E%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F"><span class="toc-number">3.5.</span> <span class="toc-text">一等公民函数与策略模式</span></a></li></ol></li></ol>
+    </nav>
+  </div>
+</aside>
+
+<script>
+  // 移动端不显示菜单
+  if (
+    navigator.userAgent.match(
+      /(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i
+    )
+  ) {
+    let self = document.querySelector(".sidebar-toc");
+    var parent = self.parentElement;
+    parent.removeChild(self);
+  } else {
+  }
+</script>
+
+
+
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-JavaScript设计模式" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      JavaScript设计模式
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2022/05/20/JavaScript%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" class="article-date">
+	  <time datetime="2022-05-19T16:00:00.000Z" itemprop="datePublished">2022-05-20</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/JavaScript/">JavaScript</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a>
+  </span>
+
+
+        
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/05/20/JavaScript%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/#comments" class="article-comment-link">评论</a></span>
+        
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <h2 id="JavaScript设计模式基础"><a href="#JavaScript设计模式基础" class="headerlink" title="JavaScript设计模式基础"></a>JavaScript设计模式基础</h2><p>JavaScript是一门经典动态类型语言，对变量类型的宽容给实际编码带来了很大灵活性。由于无需进行类型检测，我们可能尝试调用对象的任何方法，而无需去考虑它原本是否被设计拥有该方法。</p>
+<p>​	这一切都建立在鸭子类型的概念上，鸭子类型：如果它走起路来像鸭子，叫起来像鸭子，那他就是鸭子</p>
+<p>​	利用鸭子类型，我们就不必借助类型的帮助，实现一个动态语言专有原则：面向接口编程，而不是面向实现变成，例如一个对象，具备length属性，那我们就可以将其视为数组，而不需要关心它的实际类型。</p>
+<h3 id="多态"><a href="#多态" class="headerlink" title="多态"></a>多态</h3><p>​	同一个操作作用于不同的对象上面，可以产生不同的解释和不同的执行结果</p>
+<p>​	例如：小狗汪汪叫 小猫喵喵叫 他们都是动物，都会发生，但是各自发出的声音并不一样</p>
+<p>​	其背后的思想是将“做什么”于“谁去做以及怎么样”分离开来，也就是将“不变的事物”于“变化的事物”分离开来。这给予了我们拓展程序的能力，程序看起来是可生长的，也是符合开放封闭原则的，相对于修改代码，增加代码显然优雅安全的多。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">sound</span>(<span class="params">animal</span>) &#123;</span><br><span class="line">  animal.<span class="title function_">sound</span>();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> <span class="title class_">Dog</span> = <span class="keyword">function</span> (<span class="params"></span>) &#123;&#125;;</span><br><span class="line"><span class="title class_">Dog</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">sound</span> = <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;汪汪汪&quot;</span>);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> <span class="title class_">Cat</span> = <span class="keyword">function</span> (<span class="params"></span>) &#123;&#125;;</span><br><span class="line"><span class="title class_">Cat</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">sound</span> = <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;喵喵喵&quot;</span>);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">new</span> <span class="title class_">Dog</span>().<span class="title function_">sound</span>()</span><br><span class="line"><span class="keyword">new</span> <span class="title class_">Cat</span>().<span class="title function_">sound</span>()</span><br></pre></td></tr></table></figure>
+
+
+
+<p>如果是强类型语言就需要借助继承来实现<strong>向上转型</strong>，从狗可以发出叫声转变为动物可以发出叫声，从而避免我们指定了发出声音对象是某一个类型，他就不可能被替换成为另一个类型。</p>
+<p>​	多态最根本的作用就是通过把过程化的条件分支语句转化为对象的多态性，从而消除这些条件分支语句。</p>
+<h3 id="封装"><a href="#封装" class="headerlink" title="封装"></a>封装</h3><p>封装的目的是将信息隐藏，封装应该被视为“任何形式的封装”，也就是说，封装不仅仅是隐藏数据，还包括隐藏实现细节，设计细节以及隐藏对象的类型。</p>
+<h3 id="原型编程"><a href="#原型编程" class="headerlink" title="原型编程"></a>原型编程</h3><p>JavaScript本身就是基于原型的面向对象语言，它的对象系统就是使用原型模式来搭建的，在这里称之为原型编程范型业务更加合适。</p>
+<p>​	在JavaScript中不存在类的概念，对象也并非从类中创建出来，所有的JavaScript对象都是从某个对象上复制出来的。</p>
+<p>​	原型编程存在一个重要特性，即当对象无法响应某个请求的时候，就会把该请求委托给自己的原型；这里更好的说法是把请求委托给它的构造器的原型</p>
+<p>​	在JavaScript中，一个function并不一定仅仅是一个普通函数，也可以是一个函数构造器，当使用new运算符来调用函数的时候，此时函数就是一个构造器。使用new运算符来创建对象的过程，实际上也只是先克隆<code>Object.prototype</code>，再进行一些其他额外操作的过程。</p>
+<h4 id="原型链查找对象的过程"><a href="#原型链查找对象的过程" class="headerlink" title="原型链查找对象的过程"></a>原型链查找对象的过程</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> A = <span class="keyword">function</span> (<span class="params"></span>) &#123;&#125;;</span><br><span class="line">A.<span class="property"><span class="keyword">prototype</span></span> = &#123; <span class="attr">name</span>: <span class="string">&quot;sven&quot;</span> &#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> B = <span class="keyword">function</span> (<span class="params"></span>) &#123;&#125;;</span><br><span class="line">B.<span class="property"><span class="keyword">prototype</span></span> = <span class="keyword">new</span> <span class="title function_">A</span>();</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> b = <span class="keyword">new</span> <span class="title function_">B</span>();</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(b.<span class="property">name</span>);</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>首先尝试遍历对象b中的所有属性，但是没有找到name这个属性</li>
+<li>查找name属性的请求被委托到对象b的构造器原型，它被<code>b._proto_</code>记录并指向B.prototype，而B.prototype又直线new A()创建的对象</li>
+<li>再该对象中依旧没有找到name属性，于是请求又被委托到这个对象的构造器的原型A.prototype</li>
+<li>在A.prototype中找到了name属性，返回值</li>
+</ol>
+<h3 id="闭包"><a href="#闭包" class="headerlink" title="闭包"></a>闭包</h3><h4 id="闭包案例"><a href="#闭包案例" class="headerlink" title="闭包案例"></a>闭包案例</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> func = <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">var</span> a = <span class="number">1</span>;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">    a++;</span><br><span class="line">    <span class="title function_">alert</span>(a);</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> ff = <span class="title function_">func</span>();</span><br><span class="line"><span class="title function_">ff</span>();</span><br><span class="line"><span class="title function_">ff</span>();</span><br><span class="line"><span class="title function_">ff</span>();</span><br></pre></td></tr></table></figure>
+
+<p>​	局部变量在函数执行结束后将会被销毁，但是以上的例子中，局部变量a并没有消失，而是似乎一直在某个地方存活着。这是因为当执行func的时候，func返回了一个匿名函数的引用，它可以访问到func被调用时产生的环境，而局部变量所在的环境一直处于这个环境中。既然局部变量所处的环境还能被外界访问，这个局部变量就有了不被销毁的理由；在这样的闭包结构中，局部变量实现了生命的延续。</p>
+<h4 id="闭包与面向对象"><a href="#闭包与面向对象" class="headerlink" title="闭包与面向对象"></a>闭包与面向对象</h4><p><strong>过程与数据的结合</strong>是形容面向对象中的<strong>对象</strong>时常用的表达</p>
+<p>对象以方法的形式包含了过程，而闭包则是在过程中以环境的形式包含了数据</p>
+<p>通常用面向对象实现的功能，用闭包也能实现，反之亦然。</p>
+<p>闭包版本</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> app = <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">var</span> value = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    <span class="attr">call</span>: <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">      value++;</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(value);</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> <span class="title class_">App</span> = <span class="title function_">app</span>();</span><br><span class="line"><span class="title class_">App</span>.<span class="title function_">call</span>(); <span class="comment">// 1</span></span><br><span class="line"><span class="title class_">App</span>.<span class="title function_">call</span>(); <span class="comment">// 2</span></span><br><span class="line"><span class="title class_">App</span>.<span class="title function_">call</span>(); <span class="comment">// 3</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="对象版本"><a href="#对象版本" class="headerlink" title="对象版本"></a>对象版本</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> app = &#123;</span><br><span class="line">  <span class="attr">value</span>: <span class="number">0</span>,</span><br><span class="line">  <span class="attr">call</span>: <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">value</span>++;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="variable language_">this</span>.<span class="property">value</span>);</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">app.<span class="title function_">call</span>(); <span class="comment">// 1</span></span><br><span class="line">app.<span class="title function_">call</span>(); <span class="comment">// 2</span></span><br><span class="line">app.<span class="title function_">call</span>(); <span class="comment">// 3</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="类版本"><a href="#类版本" class="headerlink" title="类版本"></a>类版本</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> <span class="title class_">App</span> = <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">  <span class="variable language_">this</span>.<span class="property">value</span> = <span class="number">0</span>;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="title class_">App</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">call</span> = <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">  <span class="variable language_">this</span>.<span class="property">value</span>++;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="variable language_">this</span>.<span class="property">value</span>);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> app = <span class="keyword">new</span> <span class="title class_">App</span>();</span><br><span class="line"></span><br><span class="line">app.<span class="title function_">call</span>(); <span class="comment">// 1</span></span><br><span class="line">app.<span class="title function_">call</span>(); <span class="comment">// 2</span></span><br><span class="line">app.<span class="title function_">call</span>(); <span class="comment">// 3</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="高阶函数"><a href="#高阶函数" class="headerlink" title="高阶函数"></a>高阶函数</h3><p>高阶函数是指最少满足下列条件之一的函数</p>
+<ul>
+<li>函数可以作为参数被传递</li>
+<li>函数可以作为返回值输出</li>
+</ul>
+<p>​	JavaScript语言的函数显然满足高阶函数，在实际开发中将函数作为参数进行传递，让函数的执行结果返回一个另一个函数都是非常普遍的情况，例如函数执行的callback函数。</p>
+<p>​	通过高阶特性，我们可以实现AOP，也就是面向切面编程</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 面向切面编程</span></span><br><span class="line"><span class="title class_">Function</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">before</span> = <span class="keyword">function</span> (<span class="params">beforeFn</span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;before&quot;</span>);</span><br><span class="line">    <span class="keyword">var</span> _self = <span class="variable language_">this</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">        beforeFn.<span class="title function_">apply</span>(<span class="variable language_">this</span>, <span class="variable language_">arguments</span>); <span class="comment">// 执行before本身</span></span><br><span class="line">        <span class="keyword">return</span> _self.<span class="title function_">apply</span>(<span class="variable language_">this</span>, <span class="variable language_">arguments</span>); <span class="comment">// 返回函数本身</span></span><br><span class="line">    &#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="title class_">Function</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">after</span> = <span class="keyword">function</span> (<span class="params">afterFn</span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;after&quot;</span>);</span><br><span class="line">    <span class="keyword">var</span> _self = <span class="variable language_">this</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">        <span class="keyword">var</span> ret = _self.<span class="title function_">apply</span>(<span class="variable language_">this</span>, <span class="variable language_">arguments</span>); <span class="comment">// 先执行before</span></span><br><span class="line">        afterFn.<span class="title function_">apply</span>(<span class="variable language_">this</span>, <span class="variable language_">arguments</span>); <span class="comment">// 最后执行after</span></span><br><span class="line">        <span class="keyword">return</span> ret;</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> func = <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="number">2</span>);</span><br><span class="line">&#125;;</span><br><span class="line">func = func</span><br><span class="line">    .<span class="title function_">before</span>(<span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="number">1</span>);</span><br><span class="line">&#125;)</span><br><span class="line">    .<span class="title function_">after</span>(<span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="number">3</span>);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="title function_">func</span>();</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>首先执行<code>before</code>，打印‘before’，然后执行<code>after</code>，打印‘after’</li>
+<li>执行func()，开始执行after，进入after闭包中，然后执行ret，进入before</li>
+<li>before中首先执行了自己beforeFn，打印‘1’，然后执行func本身，打印‘2’，并返回本身</li>
+<li>ret执行结束，开始执行afterFn，打印‘3’，返回func本身</li>
+</ul>
+<h4 id="高阶应用-函数柯里化"><a href="#高阶应用-函数柯里化" class="headerlink" title="高阶应用 - 函数柯里化"></a>高阶应用 - 函数柯里化</h4><p>​	柯里化又被称为部分求值，一个柯里化函数首先会接受一些参数，接收参数后不会立刻求职而是继续返回当前函数，之前传入的值在函数形成的闭包种被保存了起来。待函数真正需要求值的时候，之前传入的所有参数都会被一次性求值。</p>
+<p>​	例如实现一个计算每个月花费多少钱的函数，但是在实现中，我们并不关心吗，每天花费了多少，只想知道月底花掉了多少，实际上只需要计算一次</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">currying</span>(<span class="params">fn</span>) &#123;</span><br><span class="line">    <span class="keyword">var</span> args = [];</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="variable language_">arguments</span>.<span class="property">length</span> == <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">var</span> res = fn.<span class="title function_">apply</span>(<span class="variable language_">this</span>, args);</span><br><span class="line">            args = [];</span><br><span class="line">            <span class="keyword">return</span> res;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            [].<span class="property">push</span>.<span class="title function_">apply</span>(args, <span class="variable language_">arguments</span>);</span><br><span class="line">            <span class="keyword">return</span> <span class="variable language_">arguments</span>.<span class="property">callee</span>; <span class="comment">// 当前正在执行的函数</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> cost = (<span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">var</span> money = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>, l = <span class="variable language_">arguments</span>.<span class="property">length</span>; i &lt; l; i++) &#123;</span><br><span class="line">            money += <span class="variable language_">arguments</span>[i];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> money;</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;)();</span><br><span class="line"><span class="keyword">var</span> cost = <span class="title function_">currying</span>(cost);</span><br><span class="line"><span class="title function_">cost</span>(<span class="number">100</span>)(<span class="number">100</span>)(<span class="number">100</span>)(<span class="number">100</span>);</span><br><span class="line"><span class="title function_">cost</span>(<span class="number">100</span>);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title function_">cost</span>()); <span class="number">500</span></span><br><span class="line"><span class="title function_">cost</span>(<span class="number">100</span>);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title function_">cost</span>()); <span class="number">600</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="单例模式"><a href="#单例模式" class="headerlink" title="单例模式"></a>单例模式</h2><p>​	要实现一个单例模式并不复杂，无非是用一个变量来标志是否已经为某个类创建过对象，如果是，则下一次获取该类的实例，直接返回之前创建的对象。</p>
+<blockquote>
+<p>vue2.x 中的vuex在页面与组件中进行挂载使用的就是单例模式</p>
+</blockquote>
+<h3 id="使用代理实现单例模式"><a href="#使用代理实现单例模式" class="headerlink" title="使用代理实现单例模式"></a>使用代理实现单例模式</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> createDiv = <span class="keyword">function</span> (<span class="params">html</span>) &#123;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">html</span> = html;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="title function_">init</span>();</span><br><span class="line">&#125;;</span><br><span class="line">createDiv.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">init</span> = <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">var</span> div = <span class="variable language_">document</span>.<span class="title function_">createElement</span>(<span class="string">&quot;div&quot;</span>);</span><br><span class="line">    div.<span class="property">innerHTML</span> = <span class="variable language_">this</span>.<span class="property">html</span>;</span><br><span class="line">    <span class="variable language_">document</span>.<span class="property">body</span>.<span class="title function_">appendChild</span>(div);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> proxySingletonCreateDiv = (<span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">var</span> instance;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">function</span> (<span class="params">html</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (!instance) &#123;</span><br><span class="line">            instance = <span class="keyword">new</span> <span class="title function_">createDiv</span>(html);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> instance;</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;)();</span><br><span class="line"><span class="keyword">var</span> a = <span class="keyword">new</span> <span class="title function_">proxySingletonCreateDiv</span>(<span class="string">&quot;one&quot;</span>);</span><br><span class="line"><span class="keyword">var</span> b = <span class="keyword">new</span> <span class="title function_">proxySingletonCreateDiv</span>(<span class="string">&quot;two&quot;</span>);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(a === b); <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="JavaScript的单例模式"><a href="#JavaScript的单例模式" class="headerlink" title="JavaScript的单例模式"></a>JavaScript的单例模式</h3><p>​	单例模式的核心是确保只有一个实例，比提供全局访问。在JavaScript中很多都会通过全局变量进行实现，但是JavaScript的全局变量并不是非常好的特性，在中大型项目中会存在命名冲突问题，所以应当尽量使用命名空间。</p>
+<h3 id="惰性单例"><a href="#惰性单例" class="headerlink" title="惰性单例"></a>惰性单例</h3><p>​	在未使用之前，相关逻辑不会被创建，并且只有第一次使用的时候才会创建，同时我们别忘记了单一职责原则</p>
+<p>​	在下面的代码中，我们将创建单例与具体单例逻辑进行分离，这两个方法独立变化而且互不影响，这样避免了下次出现其他元素，我们需要将整个单例函数都复制一遍的情况，而是只需要创建对应的创建函数即可。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">getSingle</span>(<span class="params">fn</span>) &#123;</span><br><span class="line">    <span class="keyword">let</span> result;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> result || (result = fn.<span class="title function_">apply</span>(<span class="variable language_">this</span>, <span class="variable language_">arguments</span>));</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">createLoginLayer</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">var</span> div = <span class="variable language_">document</span>.<span class="title function_">createElement</span>(<span class="string">&quot;div&quot;</span>);</span><br><span class="line">    div.<span class="property">innerHTML</span> = <span class="string">&quot;我是登录弹窗&quot;</span>;</span><br><span class="line">    div.<span class="property">style</span>.<span class="property">display</span> = <span class="string">&quot;none&quot;</span>;</span><br><span class="line">    <span class="variable language_">document</span>.<span class="property">body</span>.<span class="title function_">appendChild</span>(div);</span><br><span class="line">    <span class="keyword">return</span> div;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> createSingLoginLayer = <span class="title function_">getSingle</span>(createLoginLayer);</span><br><span class="line"></span><br><span class="line"><span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="string">&quot;loginBtn&quot;</span>).<span class="property">onclick</span> = <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">var</span> loginLayer = <span class="title function_">createSingLoginLayer</span>();</span><br><span class="line">    loginLayer.<span class="property">style</span>.<span class="property">display</span> = <span class="string">&quot;block&quot;</span>;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p>​	单例模式是一种简单，但是非常实用的模式，特别是惰性单例技术，在合适的时候再去创建对象，并且只创建唯一一个，同时我们将创建对象与管理单例的职责分开到不同方法中，这样的模式更加体验单例模式的优势。</p>
+<h2 id="策略模式"><a href="#策略模式" class="headerlink" title="策略模式"></a>策略模式</h2><p>​	策略模式：定义一系列的算法，把它们一个个的封装起来，并且使它们可以相互替换。</p>
+<p>​	案例：某个公司年终奖方式为基础工资乘以效绩等级，S为基础工资的4倍，A为基础工资的3倍，我们实用策略模式进行实现</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> performatceS = <span class="keyword">function</span> (<span class="params"></span>) &#123;&#125;; <span class="comment">// 效绩为S 工资算法</span></span><br><span class="line">performatceS.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">calculate</span> = <span class="keyword">function</span> (<span class="params">salary</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> salary * <span class="number">4</span>;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> performatceA = <span class="keyword">function</span> (<span class="params"></span>) &#123;&#125;; <span class="comment">// 效绩为A 工资算法</span></span><br><span class="line">performatceA.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">calculate</span> = <span class="keyword">function</span> (<span class="params">salary</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> salary * <span class="number">3</span>;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> <span class="title class_">Bonus</span> = <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">salary</span> = <span class="literal">null</span>; <span class="comment">// 基础工资</span></span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">strategy</span> = <span class="literal">null</span>; <span class="comment">// 具体算法</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="title class_">Bonus</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">setSalary</span> = <span class="keyword">function</span> (<span class="params">salary</span>) &#123;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">salary</span> = salary;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="title class_">Bonus</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">setStrategy</span> = <span class="keyword">function</span> (<span class="params">strategy</span>) &#123;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">strategy</span> = strategy;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="title class_">Bonus</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">getBonus</span> = <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="variable language_">this</span>.<span class="property">strategy</span>.<span class="title function_">calculate</span>(<span class="variable language_">this</span>.<span class="property">salary</span>);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> bonus1 = <span class="keyword">new</span> <span class="title class_">Bonus</span>();</span><br><span class="line">bonus1.<span class="title function_">setSalary</span>(<span class="number">10000</span>);</span><br><span class="line">bonus1.<span class="title function_">setStrategy</span>(<span class="keyword">new</span> <span class="title function_">performatceS</span>());</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;效绩为A&quot;</span>, bonus1.<span class="title function_">getBonus</span>()); <span class="comment">// 40000</span></span><br><span class="line"></span><br><span class="line">bonus1.<span class="title function_">setStrategy</span>(<span class="keyword">new</span> <span class="title function_">performatceA</span>());</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;效绩为A&quot;</span>, bonus1.<span class="title function_">getBonus</span>()); <span class="comment">// 30000</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="JavaScript中策略模式的体现"><a href="#JavaScript中策略模式的体现" class="headerlink" title="JavaScript中策略模式的体现"></a>JavaScript中策略模式的体现</h3><p>以上是类的实现方法，在JavaScript中我们可以通过函数进行实现，代码将会简洁很多</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> srtategies = &#123;&#125;;</span><br><span class="line">srtategies.<span class="property">S</span> = <span class="keyword">function</span> (<span class="params">salary</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> salary * <span class="number">4</span>;</span><br><span class="line">&#125;;</span><br><span class="line">srtategies.<span class="property">A</span> = <span class="keyword">function</span> (<span class="params">salary</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> salary * <span class="number">3</span>;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">var</span> calclateBonus = <span class="keyword">function</span> (<span class="params">level, salary</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> srtategies[level](salary);</span><br><span class="line">&#125;;</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;效绩为S&quot;</span>, <span class="title function_">calclateBonus</span>(<span class="string">&quot;S&quot;</span>, <span class="number">10000</span>));</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;效绩为A&quot;</span>, <span class="title function_">calclateBonus</span>(<span class="string">&quot;A&quot;</span>, <span class="number">10000</span>));</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="多态在策略模式中的体现"><a href="#多态在策略模式中的体现" class="headerlink" title="多态在策略模式中的体现"></a>多态在策略模式中的体现</h3><p>​	通过使用策略模式，我们可以消除程序中大量的ifelse语句，并将我们将具体逻辑与实际执行函数进行分离，执行函数没有计算能力，而是委托某个策略对象来完成奖金计算，这正是多态性的体现。</p>
+<h3 id="策略模式在表单校验的应用"><a href="#策略模式在表单校验的应用" class="headerlink" title="策略模式在表单校验的应用"></a>策略模式在表单校验的应用</h3><p>​	在通过JavaScript表单校验的场景中,我们可以通过ifelse进行校验判断，但是这种方式不符合单一职责，开放封闭原则，我们可以通过策略模式来优化他，将通用的校验逻辑与具体校验条件进行解耦合。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 校验逻辑</span></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 如果同时设置了required与verify，将会忽略required</span></span><br><span class="line"><span class="comment"> * verify为自定义校验函数 可以理解为一旦写了verify,其他参数都不需要写了</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> data 被校验对象</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> validate 校验规则</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> isOne 是否校验到错误就立刻返回</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@returns</span></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">starValidate</span>(<span class="params">data, validate, isOne</span>) &#123;</span><br><span class="line">  <span class="keyword">let</span> <span class="attr">errBack</span>: any[] = []</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">const</span> key <span class="keyword">in</span> data) &#123;</span><br><span class="line">    <span class="keyword">if</span> (validate[key]) &#123;</span><br><span class="line">      <span class="keyword">if</span> (validate[key].<span class="property">verify</span>) &#123;</span><br><span class="line">        validate[key].<span class="title function_">verify</span>(&#123; <span class="attr">data</span>: data[key], <span class="attr">allData</span>: data &#125;, <span class="function">(<span class="params">errMsg</span>) =&gt;</span> &#123;</span><br><span class="line">          <span class="keyword">if</span> (errMsg) &#123;</span><br><span class="line">            errBack.<span class="title function_">push</span>(errMsg)</span><br><span class="line">          &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            errBack.<span class="title function_">push</span>(validate[key].<span class="title function_">callback</span>(data))</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;)</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">// 开启校验</span></span><br><span class="line">        <span class="keyword">if</span> (validate[key].<span class="property">required</span>) &#123;</span><br><span class="line">          <span class="comment">// 数据不存在</span></span><br><span class="line">          <span class="keyword">if</span> (!data[key]) &#123;</span><br><span class="line">            errBack.<span class="title function_">push</span>(validate[key].<span class="title function_">callback</span>(data))</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (isOne &amp;&amp; errBack.<span class="property">length</span> != <span class="number">0</span>) &#123;</span><br><span class="line">      <span class="keyword">break</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;处理结果&#x27;</span>, errBack)</span><br><span class="line">  <span class="keyword">if</span> (errBack.<span class="property">length</span> == <span class="number">0</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="title class_">Promise</span>.<span class="title function_">resolve</span>()</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (isOne) &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="title class_">Promise</span>.<span class="title function_">reject</span>(errBack[<span class="number">0</span>])</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="title class_">Promise</span>.<span class="title function_">reject</span>(errBack)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 校验条件</span></span><br><span class="line"><span class="keyword">const</span> validateRules = &#123;</span><br><span class="line">  <span class="attr">cashingInstructions</span>: &#123;</span><br><span class="line">    <span class="attr">required</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="attr">callback</span>: <span class="function">() =&gt;</span> (&#123; <span class="attr">selector</span>: <span class="string">&#x27;.open_prize&#x27;</span>, <span class="attr">message</span>: <span class="string">&#x27;请输入字段cashingInstructions&#x27;</span> &#125;),</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">lotteryDescription</span>: &#123;</span><br><span class="line">    <span class="attr">verify</span>: <span class="function">(<span class="params">&#123; data &#125;, err</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> (data == <span class="string">&#x27;[]&#x27;</span>) &#123;</span><br><span class="line">        <span class="title function_">err</span>(&#123;</span><br><span class="line">          <span class="attr">selector</span>: <span class="string">&#x27;.launch_total&#x27;</span>,</span><br><span class="line">          <span class="attr">message</span>: <span class="string">&#x27;请输入字段lotteryDescription&#x27;</span>,</span><br><span class="line">        &#125;)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> data = &#123;</span><br><span class="line">	<span class="attr">cashingInstructions</span>:<span class="string">&#x27;&#x27;</span>,</span><br><span class="line">    <span class="attr">lotteryDescription</span>:<span class="string">&#x27;[]&#x27;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 实现表单校验</span></span><br><span class="line"> <span class="title function_">starValidate</span>(data, validateRules, <span class="literal">true</span>)</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h3 id="策略模式的优缺点"><a href="#策略模式的优缺点" class="headerlink" title="策略模式的优缺点"></a>策略模式的优缺点</h3><p>优点</p>
+<ul>
+<li>策略模式利用组合，委托和多态等技术与思想，可以有效避免多重条件选择语句</li>
+<li>策略模式符合开放封闭原则，将具体逻辑单独封装，使其易于理解易于拓展</li>
+<li>策略模式的策略函数可以再多项目之间复用，避免复制粘贴工作</li>
+</ul>
+<p>缺点</p>
+<ul>
+<li>相对于ifelse，策略模式的整体代码量会有所增加</li>
+<li>调用者需要对策略细节可能了解，才能很好的使用该策略，这违反了最少知识原则，增加了使用成本</li>
+</ul>
+<h3 id="一等公民函数与策略模式"><a href="#一等公民函数与策略模式" class="headerlink" title="一等公民函数与策略模式"></a>一等公民函数与策略模式</h3><p>​	在函数作为一等公民的语言中，策略模式是隐形的具体策略的值就是函数变量。</p>
+<p>​	在JavaScript这种将函数作为一等对象的语言中，策略模式已经融入到语言中，例如我们经常使用高阶函数来封装不同行为，并且将它传递到另一个函数中，当我们对这些函数发出“调用”的消息，不同的函数会返回不同的结果，函数对象的多态性来到更加简单。</p>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://vkcyan.github.io/2022/05/20/JavaScript%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" title="JavaScript设计模式" target="_blank" rel="external">https://vkcyan.github.io/2022/05/20/JavaScript设计模式/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/vkcyan" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/vkcyan" target="_blank"><span class="text-dark">vkcyan</span><small class="ml-1x">Web Developer &amp; Product Manager</small></a></h3>
+        <div>一切都是为了实现技术的价值</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2022/05/23/%E4%B8%8A%E7%98%BE%E6%A8%A1%E5%9E%8B%E5%A6%82%E4%BD%95%E5%BA%94%E7%94%A8%E5%88%B0%E4%BA%A7%E5%93%81/" title="上瘾模型如何应用到产品"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2022/05/20/vue%E9%A1%B9%E7%9B%AE%E4%BD%BF%E7%94%A8vw%E8%BF%9B%E8%A1%8C%E7%A7%BB%E5%8A%A8%E7%AB%AF%E9%80%82%E9%85%8D/" title="Vue + webpack项目的移动端适配"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+    <li class="toggle-toc">
+      <a class="toggle-btn " data-toggle="collapse" href="#collapseToc" aria-expanded="false" title="文章目录" role="button">    <span>[&nbsp;</span><span>文章目录</span>
+        <i class="text-collapsed icon icon-anchor"></i>
+        <i class="text-in icon icon-close"></i>
+        <span>]</span>
+      </a>
+    </li>
+    
+  </ul>
+  
+  
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-fancy btn-donate pop-onhover bg-gradient-warning" data-toggle="modal" data-target="#donateModal"><span>赏</span></button>
+  <!-- <div class="wave-icon wave-icon-danger btn-donate" data-toggle="modal" data-target="#donateModal">
+    <div class="wave-circle"><span class="icon"><i class="icon icon-bill"></i></span></div>
+  </div> -->
+  
+  
+  <div class="bar-right">
+    
+  </div>
+  </div>
+</nav>
+  
+<!-- Modal -->
+<div class="modal modal-center modal-small modal-xs-full fade" id="donateModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content donate">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <div class="modal-body">
+        <div class="donate-box">
+          <div class="donate-head">
+            <p>感谢您的支持，我会继续努力的!</p>
+          </div>
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade active in" id="alipay">
+              <div class="donate-payimg">
+                <img src="/images/donate/alipayimg.jpg" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开支付宝扫一扫，即可进行扫码打赏哦</p>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="wechatpay">
+              <div class="donate-payimg">
+                <img src="/images/donate/wechatpayimg.jpg" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开微信扫一扫，即可进行扫码打赏哦</p>
+            </div>
+          </div>
+          <div class="donate-footer">
+            <ul class="nav nav-tabs nav-justified" role="tablist">
+              <li role="presentation" class="active">
+                <a href="#alipay" id="alipay-tab" role="tab" data-toggle="tab" aria-controls="alipay" aria-expanded="true"><i class="icon icon-alipay"></i> 支付宝</a>
+              </li>
+              <li role="presentation" class="">
+                <a href="#wechatpay" role="tab" id="wechatpay-tab" data-toggle="tab" aria-controls="wechatpay" aria-expanded="false"><i class="icon icon-wepay"></i> 微信支付</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/vkcyan" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://juejin.cn/user/3720403077840519" target="_blank" title="Juejin" data-toggle=tooltip data-placement=top><i class="icon icon-juejin"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="https://cdn.staticfile.org/jquery/1.12.4/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+   
+
+
+
+
+
+
+</body>
+</html>
