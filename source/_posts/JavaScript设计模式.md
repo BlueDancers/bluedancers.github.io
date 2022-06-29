@@ -1541,7 +1541,7 @@ var Upload = function (uploadType, fileName, fileSize) {
 
 ​	对象池维护一个装载空闲对象的池子，如果需要对象的时候，不会再去new，还是从对象池中进行获取，如果对象池不存在可用对象，则创建一个新对象，当获取处的对象完成了他的职责之后，再次进入池子等待下次获取
 
-地图标点demo	
+### 地图标点demo	
 
 ​	进入地图软件后，首先搜索A地点，存在2个坐标点，通过工厂函数便创建了2个，而后搜索了B地点，存在6个坐标，便会利用之前空闲的2个，再新增加4个坐标点
 
@@ -1581,5 +1581,124 @@ var objectPoolFactory = function (createObjFun) {
 
 ​	职责链优点：请求发送者只需要知道链中的第一个节点，从而弱化了发送者和一组接收者之间的强联系
 
+### 使用指责链完成订单生成demo
 
+- 支付过定金的不受库存限制，直接可下单
+- 下了定金的订单但是却没有支付的正常购买
+- 未支付定金的正常购买
+
+```js
+var order500 = function (orderType, pay, stock) {
+    if (orderType === 1 && pay === true) {
+        console.log("500定金预付，得到100元优惠券");
+    } else {
+        order200(orderType, pay, stock);
+    }
+};
+var order200 = function (orderType, pay, stock) {
+    if (orderType === 2 && pay === true) {
+        console.log("200定金预付，得到50元优惠券");
+    } else {
+        order(orderType, pay, stock);
+    }
+};
+var orderNormal = function (orderType, pay, stock) {
+    if (stock > 0) {
+        console.log("普通购买，无优惠券");
+    } else {
+        console.log("手机库存不足");
+    }
+};
+order500(1, true, 10);
+```
+
+​	我们按照职责链进行实现，但是链条的耦合问题非常严重，加入后面出现其他折扣，便需要改写原本已经写好的代码，这违反看开放封闭原则。我们继续优化
+
+````js
+var order500 = function (orderType, pay, stock) {
+    if (orderType === 1 && pay === true) {
+        console.log("500定金预付，得到100元优惠券");
+    } else {
+        return "nextSuccessor";
+    }
+};
+var order200 = function (orderType, pay, stock) {
+    if (orderType === 2 && pay === true) {
+        console.log("200定金预付，得到50元优惠券");
+    } else {
+        return "nextSuccessor";
+    }
+};
+var orderNormal = function (orderType, pay, stock) {
+    if (stock > 0) {
+        console.log("普通购买，无优惠券");
+    } else {
+        console.log("手机库存不足");
+    }
+};
+var Chain = function (fn) {
+    this.fn = fn;
+    this.successor = null;
+};
+Chain.prototype.setNextSuccessor = function (successor) {
+    this.successor = successor;
+};
+Chain.prototype.passRequest = function (orderType, pay, stock) {
+    var ret = this.fn(orderType, pay, stock);
+    if (ret === "nextSuccessor") {
+        this.successor.passRequest(orderType, pay, stock);
+    }
+    return ret;
+};
+
+var chianOrder500 = new Chain(order500);
+var chianOrder200 = new Chain(order200);
+var chianOrderNormal = new Chain(orderNormal);
+chianOrder500.setNextSuccessor(chianOrder200);
+chianOrder200.setNextSuccessor(chianOrderNormal);
+chianOrder500.passRequest(1, true, 10);	
+````
+
+​	现在我们将职责链的耦合关系维护交给Chain进行维护如果后期还会增加其他预约类型，只需要编写相关逻辑代码与部分职责链代码即可
+
+
+
+### 异步职责链
+
+````js
+Chain.prototype.next = function () {
+    return this.successor.passRequest(arguments);
+};
+var fn1 = new Chain(function () {
+    console.log(1);
+    return "nextSuccessor";
+});
+var fn2 = new Chain(function () {
+    console.log(2);
+    var self = this;
+    setTimeout(() => {
+        self.next();
+    }, 1000);
+});
+var fn3 = new Chain(function () {
+    console.log(3);
+});
+fn1.setNextSuccessor(fn2);
+fn2.setNextSuccessor(fn3);
+fn1.passRequest();
+````
+
+​	我们增加一个next方法来执行下一个职责链的回调函数，进而实现异步效果
+
+### 职责链模式的优点
+
+- 解耦了请求发送者与若干接收者之间的复杂关系，并不需要链中谁可以处理，只需要传递给第一个人即可
+- 职责链上的各个节点互不影响
+- 职责链可以灵活拆分重组
+- 职责链可以手动指定起点，而不是必须从第一个开始传递
+
+### 职责链模式的缺点
+
+- 不能保证请求一定会被职责链处理到，可能不存在任何结果，需要额外加一个保底判断
+- 职责链模式会让程序多很多对象，并且可能大部分阶段不会起到作用，它的作用仅仅是让请求传递下去，过长的职责链会造成了一部分的性能损耗。
 

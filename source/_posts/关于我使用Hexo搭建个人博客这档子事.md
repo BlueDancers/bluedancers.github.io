@@ -67,7 +67,9 @@ date: 2022-06-30
 
 ![](https://www.vkcyan.top/Ft06OhJmhttzFocFQp6OwJ-XNeC5.png)
 
-​	到此为止githubPages便设置完成了，到这一步已经成功一半了！上图的链接已经可以访问，只是现在里面还没有内容，接下来变解决网站内容问题。
+​	关于分支请各位根据自己的情况来选择，只需要在后面配置hexo相关配置的时候别填写错误即可。
+
+​	到此为止githubPages便设置完成了，到这一步已经成功一半了！上图的链接已经可以访问，只是现在里面还没有内容，接下来便是增加站点内容。
 
 
 
@@ -127,23 +129,25 @@ hexo s // hexo server
 
 ### 编写一篇文章
 
-我们再`_post`中增加一个`md`文件，然后文章最靠头写入以下信息，使用过`wordPress`的同学应该很熟悉，这是对当前文章的属性描述，具体配置可以看[官方配置](https://hexo.io/zh-cn/docs/front-matter)，之后便是填入文章内容，还记得我们通过`hexo s`启动的本地服务器吗，文章编写完成后，让我们去看看是是否存在变化。
+我们在`_post`中增加一个`md`文件，然后文章开头处写入以下信息，使用过`wordPress`的同学应该很熟悉，这是对当前文章的属性描述，具体配置可以看[官方配置](https://hexo.io/zh-cn/docs/front-matter)，之后便是填入文章内容，还记得我们通过`hexo s`启动的本地服务器吗，文章编写完成后，让我们去看看是是否存在变化。
 
 ![image-20220628134758790](https://www.vkcyan.top/image-20220628134758790.png)
 
-能够看到文章便说明文章编写成功了
+能够看到文章便说明成功了
 
 在文章头部编写的**categories**，**tags**字段，hexo会按照关键字自动生成索引。
 
 ![image-20220628135401927](https://www.vkcyan.top/image-20220628135401927.png)
 
-下一步我们便要将其发布到githubPages中，让所有人都可以访问到。
+下一步我们便要将其发布到github Pages中，让所有人都可以访问到。
 
 ## 将hexo发布到githubPages
 
-​	由于我们之前已经配置好git本地环境与仓库，这让我们接下来部署便的非常方便
+​	我们之前已经配置好git本地环境与仓库的创建，所以接下来部署便十分简单
 
-1. 安装快速部署package
+1. 安装快速部署脚本
+
+该脚本会在你的目录下生成`.deploy_git/`执行更新命令的时候就会将该文件夹下的所有文件上传到指定的仓库中。
 
 ```
 npm install hexo-deployer-git --save
@@ -155,7 +159,7 @@ npm install hexo-deployer-git --save
 deploy:
   type: git
   repo: https://github.com/username/username.github.io // 替换这里的username
-  branch: master // 填写部署的分支GitHub默认为gh-pages
+  branch: pages // 填写部署的GitHub分支，默认为gh-pages
   message: '' // 提交信息，存在默认值，可以不填写
 ```
 
@@ -172,17 +176,17 @@ hexo d //  deploy的缩写，读取yml中deploy的配置并部署
 
 
 
-接下来我们前往仓库查看是否正常上传，以及githubPages是否正常工作
+接下来我们前往仓库查看是否正常上传，以及github Pages是否正常工作
 
 ![](http://www.vkcyan.top/image-20220628144123522.png)
 
 
 
-点击Action查看部署任务是否正常完成，正常情况下action会在60s内完成，部署完成后我们便可以访问线上站点了
+点击`Action`查看部署任务是否正常完成，正常情况下`Action`会在60s左右完成，部署完成后我们便可以访问线上站点了
 
 https://username.github.io/
 
-如果样式，内容正常显示则代表部署成功~（可能会有些慢，我们后面再优化）
+如果样式，内容正常显示则代表部署成功~（可能访问速度还有些慢，我们后面再优化）
 
 ![image-20220628145010327](https://www.vkcyan.top/image-20220628145010327.png)
 
@@ -190,13 +194,15 @@ https://username.github.io/
 
 这里肯定有好奇的小伙伴要问了，为什么你的样子和我部署的不一样?
 
-唉，这就是下面要说的，自定义主题
+哎，这就是下面要说的，自定义主题
 
 ## 自定义主题
 
 ​	一个风格优美的博客可以为读者带来更好的体验，也是作者个性的一种表达，这也是自建博客的优势所在， hexo中存在大量官方提供 + 个人维护的[Themes](https://hexo.io/themes/)
 
-​	如果出现无法正常访问的情况可以在github中搜索[hexo-theme](https://github.com/search?q=hexo-theme)，同样可以看到受欢迎的hexo主题，而每个主题都会有使用文档，只需要阅读文档并进行配置即可。
+![image-20220628182610145](https://www.vkcyan.top/image-20220628182610145.png)
+
+​	如果出现无法正常访问的情况可以在github中搜索[hexo-theme](https://github.com/search?q=hexo-theme)，同样可以看到受欢迎的hexo主题，每个主题都会有使用文档，只需要仔细阅读文档并进行配置即可使用主题。
 
 ​	主题文件都存在在themes文件夹中，并且需要将根目录的_config.yml的theme字段改为主题名称。
 
@@ -206,11 +212,11 @@ https://username.github.io/
 
 ### 站点很慢
 
-​	githubPages访问慢，大部分都是因为js脚本加载阻塞问题，在不加任何异步属性的情况下，script的下载和执行都会阻塞dom的渲染。
+​	github Pages访问很慢，绝大部分原因都是因为JS脚本加载阻塞问题，在不加任何异步属性的情况下，script的下载和执行都会阻塞dom的渲染。
 
 ​	例如项目依赖了jQuery，但是其CDN因为某些原因加载缓慢甚至超时失败，都会导致页面的长时间白屏，这会非常影响访问者的用户体验，以及作者的创作热情。
 
-​	如果出现此类情况，我们就打开**Chrome devTool**查看**NetWork**中**加载缓慢**的脚本文件，然后复制其名称，在hexo源码中找到，注意不要修改了public目录的打包后代码，再百度搜索国内的高速CDN替换掉即可。
+​	如果出现此类情况，我们就打开**Chrome devTool**查看**NetWork**中**加载缓慢**的脚本文件，然后复制其名称，在hexo源码中找到，再百度搜索国内的高速CDN替换掉即可。（注意不要修改打包后代码）
 
 ### 点击菜单404
 
@@ -218,7 +224,7 @@ https://username.github.io/
 
 ![image-20220628163232358](https://www.vkcyan.top/image-20220628163232358.png)
 
-执行以下命令建立不存在的页面即可，新建的md具体内容还是需要参考具体使用的主题的文档
+执行以下命令建立不存在的页面即可，新建的md具体内容还是需要参考使用的主题文档
 
 ```
 hexo new page books
@@ -228,9 +234,9 @@ hexo new page books
 
 ### 缓存问题
 
-​	删除文件但是打包到github Pages依旧没有被删除类似这样的缓存问题怎么办？
+​	修改了一篇文章，但是打包到github Pages依旧没有被删除，类似这样的缓存问题怎么办？
 
-​	我们只需要再每次push到github之前清楚以下hexo生成的缓存文件即可
+​	我们只需要在每次push到github之前清除hexo生成的缓存文件即可
 
 ```bash
 hexo clean
@@ -238,17 +244,48 @@ hexo clean
 
 
 
-### hexo d报错
+### 部署报错
 
-```
-fatal: unable to access 'https://github.com/username/username.github.io/': Failed to connect to github.com port 443 after 21012 ms: Timed out
+执行`hexo d`，得到错误：
+
+```bash
+fatal: unable to access 'https://github.com/username/username.github.io/': OpenSSL SSL_read: Connection was reset, errno 10054
+FATAL {
+  err: Error: Spawn failed
+      at ChildProcess.<anonymous> (xxx\username.github.io\node_modules\hexo-util\lib\spawn.js:51:21)
+      at ChildProcess.emit (node:events:390:28)
+      at ChildProcess.cp.emit (xxx\username.github.io\node_modules\cross-spawn\lib\enoent.js:34:29)
+      at Process.ChildProcess._handle.onexit (node:internal/child_process:290:12) {
+    code: 128
+  }
+} Something's wrong. Maybe you can find the solution here: %s https://hexo.io/docs/troubleshooting.html
 ```
 
-​	网络问题，重试即可
+​	网络问题，重试即可。
+
+
+
+## 其他静态构建工具
+
+### Vuepress
+
+​		大Vue出品的静态站点生成工具，用来写文档非常不错，但是如果你对个性化要求较高，可能他不是很适合你。
+
+### jekyll
+
+​	非常老牌的静态网站生成工具，使用Ruby语言进行开发，这就意味着使用jekyll需要安装Ruby环境，环境的事情劝退我了，并且相对于Hexo未发现明显优势，喜欢的小伙伴可以试用一下。
+
+### Hugo
+
+​	基于Go语言开发的静态网站构建工具，不过它并不需要Go环境，而相对于hexo需要node环境与前端开发者的天然适配性，也是存在一些劣势，但是对于非前端开发者还是不错的选择，因为他号称最快的构建框架；在搭建完hexo后我才看到了hugo感觉有点意思，喜欢折腾的朋友可以试用一下，也是非常棒的工具，目前拥有59.8k的Star，是静态构建工具中最受欢迎的项目
+
+
+
+
 
 ## 结语
 
-​	搭建好个人博客是一件非常简单的事情，但是不断输出却是一件很难的事情，如果通过这篇文章成功搭建起了博客，非常恭喜，你完成了万里长征非常重要的第一步，希望你可以坚持输出，从小的知识点开始做起，保持对可输出点的敏感嗅觉，每月输出几篇，搭建起自己的知识库。
+​	搭建好github Pages是一件相对简单的事情，不断输出却是一件有难度的事情，如果通过这篇文章成功搭建起了博客，非常恭喜，你完成了万里长征非常重要的第一步，希望你可以坚持输出，从小的知识点开始做起，保持对可输出点的敏感嗅觉，每月输出几篇，搭建起自己的知识库。
 
 ​	如果一个正在被使用的技术方案作为开发者的你却无法通过输出教会别人，这便不算掌握了该技术方案，浅尝辄止乃是技术岗位的大忌。在输出的过程中，你会带着问题再深入学习一遍，会发现一些潜在问题，而为了顺利输出，便需要自发的弄明白遇到的疑问；
 
