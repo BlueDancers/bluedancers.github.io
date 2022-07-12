@@ -1699,6 +1699,58 @@ fn1.passRequest();
 
 ### 职责链模式的缺点
 
-- 不能保证请求一定会被职责链处理到，可能不存在任何结果，需要额外加一个保底判断
-- 职责链模式会让程序多很多对象，并且可能大部分阶段不会起到作用，它的作用仅仅是让请求传递下去，过长的职责链会造成了一部分的性能损耗。
+- 不能保证请求一定会被职责链处理到，可能不存在任何结果，需要额外加一个保底判断。
+- 职责链模式会让程序多很多对象，并且可能大部分阶段不会起到作用，它的作用仅仅是让请求传递下去，过长的职责链会造成了一部分的性能损耗，但是这个问题ifelse也存在。
 
+
+
+### 使用AOP思路实现职责链
+
+> AOP为面向切面编程，例如装饰器，可以做到在代码执行的前后插入代码切片，并且并修改源代码
+
+```js
+Function.prototype.after = function (fn) {
+    var self = this;
+    return function () {
+        var ret = self.apply(this, arguments); // 调用者结果
+        if (ret === "nextSuccessor") {
+            let res = fn.apply(this, arguments); // 执行下一个函数
+            console.log("函数结果", res);
+            if (res != "nextSuccessor") {
+                return res;
+            }
+        }
+        return ret;
+    };
+};
+
+var getActiveUploadObj = function () {
+    return "nextSuccessor"; // 创建Ie上传组件(假设一定失败)
+};
+var getFlashObj = function () {
+    return "nextSuccessor"; // 创建flash对象(假设一定失败)
+};
+var getFormObj = function () {
+    return "hahahah"; // 创建表单对象(假设一定成功)
+};
+
+var getUploadObj = getActiveUploadObj
+.after(getFlashObj)
+.after(getFormObj);
+
+console.log("getUploadObj", getUploadObj());
+```
+
+
+
+### 小结
+
+个人感觉指责链有链表的感觉，在原型链，事件冒泡上都有所体现，在日常开发中倒不算很常见，类似订单demo可能更加偏向于使用ifelse + 封装来组织代码，同样可以实现职责链的效果。
+
+
+
+
+
+## 中介者模式
+
+中介者模式的作用就是接触对象与对象之间的紧耦合关系。增加一个中介者后，所有的相关对象都通过中介者对象进行通信；而不是相互引用。
