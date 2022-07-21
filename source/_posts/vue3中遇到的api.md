@@ -1,12 +1,20 @@
-# vue3 pinia常见API
+```
+title: 解读pinia源码必须知道的API
+categories:
+  - JavaScript-2022
+tags:
+  - JavaScript
+toc: true
+date: 2022-03-15
+```
 
 ## 前言
 
-​	阅读pinia源码的过程中，了解到了很多业务场景下不常用的v3 api，所以专写一篇文章来进行记录。
+​	在pinia源码中又很多业务场景下不常用的v3 api，因此专写一篇文章来进行记录。
 
 ## effectScope
 
-​	在阅读pinia的createPinia遇到了第一个不熟悉的api，便打开官网看了以下，最上方info中写道 effect作用域是一个高阶API，专为库作者服务。
+​	在阅读pinia的createPinia中的遇到的第一行就是不认识的API，打开官网看了一下，最上方info中写道 effect作用域是一个高阶API，专为库作者服务。
 
 ​	他的作用是创建一篇单独的effect空间，该空间内的effect将可以被一起被处理，有点类似与docker与k8s的关系，例如ref computed watchEffect 都是docker中的容器，而effectScope就是k8s，它可以统一管理effect集群。
 
