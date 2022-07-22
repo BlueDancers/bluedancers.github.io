@@ -170,7 +170,7 @@ function wrapAction(name: string, action: _Method) {
 
 
 
-#### 小结
+### 小结
 
 本质上来说$Action就是一个订阅发布模式，
 
@@ -192,12 +192,76 @@ function wrapAction(name: string, action: _Method) {
 
 订阅当前store中的state的变化，state发生任意更改都会触发其回调函数，他还会返回一个用来删除的回调
 
-```
+```js
+let abc = useCounter1.$subscribe(
+    (option, state) => {
+        // 通过store.num = xxxx修改，type为direct
+        // 通过store.$patch({ num: 'xxx' })修改，type为directpatchObject
+        // 通过store.$patch((state) => num.name='xxx')修改，type为patchFunction
+
+        // storeId为当前store的id
+        // events 当前改动说明
+        let { events, storeId, type } = option;
+        console.log(events, storeId, type, state);
+    },
+    { detached: false }
+);
 ```
 
 
 
 ### 源码分析
+
+当我们使用$subscribe并传入callback的时候，首先会将当前的callback加入注册中心中
+
+```js
+const removeSubscription = addSubscription(
+    subscriptions, // 事件注册中心
+    callback, // $subscribe传入的callback
+    options.detached, // 页面卸载的时候是否取消监听
+    () => stopWatcher() // 执行stopWatcher实际上执行的是scope.run返回的watch，而执行watch的返回函数，也就是停止当前watch
+);
+```
+
+​	前三个参数经过对$Action的分析后已经比较熟悉，这里我们重点说明一下第四个参数
+
+​	stopWatcher是当前store中的effectScope，我们将对当前state的watch放入scope中，以便于销毁store的时候统一处理。
+
+```typescript
+const stopWatcher = scope.run(() =>
+    watch(
+        () => pinia.state.value[$id] as UnwrapRef<S>, // 监听state的变化
+        (state) => {
+            // 在不使用$patch的情况下，则两个参数都为true，callback一定会执行
+            if (options.flush === "sync" ? isSyncListening : isListening) {
+                callback(
+                    {
+                        storeId: $id, // 
+                        type: MutationType.direct,
+                        events: debuggerEvents as DebuggerEvent,
+                    },
+                    state
+                );
+            }
+        },
+        assign({}, $subscribeOptions, options)
+    )  
+)
+```
+
+
+
+![image-20220722170139137](https://www.vkcyan.top/image-20220722170139137.png)
+
+
+
+### 小结
+
+​	`$subscribe`主要依赖`vue3`的`watch`进行实现，在`subscriptions`中注册`callback`，但是注册的callback不通过triggerSubscriptions进行触发，仅仅作为保存，watch的触发函数中通过闭包触发$subscribe中的callback，达到store中任意值发生变化的时候都执行callback
+
+​	在addSubscription的返回值removeSubscription中，不仅会再注册中心subscriptions删除订阅，同时也会执行() => stopWatcher()，停止watch监听。达到完全停止监听的目的。
+
+
 
 ## $dispose
 
