@@ -8,13 +8,25 @@ toc: true
 date: 2022-07-18
 ---
 
+## 专栏导航
+
+[分析pinia源码之前必须知道的API](https://juejin.cn/post/7124279061035089927)
+
+[Pinia源码分析【1】- 源码分析环境搭建](https://juejin.cn/post/7117131804229763079)
+
+[Pinia源码分析【2】- createPinia](https://juejin.cn/post/7119788423501578277)
+
+[pinia源码分析【3】- defineStore](https://juejin.cn/post/7121661056044236831)
+
+[pinia源码分析【4】- Pinia Methods](https://juejin.cn/post/7123504805892325406)
+
 ## 前言
 
 本系列文章参考源码`pinia V2.0.14`
 
 源码分析记录：https://github.com/vkcyan/goto-pinia
 
-本文主要介绍我们pinia中**defineStore**的实现原理
+在上一节，我们完成了`createPinia`相关逻辑的源码解读，了解了`pinia`注册到`vue`的阶段具体做了哪些工作，以及`pinia`核心对象的生成逻辑，本文我们就要一起解读`pinia`中最重要的方法**defineStore**的实现原理
 
 ![image-20220718114312824](https://www.vkcyan.top/image-20220718114312824.png)
 
@@ -28,9 +40,9 @@ date: 2022-07-18
 
 在`defineStore`声明中，我们需要传入三种的参数。
 
-- id：定义store的唯一id，单独传参或者通过options.id进行传参
-- options：具体配置信息包含如果传参是对象，则可以传，state，getters，action，id，例如上图1 2 种声明方式；如果传参是Function，则自主声明变量方法，例如上图第三种声明方式
-- storeSetup：仅限第三种store的声明方式，传入函数
+- **id**：定义`store`的唯一id，单独传参或者通过`options.id`进行传参
+- **options**：具体配置信息包含如果传参是对象，则可以传，`state`，`getters`，`action`，`id`，例如上图1 2 种声明方式；如果传参是`Function`，则自主声明变量方法，例如上图第三种声明方式
+- **storeSetup**：仅限第三种`store`的声明方式，传入函数
 
 ### defineStore执行逻辑
 
@@ -63,7 +75,7 @@ export function defineStore(
 }
 ```
 
-​	通过对defineStore的源码大致分析可以得知，只有在store被执行的时候才会运行被返回的函数useStore。这才是核心实现逻辑，我们接下来便分析其实现原理。
+​	通过对`defineStore`的源码大致分析可以得知，只有在`store`被执行的时候才会运行被返回的函数`useStore`，`useStore`才是核心store的创建逻辑，我们接下便要重点分析其实现原理。
 
 
 
@@ -84,10 +96,10 @@ export function defineStore(
 ![image-20220708145541424](https://www.vkcyan.top/image-20220708145541424.png)
 
 1.  `defineStore`初始化
-2. 指定main.ts -> createPinia -> vue.use -> install（注册逻辑）
+2. main.ts -> createPinia -> vue.use -> install（注册逻辑）
 3. 执行useStore（页面逻辑）
 
-代码执行与我们想象的一致，defineStore是一个函数，会在引用阶段执行，之后便是一连串的初始化，最后是页面中使用pinia而运行的useStore。
+代码执行与我们想象的一致，`defineStore`是一个函数，会在引用阶段执行，并返回未执行函数`useStore`，之后便是一连串的初始化，最后是页面中使用`pinia`而运行的`useStore`。
 
 
 
@@ -126,7 +138,7 @@ function useStore(pinia?: Pinia | null, hot?: StoreGeneric): StoreGeneric {
 
 ![image-20220718112358146](https://www.vkcyan.top/image-20220718112358146.png)
 
-当我们第一次是否store的时候，才会进行相关逻辑的执行，通过单例模式创建，未来再次使用该store将会直接返回已经被处理过的store。
+​	当我们第一次运行`store`的时候，才会进行相关逻辑的执行，通过单例模式创建，未来再次使用该`store`将会直接从`pinia._s`中获取已经被处理过的store并返回。
 
 ```js
 function useStore(pinia?: Pinia | null, hot?: StoreGeneric): StoreGeneric {
@@ -147,7 +159,7 @@ function useStore(pinia?: Pinia | null, hot?: StoreGeneric): StoreGeneric {
 }
 ```
 
-`useStore`的大致逻辑比较简单，我们假设第一次使用，并且通过非Function进行传参，进入createOptionsStore函数。
+`useStore`的大致逻辑比较简单，我们假设第一次使用，并且通过非Function进行传参，进入**createOptionsStore**函数。
 
 ### createOptionsStore
 
@@ -242,7 +254,11 @@ function createOptionsStore<
 }
 ```
 
-`createOptionsStore`函数在获取`defineStore`声明的数据后，在其内部构建了**setup函数**，该函数将**option形式的state**与**getters**分别转化为**ref**与**computed**，这样就与**setup形式**声明的`store`保持一致。最后统一通过`createSetupStore`逻辑处理
+​	`createOptionsStore`函数在获取`defineStore`声明的数据后，在其内部构建了**setup函数**，该函数将**option形式的state**与**getters**分别转化为**ref**与**computed**，这样就与**setup形式**声明的`store`保持一致。
+
+​	**这一块代码非常核心，初步解释了为何state具备响应式，为何getters具备computed的效果**
+
+​	最后不论是**option**方式创建还是**setup**的形式创建，最后都统一通过`createSetupStore`完成对`store`最后的处理
 
 
 
@@ -250,17 +266,19 @@ function createOptionsStore<
 
 ![image-20220718112449354](https://www.vkcyan.top/image-20220718112449354.png)
 
-> 无论是何种defineStore的创建方式，最终都会走向createSetupStore，在这里进行最核心逻辑处理。
+> 无论是何种`defineStore`创建方式，最终都会走向`createSetupStore`，在这里进行最终store的生成以及相关methods的实现。
 >
-> 这一块代码实在是复杂，关于$reset $patch等API，我们放下一个系列文章
+> 注：这一块代码实在是复杂，关于$reset $patch等API，我们放下一个系列文章
 
-经过`createOptionsStore`的处理，已经将option形式的字段全部转化为setup形式进行返回，现在无论何种创建方式，执行此处的setup函数，都会得到同一个结果。
+​	经过`createOptionsStore`的处理，已经将**option**形式的字段全部转化为**setup**形式进行返回，现在无论何种创建方式，执行此处的setup函数，都会得到同一个结果。
 
 ![image-20220715170700824](https://www.vkcyan.top/image-20220715170700824.png)
 
+以上三种创建方式，内部运行setup函数都会得到如下结果
+
 ![image-20220715170712733](https://www.vkcyan.top/image-20220715170712733.png)
 
-上图为三种创建形式的`setup函数`执行的返回值，接下来，我们就需要对其数据进行处理。
+接下来，我们就需要对其数据进行处理，获取到所有变量与方法，并对action通过wrapAction进行处理，便于实现后续的订阅发布模式 methods`$Action`
 
 ```js
 const setupStore = pinia._e.run(() => {
@@ -298,7 +316,7 @@ for (const key in setupStore) {
 
 ​	经过以上逻辑处理后，`setupStore`方式进行创建的`store`也会被添加到`pinia.state`中，而所有的`function`都会被`wrapAction`进行包装处理。
 
-​	对声明的对象进行处理的同时，还需要对当前store可调用API进行处理，例如$reset，$patch
+​	对state，action进行处理的同时，还需要对当前`store`可调用API进行处理，例如`$reset`，`$patch`
 
 ```js
 const partialStore = {
@@ -329,13 +347,13 @@ const store: Store<Id, S, G, A> = reactive(
 assign(toRaw(store), setupStore);
 ```
 
-​	最终将API与store内的数据进行合并，存储以当前store的id为key的`Map`中，`createSetupStore`的核心逻辑便全部结束了。
+​	最终将相关`methods`与`store`内的数据进行合并，存储以当前store的id为key的`Map`中，`createSetupStore`的核心逻辑便全部结束了。
 
 
 
 ##  useStore后续逻辑
 
-我们再回到`defineStore`的逻辑中
+我们再回到`defineStore`的逻辑中，获取到`createSetupStore`最后放入`pinia._s`中的当前store被处理后的对象。
 
 ```js
 // ....
@@ -345,7 +363,7 @@ const store: StoreGeneric = pinia._s.get(id)!;
 return store as any;
 ```
 
-​	最后将通过`createSetupStore`处理后的数据进行返回，我们便得到了使用当前`store`中变量与方法以及各种API的能力。
+​	最后将通过`createSetupStore`处理后的数据进行返回，我们便得到了使用当前`store`中变量与方法以及各种方法的能力。
 
 ![img](https://www.vkcyan.top/312434234234.png)
 
@@ -353,7 +371,7 @@ return store as any;
 
 
 
-## 为什么访问defineStore创建的state不需要.value
+## 拓展：为什么访问defineStore创建的state不需要.value
 
 ​	通过以上源码分析可以得知，state的数据都会被处理为ref，那访问ref自然是需要.value，但是我们日常使用pinia似乎从来没有.value。
 
@@ -415,5 +433,9 @@ if (isVue2) {
 
 ## 结语
 
-​	通过对defineStore的分析后，我们已经了解store的第一次创建与使用的核心逻辑，但是在`store`上通过`partialStore`增加的方法我们还没有一一了解，下一篇我们将会重点介绍，store相关api的具体实现。
+​	**虽然代码量比较大，但是核心逻辑就是将state处理为ref，将getters处理为computed，将action进行二次封装，提供若干方法，最后组合对象存储到Pinia中。**
+
+​	在这一章我们完成了最核心`store`创建流程的源码分析，但是通过`partialStore`增加的方法我们还没有一一了解。下一篇我们将会重点介绍`store`相关`Methods`的具体实现。
+
+
 

@@ -22,7 +22,9 @@ date: 2022-07-07
 
 ## 前言
 
-本系列文章参考源码`pinia V2.0.14`
+参考源码`pinia V2.0.14`
+
+源码分析仓库：https://github.com/vkcyan/goto-pinia
 
 上一篇文章我们主要介绍了如何搭建一个pinia源码阅读环境；本文主要介绍pinia在vue3初始化阶段相关逻辑，以及如何构建pinia对象。
 
@@ -30,14 +32,14 @@ date: 2022-07-07
 
 ## 正文
 
-根据官方文档，我们使用`pinia`首先需要是将他注册到`vue`中
+根据官方文档，我们使用`pinia`首先需要是将它注册到`vue`中
 
 ```js
 const pinia = createPinia();
 app.use(pinia);
 ```
 
-`createPinia`的阶段究竟做了什么，他又是如何被注册到vue中呢？我们要从`createPinia`中寻找答案。
+`createPinia`阶段究竟做了什么，他又是如何被注册到vue中呢？我们要从`createPinia`中寻找答案。
 
 
 

@@ -1,14 +1,12 @@
-```
+---
 title: 分析pinia源码之前必须知道的API
 categories:
   - JavaScript-2022
 tags:
-  - JavaScript
+  - Pinia
 toc: true
-date: 2022-03-15
-```
-
-
+date: 2022-07-05
+---
 
 ## 专栏导航
 

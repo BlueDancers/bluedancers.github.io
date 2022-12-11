@@ -26,7 +26,7 @@ date: 2022-07-18
 
 源码分析仓库：https://github.com/vkcyan/goto-pinia
 
-​	上一章我们对store的最核心流程完成了分析，从而了解了一个`store`从定义到被使用的内部实现流程，但是`store`相关的方法，我们还未进行分析，本章我们就重点分析分析`store`自带的**Methods**
+​	上一章我们对`store`的核心流程完成了分析，从而了解了一个`store`从定义到被使用的实现逻辑，但是`store`相关的方法，我们还未进行分析，本章我们就重点分析分析`store`自带的**Methods**
 
 
 
@@ -107,11 +107,11 @@ const actionValue =  wrapAction(key, prop) // hot为undefined的情况下
 
 ![image-20220720184122095](https://www.vkcyan.top/image-20220720184122095.png)
 
-​	所有的`action`在初始化阶段都会被`wrapAction`方法，也就代表我们执行`action`的时候，实际上执行的是`wrapAction`函数，那就让我们就看看，在`wrapAction`中究竟发生了什么
+​	所有的`action`在初始化阶段都会被`wrapAction`方法拦截，也就代表我们执行`action`的时候，实际上执行的是`wrapAction`函数，那就让我们就看看，在`wrapAction`中究竟发生了什么
 
 ```js
 /**
-* 包装一个action来处理订阅。
+* 包装一个action来处理订阅
 *
 * @param name - store的名称
 * @param action - 需要被包装的action
@@ -120,7 +120,7 @@ const actionValue =  wrapAction(key, prop) // hot为undefined的情况下
 function wrapAction(name: string, action: _Method) {
     return function (this: any) {
         setActivePinia(pinia);
-        // 当前action的参数
+        // 获取当前action的参数
         const args = Array.from(arguments);
 
         const afterCallbackList: Array<(resolvedReturn: any) => any> = [];
@@ -176,7 +176,7 @@ function wrapAction(name: string, action: _Method) {
 }
 ```
 
-​	之前在`$Action`中的回调函数在此处发挥了作用，每当一个`action`触发的都会遍历一遍之前订阅的所有`$Action`的回调函数，其内部执行`action`方法，`action`执行正常在触发`after`的`callback`，执行异常则触发`onError`的`callback`。
+​	之前在`$Action`中的回调函数在此处发挥了作用，每当一个`action`触发的都会遍历之前订阅的所有`$Action`的回调函数，其内部执行`action`方法，`action`执行正常在触发`after`的`callback`，执行异常则触发`onError`的`callback`。
 
 
 
@@ -204,7 +204,7 @@ function wrapAction(name: string, action: _Method) {
 
 ### 使用示例
 
-订阅当前`store`中的`state`的变化，`state`发生任意更改都会触发其回调函数，他还会返回一个用来删除的回调
+​	订阅当前`store`中的`state`的变化，`state`发生任意更改都会触发其回调函数，他还会返回一个用来删除的回调函数
 
 ```js
 let abc = useCounter1.$subscribe(
@@ -294,7 +294,7 @@ useCounter1.$patch((state) => {
 
 ### 源码分析
 
-​	`$patch`的主体逻辑不算很复杂，针对不同的参数类型进行分别处理，其中`partialStateOrMutator`是传入的方法，我们将当前`store`传入其中，通过其`callback`直接完成`state`的修改，而传入类型为`object`的时候，则依赖`mergeReactiveObjects`进行处理。
+​	`$patch`的主体逻辑不算很复杂，针对不同的参数类型进行分别处理，其中`partialStateOrMutator`是传入的方法，我们将当前`store`传入其中，通过其`callback`直接完成`state`的修改，而传入类型为`object`的时候，则通过`mergeReactiveObjects`进行处理。
 
 ```typescript
 function $patch(stateMutation: (state: UnwrapRef<S>) => void): void; // Fun传参
@@ -392,7 +392,7 @@ function mergeReactiveObjects<T extends StateTree>(
 
 ### 小结
 
-​	`$patch`的源码相对来说比较简单，但是关于触发`$subscribe`的部分代码逻辑比较复杂，尤其是当`$subscribe` `option`设置中的`flush`为sync的时候，修改`state`立刻就会触发`$subscribe`的`watch`，虽然最终呈现出来的结果是一致的，但是内部对不同情况的兼容有大学问。
+​	`$patch`的源码相对来说比较简单，但是关于触发`$subscribe`的部分代码逻辑比较复杂，尤其是当`$subscribe` `option`设置中的`flush`为sync的时候，修改`state`立刻就会触发`$subscribe`的`watch`，虽然最终呈现出来的结果是一致的，但是内部对不同情况的兼容没有看起来那么简单。
 
 ![image-20220723162542035](https://www.vkcyan.top/image-20220723162542035.png)
 
@@ -400,9 +400,9 @@ function mergeReactiveObjects<T extends StateTree>(
 
 ## $dispose
 
-​	调用该方法后将会注销当前`store`
+调用该方法后将会注销当前`store`
 
-`	scope`中存储当前`store`中的相关反应，当前`state`的`watch`，`ref`，等等`effect`都通过`scope.run`创建，就是为了方便统一处理，这里调用`scope.stop()`所有的effect全部被注销了。
+`	scope`中存储当前`store`中的相关反应，当前`state`的`watch`，`ref`，等等`effect`都通过`scope.run`创建，就是为了方便统一处理，这里调用`scope.stop()`所有的`effect`便被全部注销了。
 
 ```js
   function $dispose() {
@@ -417,9 +417,9 @@ function mergeReactiveObjects<T extends StateTree>(
 
 ## $reset
 
-调用该方法可以将当前`state`重置为初始化时候的状态
+调用该方法可以将当前`state`重置为初始化的状态
 
-但是又有点需要注意，如果`defineStore`通过`setup类型`声明，则无法调用该函数
+但是有点需要注意，如果`defineStore`通过`setup类型`声明，则无法调用该函数
 
 ````js
 const $reset = __DEV__
@@ -448,6 +448,6 @@ store.$reset = function $reset() {
 
 ## 总结
 
-​	至此，我们就完成了对pinia所有方法的源码解读，而pinia源码解读系列文章也将告一段落，我们从pinia的初始化到使用action修改state，最后完成对自带metnods的解读，已经完成理解了其核心实现，最后我们将会实现一个简易版的pinia，一来降低源码阅读门槛，而来也是检验是否真的读懂了其核心实现。
+​	至此，我们就完成了对`pinia`所有方法的源码解读，而`pinia`源码解读系列文章也将告一段落，我们从`pinia`的初始化到了解如何实现**state，getters**的响应式，最后完成对`pinia metnods`的全部解读，也算是完全了解了其核心实现，最后我们将会实现一个**mini版的pinia**，仅仅保留核心实现，降低阅读门槛，让大多数人可以轻松了解pinia的核心实现原理~
 
  
