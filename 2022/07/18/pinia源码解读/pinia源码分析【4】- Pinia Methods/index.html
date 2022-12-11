@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>pinia源码分析【4】- Pinia Methods | vkcyan Blog</title>
+  <meta name="description" content="专栏导航分析pinia源码之前必须知道的API Pinia源码分析【1】- 源码分析环境搭建 Pinia源码分析【2】- createPinia pinia源码分析【3】- defineStore pinia源码分析【4】- Pinia Methods 前言本系列文章参考源码pinia V2.0.14 源码分析仓库：https:&#x2F;&#x2F;github.com&#x2F;vkcyan&#x2F;goto-pinia ​	上一">
+<meta property="og:type" content="article">
+<meta property="og:title" content="pinia源码分析【4】- Pinia Methods">
+<meta property="og:url" content="https://vkcyan.github.io/2022/07/18/pinia%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/pinia%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E3%80%904%E3%80%91-%20Pinia%20Methods/index.html">
+<meta property="og:site_name" content="vkcya Blog">
+<meta property="og:description" content="专栏导航分析pinia源码之前必须知道的API Pinia源码分析【1】- 源码分析环境搭建 Pinia源码分析【2】- createPinia pinia源码分析【3】- defineStore pinia源码分析【4】- Pinia Methods 前言本系列文章参考源码pinia V2.0.14 源码分析仓库：https:&#x2F;&#x2F;github.com&#x2F;vkcyan&#x2F;goto-pinia ​	上一">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://www.vkcyan.top/image-20220720184122095.png">
+<meta property="og:image" content="https://www.vkcyan.top/image-20220721143852948.png">
+<meta property="og:image" content="https://www.vkcyan.top/image-20220722170139137.png">
+<meta property="og:image" content="https://www.vkcyan.top/image-20220723162542035.png">
+<meta property="article:published_time" content="2022-07-17T16:00:00.000Z">
+<meta property="article:modified_time" content="2022-12-11T13:51:24.081Z">
+<meta property="article:author" content="vkcyan">
+<meta property="article:tag" content="Pinia">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://www.vkcyan.top/image-20220720184122095.png">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://vkcyan.github.io/2022/07/18/pinia%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/pinia%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E3%80%904%E3%80%91-%20Pinia%20Methods/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="vkcya Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+
+<body class="main-center theme-black" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/vkcyan" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">vkcyan</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Web Developer &amp; Product Manager</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> HeFei, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-books">
+          <a href="/books">
+            
+            <i class="icon icon-book-fill"></i>
+            
+            <span class="menu-title">书单</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">友链</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/vkcyan" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://juejin.cn/user/3720403077840519" target="_blank" title="Juejin" data-toggle=tooltip data-placement=top><i class="icon icon-juejin"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>往者不可谏，来者犹可追</p><br/>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript/">JavaScript</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript-2021/">JavaScript-2021</a><span class="category-list-count">10</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript-2022/">JavaScript-2022</a><span class="category-list-count">15</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Javascript-2022/">Javascript-2022</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%BA%A7%E5%93%81%E7%BB%8F%E7%90%86/">产品经理</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/">数据结构与算法</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%97%A5%E5%B8%B8/">日常</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%97%A5%E5%B8%B8%E5%BC%80%E5%8F%91/">日常开发</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%9D%82%E8%B0%88/">杂谈</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%8E%A9%E6%9C%BA%E6%8A%80%E5%B7%A7/">玩机技巧</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%A7%BB%E5%8A%A8%E7%AB%AF/">移动端</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%9A%8F%E6%83%B3%E9%9B%86/">随想集</a><span class="category-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/" rel="tag">Hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a><span class="tag-list-count">18</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NPDP/" rel="tag">NPDP</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Pinia/" rel="tag">Pinia</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue/" rel="tag">Vue</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue3/" rel="tag">Vue3</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/h5%E8%A3%85%E4%BF%AE/" rel="tag">h5装修</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vue3/" rel="tag">vue3</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vw/" rel="tag">vw</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/webpack5/" rel="tag">webpack5</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/" rel="tag">个人博客</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%A7%E5%93%81%E5%88%86%E6%9E%90/" rel="tag">产品分析</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%A7%E5%93%81%E6%97%A5%E5%B8%B8/" rel="tag">产品日常</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BB%B7%E5%80%BC%E8%A7%82/" rel="tag">价值观</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BD%8E%E4%BB%A3%E7%A0%81/" rel="tag">低代码</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%85%B3%E4%BA%8EC%E7%AB%AF/" rel="tag">关于C端</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%85%BC%E5%AE%B9%E6%80%A7/" rel="tag">兼容性</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%93%8D%E5%BA%94%E5%BC%8F/" rel="tag">响应式</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag">数据结构</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%97%A0%E9%9A%9C%E7%A2%8D/" rel="tag">无障碍</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%A7%BB%E5%8A%A8%E7%AB%AF/" rel="tag">移动端</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AB%A5%E5%B9%B4/" rel="tag">童年</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%B0%E5%BD%95/" rel="tag">记录</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%BE%93%E5%87%BA/" rel="tag">输出</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9A%8F%E6%83%B3/" rel="tag">随想</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9A%8F%E9%80%89%E6%9C%97%E8%AF%BB/" rel="tag">随选朗读</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/Hexo/" style="font-size: 13px;">Hexo</a> <a href="/tags/JavaScript/" style="font-size: 14px;">JavaScript</a> <a href="/tags/NPDP/" style="font-size: 13.75px;">NPDP</a> <a href="/tags/Pinia/" style="font-size: 13.5px;">Pinia</a> <a href="/tags/Vue/" style="font-size: 13px;">Vue</a> <a href="/tags/Vue3/" style="font-size: 13px;">Vue3</a> <a href="/tags/h5%E8%A3%85%E4%BF%AE/" style="font-size: 13px;">h5装修</a> <a href="/tags/vue3/" style="font-size: 13px;">vue3</a> <a href="/tags/vw/" style="font-size: 13px;">vw</a> <a href="/tags/webpack5/" style="font-size: 13px;">webpack5</a> <a href="/tags/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/" style="font-size: 13px;">个人博客</a> <a href="/tags/%E4%BA%A7%E5%93%81%E5%88%86%E6%9E%90/" style="font-size: 13px;">产品分析</a> <a href="/tags/%E4%BA%A7%E5%93%81%E6%97%A5%E5%B8%B8/" style="font-size: 13px;">产品日常</a> <a href="/tags/%E4%BB%B7%E5%80%BC%E8%A7%82/" style="font-size: 13px;">价值观</a> <a href="/tags/%E4%BD%8E%E4%BB%A3%E7%A0%81/" style="font-size: 13px;">低代码</a> <a href="/tags/%E5%85%B3%E4%BA%8EC%E7%AB%AF/" style="font-size: 13px;">关于C端</a> <a href="/tags/%E5%85%BC%E5%AE%B9%E6%80%A7/" style="font-size: 13px;">兼容性</a> <a href="/tags/%E5%93%8D%E5%BA%94%E5%BC%8F/" style="font-size: 13px;">响应式</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="font-size: 13.75px;">数据结构</a> <a href="/tags/%E6%97%A0%E9%9A%9C%E7%A2%8D/" style="font-size: 13px;">无障碍</a> <a href="/tags/%E7%A7%BB%E5%8A%A8%E7%AB%AF/" style="font-size: 13px;">移动端</a> <a href="/tags/%E7%AB%A5%E5%B9%B4/" style="font-size: 13px;">童年</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 13.25px;">算法</a> <a href="/tags/%E8%AE%B0%E5%BD%95/" style="font-size: 13.25px;">记录</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 13px;">设计模式</a> <a href="/tags/%E8%BE%93%E5%87%BA/" style="font-size: 13.25px;">输出</a> <a href="/tags/%E9%9A%8F%E6%83%B3/" style="font-size: 13px;">随想</a> <a href="/tags/%E9%9A%8F%E9%80%89%E6%9C%97%E8%AF%BB/" style="font-size: 13px;">随选朗读</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/12/">十二月 2022</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/09/">九月 2022</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/08/">八月 2022</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/07/">七月 2022</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/06/">六月 2022</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/05/">五月 2022</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/03/">三月 2022</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/12/">十二月 2021</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/10/">十月 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/09/">九月 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/06/">六月 2021</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/03/">三月 2021</a><span class="archive-list-count">9</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E6%97%A5%E5%B8%B8/">日常</a>
+              </p>
+              <p class="item-title">
+                <a href="/2022/12/31/%E6%97%A5%E5%B8%B8/2022%E5%B9%B4%E7%BB%88%E6%80%BB%E7%BB%93/" class="title">2022年终总结</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-12-30T16:00:00.000Z" itemprop="datePublished">2022-12-31</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E4%BA%A7%E5%93%81%E7%BB%8F%E7%90%86/">产品经理</a>
+              </p>
+              <p class="item-title">
+                <a href="/2022/09/19/NPDP%E4%BA%A7%E5%93%81%E7%BB%8F%E7%90%86/%E7%BE%8A%E4%BA%86%E4%B8%AA%E7%BE%8A%E7%88%86%E7%81%AB%EF%BC%8C%E5%88%B0%E5%BA%95%E5%8F%91%E7%94%9F%E4%BA%86%E4%BB%80%E4%B9%88%EF%BC%9F/" class="title">羊了个羊，怎么突然爆火了？</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-09-18T16:00:00.000Z" itemprop="datePublished">2022-09-19</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/Javascript-2022/">Javascript-2022</a>
+              </p>
+              <p class="item-title">
+                <a href="/2022/09/18/%E5%85%B3%E4%BA%8Evue3%E7%9A%84%E7%A0%94%E7%A9%B6/vue3%E7%9B%B8%E5%AF%B9%E4%BA%8Evue2%E5%81%9A%E4%BA%86%E4%BB%80%E4%B9%88%EF%BC%9F/" class="title">vue3相对于vue2做了什么？</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-09-17T16:00:00.000Z" itemprop="datePublished">2022-09-18</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E4%BA%A7%E5%93%81%E7%BB%8F%E7%90%86/">产品经理</a>
+              </p>
+              <p class="item-title">
+                <a href="/2022/08/15/%E5%BF%83%E7%90%86%E5%AD%A6%E4%B8%8E%E7%94%9F%E6%B4%BB/%E7%8E%B0%E4%BB%A3%E5%BF%83%E7%90%86%E5%AD%A6%E4%B8%83%E7%A7%8D%E8%A7%82%E7%82%B9/" class="title">现代心理学七种观点</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-08-14T16:00:00.000Z" itemprop="datePublished">2022-08-15</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/JavaScript-2022/">JavaScript-2022</a>
+              </p>
+              <p class="item-title">
+                <a href="/2022/07/29/pinia%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/pinia%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E3%80%905%E3%80%91-%20150%E8%A1%8C%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0mini%E7%89%88pinia/" class="title">pinia源码分析【5】- 150行代码实现mini版pinia</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-07-28T16:00:00.000Z" itemprop="datePublished">2022-07-29</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<aside
+  class="sidebar sidebar-toc collapse  in "
+  id="collapseToc"
+  itemscope
+  itemtype="http://schema.org/WPSideBar"
+>
+  <div class="slimContent">
+    <nav id="toc" class="article-toc">
+      <h3 class="toc-title">文章目录</h3>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%93%E6%A0%8F%E5%AF%BC%E8%88%AA"><span class="toc-number">1.</span> <span class="toc-text">专栏导航</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">2.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#onAction"><span class="toc-number">3.</span> <span class="toc-text">$onAction</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E7%A4%BA%E4%BE%8B"><span class="toc-number">3.1.</span> <span class="toc-text">使用示例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90"><span class="toc-number">3.2.</span> <span class="toc-text">源码分析</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%AE%A2%E9%98%85"><span class="toc-number">3.2.1.</span> <span class="toc-text">订阅</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%A7%A6%E5%8F%91%E8%AE%A2%E9%98%85"><span class="toc-number">3.2.2.</span> <span class="toc-text">触发订阅</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B0%8F%E7%BB%93"><span class="toc-number">3.3.</span> <span class="toc-text">小结</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#subscribe"><span class="toc-number">4.</span> <span class="toc-text">$subscribe</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E7%A4%BA%E4%BE%8B-1"><span class="toc-number">4.1.</span> <span class="toc-text">使用示例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-1"><span class="toc-number">4.2.</span> <span class="toc-text">源码分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B0%8F%E7%BB%93-1"><span class="toc-number">4.3.</span> <span class="toc-text">小结</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#patch"><span class="toc-number">5.</span> <span class="toc-text">$patch</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E7%A4%BA%E4%BE%8B-2"><span class="toc-number">5.1.</span> <span class="toc-text">使用示例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-2"><span class="toc-number">5.2.</span> <span class="toc-text">源码分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#patch%E8%A7%A6%E5%8F%91-subscribe"><span class="toc-number">5.3.</span> <span class="toc-text">$patch触发$subscribe</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B0%8F%E7%BB%93-2"><span class="toc-number">5.4.</span> <span class="toc-text">小结</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#dispose"><span class="toc-number">6.</span> <span class="toc-text">$dispose</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#reset"><span class="toc-number">7.</span> <span class="toc-text">$reset</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">8.</span> <span class="toc-text">总结</span></a></li></ol>
+    </nav>
+  </div>
+</aside>
+
+<script>
+  // 移动端不显示菜单
+  if (
+    navigator.userAgent.match(
+      /(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i
+    )
+  ) {
+    let self = document.querySelector(".sidebar-toc");
+    var parent = self.parentElement;
+    parent.removeChild(self);
+  } else {
+  }
+</script>
+
+
+
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-pinia源码解读/pinia源码分析【4】- Pinia Methods" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      pinia源码分析【4】- Pinia Methods
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2022/07/18/pinia%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/pinia%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E3%80%904%E3%80%91-%20Pinia%20Methods/" class="article-date">
+	  <time datetime="2022-07-17T16:00:00.000Z" itemprop="datePublished">2022-07-18</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/JavaScript-2022/">JavaScript-2022</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/Pinia/" rel="tag">Pinia</a>
+  </span>
+
+
+        
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/07/18/pinia%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/pinia%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E3%80%904%E3%80%91-%20Pinia%20Methods/#comments" class="article-comment-link">评论</a></span>
+        
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <h2 id="专栏导航"><a href="#专栏导航" class="headerlink" title="专栏导航"></a>专栏导航</h2><p><a target="_blank" rel="noopener" href="https://juejin.cn/post/7124279061035089927">分析pinia源码之前必须知道的API</a></p>
+<p><a target="_blank" rel="noopener" href="https://juejin.cn/post/7117131804229763079">Pinia源码分析【1】- 源码分析环境搭建</a></p>
+<p><a target="_blank" rel="noopener" href="https://juejin.cn/post/7119788423501578277">Pinia源码分析【2】- createPinia</a></p>
+<p><a target="_blank" rel="noopener" href="https://juejin.cn/post/7121661056044236831">pinia源码分析【3】- defineStore</a></p>
+<p><a target="_blank" rel="noopener" href="https://juejin.cn/post/7123504805892325406">pinia源码分析【4】- Pinia Methods</a></p>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>本系列文章参考源码<code>pinia V2.0.14</code></p>
+<p>源码分析仓库：<a target="_blank" rel="noopener" href="https://github.com/vkcyan/goto-pinia">https://github.com/vkcyan/goto-pinia</a></p>
+<p>​	上一章我们对<code>store</code>的核心流程完成了分析，从而了解了一个<code>store</code>从定义到被使用的实现逻辑，但是<code>store</code>相关的方法，我们还未进行分析，本章我们就重点分析分析<code>store</code>自带的<strong>Methods</strong></p>
+<h2 id="onAction"><a href="#onAction" class="headerlink" title="$onAction"></a>$onAction</h2><h3 id="使用示例"><a href="#使用示例" class="headerlink" title="使用示例"></a>使用示例</h3><p>订阅当前<code>store</code>所有<code>action</code>操作，每当<code>action</code>被执行的时候，便会触发该方法</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">onMounted</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  useCounter1.$onAction(<span class="function">(<span class="params">option</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">let</span> &#123; after, onError, args, name, store &#125; = option;</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  <span class="built_in">setInterval</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    useCounter1.<span class="property">counter</span>++;</span><br><span class="line">    <span class="comment">// useCounter1.increment();</span></span><br><span class="line">  &#125;, <span class="number">1000</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="源码分析"><a href="#源码分析" class="headerlink" title="源码分析"></a>源码分析</h3><h4 id="订阅"><a href="#订阅" class="headerlink" title="订阅"></a>订阅</h4><p>在<code>$Action</code>声明的地方，我们可以看到一段这样的函数</p>
+<blockquote>
+<p>第一个参数传<code>null</code>，则不改变this指向，并且在后续的调用依旧是该this。</p>
+</blockquote>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> partialStore = &#123;</span><br><span class="line">  <span class="attr">$onAction</span>: addSubscription.<span class="title function_">bind</span>(<span class="literal">null</span>, actionSubscriptions), <span class="comment">// action事件注册函数</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>​	也就是说，当我们使用<code>store.$Action</code>的时候实际上触发的是<code>addSubscription</code>函数，并将我们<code>$Action</code>中的回调函数传入<code>createSetupStore</code>中的<code>actionSubscriptions</code>中，<strong>也就是订阅了我们的callback</strong></p>
+<p>​	运行<code>store.$Action</code>后得到了<code>addSubscription</code>方法的返回值<code>removeSubscription</code>方法，让我们可以执行其返回值，达到取消订阅的目的。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> addSubscription&lt;T <span class="keyword">extends</span> _Method&gt;(</span><br><span class="line">  <span class="attr">subscriptions</span>: T[], <span class="comment">// createSetupStore中的actionSubscriptions</span></span><br><span class="line">  <span class="attr">callback</span>: T, <span class="comment">// 我们传入的callback</span></span><br><span class="line">  detached?: boolean, <span class="comment">// 如果为true，则该$Action在页面销毁之后依旧有效</span></span><br><span class="line">  <span class="attr">onCleanup</span>: <span class="function">() =&gt;</span> <span class="keyword">void</span> = noop</span><br><span class="line">) &#123;</span><br><span class="line">  <span class="comment">// 使用$Action的时候就会触发本函数</span></span><br><span class="line">  subscriptions.<span class="title function_">push</span>(callback)</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> <span class="title function_">removeSubscription</span> = (<span class="params"></span>) =&gt; &#123;</span><br><span class="line">    <span class="keyword">const</span> idx = subscriptions.<span class="title function_">indexOf</span>(callback)</span><br><span class="line">    <span class="keyword">if</span> (idx &gt; -<span class="number">1</span>) &#123;</span><br><span class="line">      subscriptions.<span class="title function_">splice</span>(idx, <span class="number">1</span>)</span><br><span class="line">      <span class="title function_">onCleanup</span>()</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (!detached &amp;&amp; <span class="title function_">getCurrentInstance</span>()) &#123;</span><br><span class="line">    <span class="comment">// 如果detached参数不存在，则在当前页面卸载的时候，去除该订阅事件</span></span><br><span class="line">    <span class="title function_">onUnmounted</span>(removeSubscription)</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> removeSubscription</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="触发订阅"><a href="#触发订阅" class="headerlink" title="触发订阅"></a>触发订阅</h4><p>​	在<code>useStore</code>中对<code>action</code>进行处理的逻辑中，存在这样的一段代码，这段代码中的hot在正常使用的业务场景下都是undefined，所以会走后面的逻辑。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> actionValue =  <span class="title function_">wrapAction</span>(key, prop) <span class="comment">// hot为undefined的情况下</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="https://www.vkcyan.top/image-20220720184122095.png" alt="image-20220720184122095"></p>
+<p>​	所有的<code>action</code>在初始化阶段都会被<code>wrapAction</code>方法拦截，也就代表我们执行<code>action</code>的时候，实际上执行的是<code>wrapAction</code>函数，那就让我们就看看，在<code>wrapAction</code>中究竟发生了什么</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* 包装一个action来处理订阅</span></span><br><span class="line"><span class="comment">*</span></span><br><span class="line"><span class="comment">* <span class="doctag">@param</span> <span class="variable">name</span> - store的名称</span></span><br><span class="line"><span class="comment">* <span class="doctag">@param</span> <span class="variable">action</span> - 需要被包装的action</span></span><br><span class="line"><span class="comment">* <span class="doctag">@returns</span> a wrapped action to handle subscriptions</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">wrapAction</span>(<span class="params">name: string, action: _Method</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">function</span> (<span class="params"><span class="variable language_">this</span>: any</span>) &#123;</span><br><span class="line">        <span class="title function_">setActivePinia</span>(pinia);</span><br><span class="line">        <span class="comment">// 获取当前action的参数</span></span><br><span class="line">        <span class="keyword">const</span> args = <span class="title class_">Array</span>.<span class="title function_">from</span>(<span class="variable language_">arguments</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">const</span> <span class="attr">afterCallbackList</span>: <span class="title class_">Array</span>&lt;<span class="function">(<span class="params">resolvedReturn: any</span>) =&gt;</span> any&gt; = [];</span><br><span class="line">        <span class="keyword">const</span> <span class="attr">onErrorCallbackList</span>: <span class="title class_">Array</span>&lt;<span class="function">(<span class="params">error: unknown</span>) =&gt;</span> unknown&gt; = [];</span><br><span class="line">        <span class="comment">// 声明after方法</span></span><br><span class="line">        <span class="keyword">function</span> <span class="title function_">after</span>(<span class="params">callback: _ArrayType&lt;<span class="keyword">typeof</span> afterCallbackList&gt;</span>) &#123;</span><br><span class="line">            <span class="comment">// 将after的call放入list中</span></span><br><span class="line">            afterCallbackList.<span class="title function_">push</span>(callback);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 声明error方法</span></span><br><span class="line">        <span class="keyword">function</span> <span class="title function_">onError</span>(<span class="params">callback: _ArrayType&lt;<span class="keyword">typeof</span> onErrorCallbackList&gt;</span>) &#123;</span><br><span class="line">            onErrorCallbackList.<span class="title function_">push</span>(callback);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// @ts-expect-error</span></span><br><span class="line">        <span class="comment">// 触发actionSubscriptions中订阅的store.$Action的全部回调函数,并将参数传入</span></span><br><span class="line">        <span class="comment">// 此时store.$Action的callback已经执行,但是after onError的回调函数尚未执行</span></span><br><span class="line">        <span class="title function_">triggerSubscriptions</span>(actionSubscriptions, &#123;</span><br><span class="line">            args,</span><br><span class="line">            name,</span><br><span class="line">            store,</span><br><span class="line">            after,</span><br><span class="line">            onError,</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">let</span> <span class="attr">ret</span>: any; <span class="comment">// ret为action的返回值</span></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            ret = action.<span class="title function_">apply</span>(<span class="variable language_">this</span> &amp;&amp; <span class="variable language_">this</span>.<span class="property">$id</span> === $id ? <span class="variable language_">this</span> : store, args);</span><br><span class="line">            <span class="comment">// handle sync errors</span></span><br><span class="line">        &#125; <span class="keyword">catch</span> (error) &#123;</span><br><span class="line">            <span class="comment">// 如果action执行出错,则直接执行错误回调,终止函数</span></span><br><span class="line">            <span class="title function_">triggerSubscriptions</span>(onErrorCallbackList, error);</span><br><span class="line">            <span class="keyword">throw</span> error;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 如果ret是promise,则当前结果未知，会通过上方的try catch，但是会在action结尾增加then catch进行结果捕捉</span></span><br><span class="line">        <span class="keyword">if</span> (ret <span class="keyword">instanceof</span> <span class="title class_">Promise</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> ret</span><br><span class="line">                .<span class="title function_">then</span>(<span class="function">(<span class="params">value</span>) =&gt;</span> &#123;</span><br><span class="line">                <span class="title function_">triggerSubscriptions</span>(afterCallbackList, value);</span><br><span class="line">                <span class="keyword">return</span> value;</span><br><span class="line">            &#125;)</span><br><span class="line">                .<span class="title function_">catch</span>(<span class="function">(<span class="params">error</span>) =&gt;</span> &#123;</span><br><span class="line">                <span class="title function_">triggerSubscriptions</span>(onErrorCallbackList, error);</span><br><span class="line">                <span class="keyword">return</span> <span class="title class_">Promise</span>.<span class="title function_">reject</span>(error);</span><br><span class="line">            &#125;);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// allow the afterCallback to override the return value</span></span><br><span class="line">        <span class="comment">// 如果try catch 通过，并且当前action不是Promise，则逻辑进行到此处，触发所有 触发真正的after函数，并将当前action的返回值传入其中，至此完成对action触发的监听。</span></span><br><span class="line">        <span class="title function_">triggerSubscriptions</span>(afterCallbackList, ret);</span><br><span class="line">        <span class="keyword">return</span> ret;</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>​	之前在<code>$Action</code>中的回调函数在此处发挥了作用，每当一个<code>action</code>触发的都会遍历之前订阅的所有<code>$Action</code>的回调函数，其内部执行<code>action</code>方法，<code>action</code>执行正常在触发<code>after</code>的<code>callback</code>，执行异常则触发<code>onError</code>的<code>callback</code>。</p>
+<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p><img src="https://www.vkcyan.top/image-20220721143852948.png" alt="image-20220721143852948"></p>
+<p>本质上来说$Action就是一个订阅发布模式。</p>
+<p><strong>$Action 订阅者</strong></p>
+<p><strong>store.action 发布者</strong></p>
+<p><strong>actionSubscriptions - 事件注册中心</strong></p>
+<p><strong>triggerSubscriptions - 调度中心</strong></p>
+<p>​	通过<strong>订阅者（$Action）</strong>把对<strong>发布者（action）</strong>的订阅注册到<strong>事件注册中心（actionSubscriptions）</strong>中，当<strong>发布者（action）</strong>触发时，通知<strong>调度中心（triggerSubscriptions）</strong>，<strong>调度中心（triggerSubscriptions）</strong>触发事件注册中心中的所有订阅。</p>
+<h2 id="subscribe"><a href="#subscribe" class="headerlink" title="$subscribe"></a>$subscribe</h2><h3 id="使用示例-1"><a href="#使用示例-1" class="headerlink" title="使用示例"></a>使用示例</h3><p>​	订阅当前<code>store</code>中的<code>state</code>的变化，<code>state</code>发生任意更改都会触发其回调函数，他还会返回一个用来删除的回调函数</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> abc = useCounter1.$subscribe(</span><br><span class="line">    <span class="function">(<span class="params">option, state</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="comment">// 通过store.num = xxxx修改，type为direct</span></span><br><span class="line">        <span class="comment">// 通过store.$patch(&#123; num: &#x27;xxx&#x27; &#125;)修改，type为directpatchObject</span></span><br><span class="line">        <span class="comment">// 通过store.$patch((state) =&gt; num.name=&#x27;xxx&#x27;)修改，type为patchFunction</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">// storeId为当前store的id</span></span><br><span class="line">        <span class="comment">// events 当前改动说明</span></span><br><span class="line">        <span class="keyword">let</span> &#123; events, storeId, type &#125; = option;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(events, storeId, type, state);</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123; <span class="attr">detached</span>: <span class="literal">false</span> &#125;</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="源码分析-1"><a href="#源码分析-1" class="headerlink" title="源码分析"></a>源码分析</h3><p>当我们使用<code>$subscribe</code>并传入<code>callback</code>的时候，首先会将当前的<code>callback</code>加入注册中心中</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> removeSubscription = <span class="title function_">addSubscription</span>(</span><br><span class="line">    subscriptions, <span class="comment">// 事件注册中心</span></span><br><span class="line">    callback, <span class="comment">// $subscribe传入的callback</span></span><br><span class="line">    options.<span class="property">detached</span>, <span class="comment">// 页面卸载的时候是否取消监听</span></span><br><span class="line">    <span class="function">() =&gt;</span> <span class="title function_">stopWatcher</span>() <span class="comment">// 执行stopWatcher实际上执行的是scope.run返回的watch，而执行watch的返回函数，也就是停止当前watch</span></span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<p>​	前三个参数经过对<code>$Action</code>的分析后已经比较熟悉，这里我们重点说明一下第四个参数</p>
+<p>​	<code>stopWatcher</code>是当前<code>store</code>中的<code>effectScope</code>，我们将对当前<code>state</code>的<code>watch</code>放入<code>scope</code>中，以便于销毁<code>store</code>的时候统一处理。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> stopWatcher = scope.<span class="title function_">run</span>(<span class="function">() =&gt;</span></span><br><span class="line">    <span class="title function_">watch</span>(</span><br><span class="line">        <span class="function">() =&gt;</span> pinia.<span class="property">state</span>.<span class="property">value</span>[$id] <span class="keyword">as</span> <span class="title class_">UnwrapRef</span>&lt;S&gt;, <span class="comment">// 监听state的变化</span></span><br><span class="line">        <span class="function">(<span class="params">state</span>) =&gt;</span> &#123;</span><br><span class="line">            <span class="comment">// 在不使用$patch的情况下，则两个参数都为true，callback一定会执行</span></span><br><span class="line">            <span class="keyword">if</span> (options.<span class="property">flush</span> === <span class="string">&quot;sync&quot;</span> ? isSyncListening : isListening) &#123;</span><br><span class="line">                <span class="title function_">callback</span>(</span><br><span class="line">                    &#123;</span><br><span class="line">                        <span class="attr">storeId</span>: $id, <span class="comment">// </span></span><br><span class="line">                        <span class="attr">type</span>: <span class="title class_">MutationType</span>.<span class="property">direct</span>,</span><br><span class="line">                        <span class="attr">events</span>: debuggerEvents <span class="keyword">as</span> <span class="title class_">DebuggerEvent</span>,</span><br><span class="line">                    &#125;,</span><br><span class="line">                    state</span><br><span class="line">                );</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="title function_">assign</span>(&#123;&#125;, $subscribeOptions, options)</span><br><span class="line">    )  </span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="小结-1"><a href="#小结-1" class="headerlink" title="小结"></a>小结</h3><p><img src="https://www.vkcyan.top/image-20220722170139137.png" alt="image-20220722170139137"></p>
+<p>​	<code>$subscribe</code>主要依赖<code>vue3</code>的<code>watch</code>进行实现，在<code>subscriptions</code>中注册<code>callback</code>，但是注册的<code>callback</code>不通过<code>triggerSubscriptions</code>进行触发，仅仅作为保存，<code>watch</code>的触发函数中通过闭包触发<code>$subscribe</code>中的<code>callback</code>，达到<code>store</code>中任意值发生变化的时候都执行<code>callback</code>的目的</p>
+<p>​	在<code>addSubscription</code>的返回值<code>removeSubscription</code>中，不仅会在<code>subscriptions</code>(注册中心)删除订阅，同时也会执行<code>() =&gt; stopWatcher()</code>，停止<code>watch</code>监听。达到完全停止监听的目的。</p>
+<h2 id="patch"><a href="#patch" class="headerlink" title="$patch"></a>$patch</h2><h3 id="使用示例-2"><a href="#使用示例-2" class="headerlink" title="使用示例"></a>使用示例</h3><p>直接更新当前<code>state</code>，可以通过传入<strong>对象</strong>与<strong>callback</strong>两种方式进行<code>state</code>更新，允许传递嵌套值</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 对象</span></span><br><span class="line">useCounter1.$patch(&#123; <span class="attr">counter</span>: <span class="number">2</span> &#125;);</span><br><span class="line"><span class="comment">// function</span></span><br><span class="line">useCounter1.$patch(<span class="function">(<span class="params">state</span>) =&gt;</span> &#123;</span><br><span class="line">    state.<span class="property">counter</span> = <span class="number">2</span>;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="源码分析-2"><a href="#源码分析-2" class="headerlink" title="源码分析"></a>源码分析</h3><p>​	<code>$patch</code>的主体逻辑不算很复杂，针对不同的参数类型进行分别处理，其中<code>partialStateOrMutator</code>是传入的方法，我们将当前<code>store</code>传入其中，通过其<code>callback</code>直接完成<code>state</code>的修改，而传入类型为<code>object</code>的时候，则通过<code>mergeReactiveObjects</code>进行处理。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">$patch</span>(<span class="params">stateMutation: (state: UnwrapRef&lt;S&gt;) =&gt; <span class="built_in">void</span></span>): <span class="built_in">void</span>; <span class="comment">// Fun传参</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">$patch</span>(<span class="params">partialState: _DeepPartial&lt;UnwrapRef&lt;S&gt;&gt;</span>): <span class="built_in">void</span>; <span class="comment">// 对象传参</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">$patch</span>(<span class="params"></span></span><br><span class="line"><span class="params">partialStateOrMutator:</span></span><br><span class="line"><span class="params"> | _DeepPartial&lt;UnwrapRef&lt;S&gt;&gt;</span></span><br><span class="line"><span class="params"> | ((state: UnwrapRef&lt;S&gt;) =&gt; <span class="built_in">void</span>)</span></span><br><span class="line"><span class="params"></span>): <span class="built_in">void</span> &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="attr">subscriptionMutation</span>: <span class="title class_">SubscriptionCallbackMutation</span>&lt;S&gt;;</span><br><span class="line">    isListening = isSyncListening = <span class="literal">false</span>;</span><br><span class="line">    <span class="comment">// reset the debugger events since patches are sync</span></span><br><span class="line">    <span class="comment">/* istanbul ignore else */</span></span><br><span class="line">    <span class="keyword">if</span> (__DEV__) &#123;</span><br><span class="line">        debuggerEvents = [];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 如果参数是方法，走以下处理逻辑</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">typeof</span> partialStateOrMutator === <span class="string">&quot;function&quot;</span>) &#123;</span><br><span class="line">        <span class="title function_">partialStateOrMutator</span>(pinia.<span class="property">state</span>.<span class="property">value</span>[$id] <span class="keyword">as</span> <span class="title class_">UnwrapRef</span>&lt;S&gt;);</span><br><span class="line">        subscriptionMutation = &#123;</span><br><span class="line">            <span class="attr">type</span>: <span class="title class_">MutationType</span>.<span class="property">patchFunction</span>,</span><br><span class="line">            <span class="attr">storeId</span>: $id,</span><br><span class="line">            <span class="attr">events</span>: debuggerEvents <span class="keyword">as</span> <span class="title class_">DebuggerEvent</span>[],</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="comment">// 如果参数是对象，走以下处理逻辑</span></span><br><span class="line">        <span class="title function_">mergeReactiveObjects</span>(pinia.<span class="property">state</span>.<span class="property">value</span>[$id], partialStateOrMutator);</span><br><span class="line">        subscriptionMutation = &#123;</span><br><span class="line">            <span class="attr">type</span>: <span class="title class_">MutationType</span>.<span class="property">patchObject</span>,</span><br><span class="line">            <span class="attr">payload</span>: partialStateOrMutator,</span><br><span class="line">            <span class="attr">storeId</span>: $id,</span><br><span class="line">            <span class="attr">events</span>: debuggerEvents <span class="keyword">as</span> <span class="title class_">DebuggerEvent</span>[],</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">const</span> myListenerId = (activeListener = <span class="title class_">Symbol</span>());</span><br><span class="line">    <span class="title function_">nextTick</span>().<span class="title function_">then</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (activeListener === myListenerId) &#123;</span><br><span class="line">            isListening = <span class="literal">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">    isSyncListening = <span class="literal">true</span>;</span><br><span class="line">    <span class="comment">// 在上方逻辑中，我们将isListening isSyncListening 重置为false，不会触发$subscribe中的callback，所以需要手动进行订阅发布</span></span><br><span class="line">    <span class="title function_">triggerSubscriptions</span>(</span><br><span class="line">        subscriptions,</span><br><span class="line">        subscriptionMutation,</span><br><span class="line">        pinia.<span class="property">state</span>.<span class="property">value</span>[$id] <span class="keyword">as</span> <span class="title class_">UnwrapRef</span>&lt;S&gt;</span><br><span class="line">    );</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// $patch传入参数为Object的处理逻辑</span></span><br><span class="line"><span class="keyword">function</span> mergeReactiveObjects&lt;T <span class="keyword">extends</span> <span class="title class_">StateTree</span>&gt;(</span><br><span class="line">  <span class="attr">target</span>: T,</span><br><span class="line">  <span class="attr">patchToApply</span>: _DeepPartial&lt;T&gt;</span><br><span class="line">): T &#123;</span><br><span class="line">  <span class="comment">// no need to go through symbols because they cannot be serialized anyway</span></span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">const</span> key <span class="keyword">in</span> patchToApply) &#123;</span><br><span class="line">    <span class="keyword">if</span> (!patchToApply.<span class="title function_">hasOwnProperty</span>(key)) <span class="keyword">continue</span>;</span><br><span class="line">    <span class="keyword">const</span> subPatch = patchToApply[key];</span><br><span class="line">    <span class="keyword">const</span> targetValue = target[key];</span><br><span class="line">    <span class="keyword">if</span> (</span><br><span class="line">      <span class="title function_">isPlainObject</span>(targetValue) &amp;&amp;</span><br><span class="line">      <span class="title function_">isPlainObject</span>(subPatch) &amp;&amp;</span><br><span class="line">      target.<span class="title function_">hasOwnProperty</span>(key) &amp;&amp;</span><br><span class="line">      !<span class="title function_">isRef</span>(subPatch) &amp;&amp;</span><br><span class="line">      !<span class="title function_">isReactive</span>(subPatch)</span><br><span class="line">    ) &#123;</span><br><span class="line">      <span class="comment">// 如果被修改的值 修改前修改后都是object类型并且不是Function类型、并且不是ref 不是isReactive，则递归mergeReactiveObjects达到修改嵌套object的目的</span></span><br><span class="line">      target[key] = <span class="title function_">mergeReactiveObjects</span>(targetValue, subPatch);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="comment">// @ts-expect-error: subPatch is a valid value</span></span><br><span class="line">      <span class="comment">// 如果是简单类型 则直接进行state的修改，这里的target为pinia.state.value[$id]</span></span><br><span class="line">      <span class="comment">// 按我们的示例来实际分析：pinia.state.value[$id].counter = 2</span></span><br><span class="line">      target[key] = subPatch;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> target;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>​	完成对<code>mergeReactiveObjects</code>的分析后，<code>$patch</code>的核心逻辑就全部结束了，但是还有一点我们没完成，就是通过<code>$patch</code>修改的<code>state</code>，<code>$subscribe</code>是否可以监听到。</p>
+<h3 id="patch触发-subscribe"><a href="#patch触发-subscribe" class="headerlink" title="$patch触发$subscribe"></a>$patch触发$subscribe</h3><p>​	在<code>$patch</code>执行的中，我们会修改当前<code>store</code>中的<code>state</code>，<code>$subscribe</code>中的<code>watch</code>在<code>flush=&#39;sync&#39;</code>的情况下可以立刻监听到，但是也无法执行<code>callback</code>，因为<code>$patch</code>函数最开始的地方将<code>isListening，isSyncListening</code>置为<code>false</code></p>
+<p>​	在对值完成修改后，我们将<code>isSyncListening</code>置为true，并且手动订阅<code>$subscribe</code>的<code>callback</code>，达到通过<code>$patch</code>修改<code>state</code>也能被<code>$subscribe</code>监听到的目的。</p>
+<h3 id="小结-2"><a href="#小结-2" class="headerlink" title="小结"></a>小结</h3><p>​	<code>$patch</code>的源码相对来说比较简单，但是关于触发<code>$subscribe</code>的部分代码逻辑比较复杂，尤其是当<code>$subscribe</code> <code>option</code>设置中的<code>flush</code>为sync的时候，修改<code>state</code>立刻就会触发<code>$subscribe</code>的<code>watch</code>，虽然最终呈现出来的结果是一致的，但是内部对不同情况的兼容没有看起来那么简单。</p>
+<p><img src="https://www.vkcyan.top/image-20220723162542035.png" alt="image-20220723162542035"></p>
+<h2 id="dispose"><a href="#dispose" class="headerlink" title="$dispose"></a>$dispose</h2><p>调用该方法后将会注销当前<code>store</code></p>
+<p><code>	scope</code>中存储当前<code>store</code>中的相关反应，当前<code>state</code>的<code>watch</code>，<code>ref</code>，等等<code>effect</code>都通过<code>scope.run</code>创建，就是为了方便统一处理，这里调用<code>scope.stop()</code>所有的<code>effect</code>便被全部注销了。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">$dispose</span>(<span class="params"></span>) &#123;</span><br><span class="line">  scope.<span class="title function_">stop</span>();</span><br><span class="line">  subscriptions = []; <span class="comment">// $subscribe注册中心</span></span><br><span class="line">  actionSubscriptions = []; <span class="comment">// $Action的注册中心</span></span><br><span class="line">  pinia.<span class="property">_s</span>.<span class="title function_">delete</span>($id); <span class="comment">// 删除effectMap结构</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="reset"><a href="#reset" class="headerlink" title="$reset"></a>$reset</h2><p>调用该方法可以将当前<code>state</code>重置为初始化的状态</p>
+<p>但是有点需要注意，如果<code>defineStore</code>通过<code>setup类型</code>声明，则无法调用该函数</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> $reset = __DEV__</span><br><span class="line">	? <span class="function">() =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">Error</span>(</span><br><span class="line">            <span class="string">`🍍: Store &quot;<span class="subst">$&#123;$id&#125;</span>&quot; is built using the setup syntax and does not implement $reset().`</span></span><br><span class="line">        );</span><br><span class="line">	&#125;</span><br><span class="line">	: noop; <span class="comment">// noop为空函数</span></span><br></pre></td></tr></table></figure>
+
+<p>如果通过<code>option类型</code>进行声明，则会<strong>重写$reset</strong>方法</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">store.<span class="property">$reset</span> = <span class="keyword">function</span> <span class="title function_">$reset</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="comment">// state通过闭包机制获得最初state定义的状态</span></span><br><span class="line">    <span class="keyword">const</span> newState = state ? <span class="title function_">state</span>() : &#123;&#125;;</span><br><span class="line">    <span class="comment">// 通过$patch完成对state中数据的更新</span></span><br><span class="line">    <span class="variable language_">this</span>.$patch(<span class="function">(<span class="params">$state</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="title function_">assign</span>($state, newState);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>​	至此，我们就完成了对<code>pinia</code>所有方法的源码解读，而<code>pinia</code>源码解读系列文章也将告一段落，我们从<code>pinia</code>的初始化到了解如何实现<strong>state，getters</strong>的响应式，最后完成对<code>pinia metnods</code>的全部解读，也算是完全了解了其核心实现，最后我们将会实现一个<strong>mini版的pinia</strong>，仅仅保留核心实现，降低阅读门槛，让大多数人可以轻松了解pinia的核心实现原理~</p>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://vkcyan.github.io/2022/07/18/pinia%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/pinia%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E3%80%904%E3%80%91-%20Pinia%20Methods/" title="pinia源码分析【4】- Pinia Methods" target="_blank" rel="external">https://vkcyan.github.io/2022/07/18/pinia源码解读/pinia源码分析【4】- Pinia Methods/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/vkcyan" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/vkcyan" target="_blank"><span class="text-dark">vkcyan</span><small class="ml-1x">Web Developer &amp; Product Manager</small></a></h3>
+        <div>一切都是为了实现技术的价值</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2022/07/18/pinia%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/pinia%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E3%80%903%E3%80%91-%20defineStore/" title="pinia源码分析【3】- defineStore"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2022/07/07/pinia%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/pinia%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E3%80%902%E3%80%91-%20createPinia/" title="Pinia源码分析【2】- createPinia"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+    <li class="toggle-toc">
+      <a class="toggle-btn " data-toggle="collapse" href="#collapseToc" aria-expanded="false" title="文章目录" role="button">    <span>[&nbsp;</span><span>文章目录</span>
+        <i class="text-collapsed icon icon-anchor"></i>
+        <i class="text-in icon icon-close"></i>
+        <span>]</span>
+      </a>
+    </li>
+    
+  </ul>
+  
+  
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-fancy btn-donate pop-onhover bg-gradient-warning" data-toggle="modal" data-target="#donateModal"><span>赏</span></button>
+  <!-- <div class="wave-icon wave-icon-danger btn-donate" data-toggle="modal" data-target="#donateModal">
+    <div class="wave-circle"><span class="icon"><i class="icon icon-bill"></i></span></div>
+  </div> -->
+  
+  
+  <div class="bar-right">
+    
+  </div>
+  </div>
+</nav>
+  
+<!-- Modal -->
+<div class="modal modal-center modal-small modal-xs-full fade" id="donateModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content donate">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <div class="modal-body">
+        <div class="donate-box">
+          <div class="donate-head">
+            <p>感谢您的支持，我会继续努力的!</p>
+          </div>
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade active in" id="alipay">
+              <div class="donate-payimg">
+                <img src="/images/donate/alipayimg.jpg" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开支付宝扫一扫，即可进行扫码打赏哦</p>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="wechatpay">
+              <div class="donate-payimg">
+                <img src="/images/donate/wechatpayimg.jpg" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开微信扫一扫，即可进行扫码打赏哦</p>
+            </div>
+          </div>
+          <div class="donate-footer">
+            <ul class="nav nav-tabs nav-justified" role="tablist">
+              <li role="presentation" class="active">
+                <a href="#alipay" id="alipay-tab" role="tab" data-toggle="tab" aria-controls="alipay" aria-expanded="true"><i class="icon icon-alipay"></i> 支付宝</a>
+              </li>
+              <li role="presentation" class="">
+                <a href="#wechatpay" role="tab" id="wechatpay-tab" data-toggle="tab" aria-controls="wechatpay" aria-expanded="false"><i class="icon icon-wepay"></i> 微信支付</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/vkcyan" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://juejin.cn/user/3720403077840519" target="_blank" title="Juejin" data-toggle=tooltip data-placement=top><i class="icon icon-juejin"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="https://cdn.staticfile.org/jquery/1.12.4/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+   
+
+
+
+
+
+
+</body>
+</html>

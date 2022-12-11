@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>pinia源码分析【5】- 150行代码实现mini版pinia | vkcyan Blog</title>
+  <meta name="description" content="源码解析系列文章分析pinia源码之前必须知道的API Pinia源码分析【1】- 源码分析环境搭建 Pinia源码分析【2】- createPinia pinia源码分析【3】- defineStore pinia源码分析【4】- Pinia Methods 前言 别人还在学习使用pinia，看过文章的你直接了解核心原理，无论是实际使用，还是面试都将更上一层楼~  ​	前段时间完成了对pinia">
+<meta property="og:type" content="article">
+<meta property="og:title" content="pinia源码分析【5】- 150行代码实现mini版pinia">
+<meta property="og:url" content="https://vkcyan.github.io/2022/07/29/pinia%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/pinia%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E3%80%905%E3%80%91-%20150%E8%A1%8C%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0mini%E7%89%88pinia/index.html">
+<meta property="og:site_name" content="vkcya Blog">
+<meta property="og:description" content="源码解析系列文章分析pinia源码之前必须知道的API Pinia源码分析【1】- 源码分析环境搭建 Pinia源码分析【2】- createPinia pinia源码分析【3】- defineStore pinia源码分析【4】- Pinia Methods 前言 别人还在学习使用pinia，看过文章的你直接了解核心原理，无论是实际使用，还是面试都将更上一层楼~  ​	前段时间完成了对pinia">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://www.vkcyan.top/image-20220729092737403.png">
+<meta property="og:image" content="https://www.vkcyan.top/59mhu-59cji.gif">
+<meta property="article:published_time" content="2022-07-28T16:00:00.000Z">
+<meta property="article:modified_time" content="2022-12-11T13:51:24.081Z">
+<meta property="article:author" content="vkcyan">
+<meta property="article:tag" content="Pinia">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://www.vkcyan.top/image-20220729092737403.png">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://vkcyan.github.io/2022/07/29/pinia%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/pinia%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E3%80%905%E3%80%91-%20150%E8%A1%8C%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0mini%E7%89%88pinia/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="vkcya Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+
+<body class="main-center theme-black" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/vkcyan" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">vkcyan</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Web Developer &amp; Product Manager</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> HeFei, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-books">
+          <a href="/books">
+            
+            <i class="icon icon-book-fill"></i>
+            
+            <span class="menu-title">书单</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">友链</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/vkcyan" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://juejin.cn/user/3720403077840519" target="_blank" title="Juejin" data-toggle=tooltip data-placement=top><i class="icon icon-juejin"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>往者不可谏，来者犹可追</p><br/>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript/">JavaScript</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript-2021/">JavaScript-2021</a><span class="category-list-count">10</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript-2022/">JavaScript-2022</a><span class="category-list-count">15</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Javascript-2022/">Javascript-2022</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%BA%A7%E5%93%81%E7%BB%8F%E7%90%86/">产品经理</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/">数据结构与算法</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%97%A5%E5%B8%B8/">日常</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%97%A5%E5%B8%B8%E5%BC%80%E5%8F%91/">日常开发</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%9D%82%E8%B0%88/">杂谈</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%8E%A9%E6%9C%BA%E6%8A%80%E5%B7%A7/">玩机技巧</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%A7%BB%E5%8A%A8%E7%AB%AF/">移动端</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%9A%8F%E6%83%B3%E9%9B%86/">随想集</a><span class="category-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/" rel="tag">Hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a><span class="tag-list-count">18</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NPDP/" rel="tag">NPDP</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Pinia/" rel="tag">Pinia</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue/" rel="tag">Vue</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue3/" rel="tag">Vue3</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/h5%E8%A3%85%E4%BF%AE/" rel="tag">h5装修</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vue3/" rel="tag">vue3</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vw/" rel="tag">vw</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/webpack5/" rel="tag">webpack5</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/" rel="tag">个人博客</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%A7%E5%93%81%E5%88%86%E6%9E%90/" rel="tag">产品分析</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%A7%E5%93%81%E6%97%A5%E5%B8%B8/" rel="tag">产品日常</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BB%B7%E5%80%BC%E8%A7%82/" rel="tag">价值观</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BD%8E%E4%BB%A3%E7%A0%81/" rel="tag">低代码</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%85%B3%E4%BA%8EC%E7%AB%AF/" rel="tag">关于C端</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%85%BC%E5%AE%B9%E6%80%A7/" rel="tag">兼容性</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%93%8D%E5%BA%94%E5%BC%8F/" rel="tag">响应式</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag">数据结构</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%97%A0%E9%9A%9C%E7%A2%8D/" rel="tag">无障碍</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%A7%BB%E5%8A%A8%E7%AB%AF/" rel="tag">移动端</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AB%A5%E5%B9%B4/" rel="tag">童年</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%B0%E5%BD%95/" rel="tag">记录</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%BE%93%E5%87%BA/" rel="tag">输出</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9A%8F%E6%83%B3/" rel="tag">随想</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9A%8F%E9%80%89%E6%9C%97%E8%AF%BB/" rel="tag">随选朗读</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/Hexo/" style="font-size: 13px;">Hexo</a> <a href="/tags/JavaScript/" style="font-size: 14px;">JavaScript</a> <a href="/tags/NPDP/" style="font-size: 13.75px;">NPDP</a> <a href="/tags/Pinia/" style="font-size: 13.5px;">Pinia</a> <a href="/tags/Vue/" style="font-size: 13px;">Vue</a> <a href="/tags/Vue3/" style="font-size: 13px;">Vue3</a> <a href="/tags/h5%E8%A3%85%E4%BF%AE/" style="font-size: 13px;">h5装修</a> <a href="/tags/vue3/" style="font-size: 13px;">vue3</a> <a href="/tags/vw/" style="font-size: 13px;">vw</a> <a href="/tags/webpack5/" style="font-size: 13px;">webpack5</a> <a href="/tags/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/" style="font-size: 13px;">个人博客</a> <a href="/tags/%E4%BA%A7%E5%93%81%E5%88%86%E6%9E%90/" style="font-size: 13px;">产品分析</a> <a href="/tags/%E4%BA%A7%E5%93%81%E6%97%A5%E5%B8%B8/" style="font-size: 13px;">产品日常</a> <a href="/tags/%E4%BB%B7%E5%80%BC%E8%A7%82/" style="font-size: 13px;">价值观</a> <a href="/tags/%E4%BD%8E%E4%BB%A3%E7%A0%81/" style="font-size: 13px;">低代码</a> <a href="/tags/%E5%85%B3%E4%BA%8EC%E7%AB%AF/" style="font-size: 13px;">关于C端</a> <a href="/tags/%E5%85%BC%E5%AE%B9%E6%80%A7/" style="font-size: 13px;">兼容性</a> <a href="/tags/%E5%93%8D%E5%BA%94%E5%BC%8F/" style="font-size: 13px;">响应式</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="font-size: 13.75px;">数据结构</a> <a href="/tags/%E6%97%A0%E9%9A%9C%E7%A2%8D/" style="font-size: 13px;">无障碍</a> <a href="/tags/%E7%A7%BB%E5%8A%A8%E7%AB%AF/" style="font-size: 13px;">移动端</a> <a href="/tags/%E7%AB%A5%E5%B9%B4/" style="font-size: 13px;">童年</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 13.25px;">算法</a> <a href="/tags/%E8%AE%B0%E5%BD%95/" style="font-size: 13.25px;">记录</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 13px;">设计模式</a> <a href="/tags/%E8%BE%93%E5%87%BA/" style="font-size: 13.25px;">输出</a> <a href="/tags/%E9%9A%8F%E6%83%B3/" style="font-size: 13px;">随想</a> <a href="/tags/%E9%9A%8F%E9%80%89%E6%9C%97%E8%AF%BB/" style="font-size: 13px;">随选朗读</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/12/">十二月 2022</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/09/">九月 2022</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/08/">八月 2022</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/07/">七月 2022</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/06/">六月 2022</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/05/">五月 2022</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/03/">三月 2022</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/12/">十二月 2021</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/10/">十月 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/09/">九月 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/06/">六月 2021</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/03/">三月 2021</a><span class="archive-list-count">9</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E6%97%A5%E5%B8%B8/">日常</a>
+              </p>
+              <p class="item-title">
+                <a href="/2022/12/31/%E6%97%A5%E5%B8%B8/2022%E5%B9%B4%E7%BB%88%E6%80%BB%E7%BB%93/" class="title">2022年终总结</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-12-30T16:00:00.000Z" itemprop="datePublished">2022-12-31</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E4%BA%A7%E5%93%81%E7%BB%8F%E7%90%86/">产品经理</a>
+              </p>
+              <p class="item-title">
+                <a href="/2022/09/19/NPDP%E4%BA%A7%E5%93%81%E7%BB%8F%E7%90%86/%E7%BE%8A%E4%BA%86%E4%B8%AA%E7%BE%8A%E7%88%86%E7%81%AB%EF%BC%8C%E5%88%B0%E5%BA%95%E5%8F%91%E7%94%9F%E4%BA%86%E4%BB%80%E4%B9%88%EF%BC%9F/" class="title">羊了个羊，怎么突然爆火了？</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-09-18T16:00:00.000Z" itemprop="datePublished">2022-09-19</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/Javascript-2022/">Javascript-2022</a>
+              </p>
+              <p class="item-title">
+                <a href="/2022/09/18/%E5%85%B3%E4%BA%8Evue3%E7%9A%84%E7%A0%94%E7%A9%B6/vue3%E7%9B%B8%E5%AF%B9%E4%BA%8Evue2%E5%81%9A%E4%BA%86%E4%BB%80%E4%B9%88%EF%BC%9F/" class="title">vue3相对于vue2做了什么？</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-09-17T16:00:00.000Z" itemprop="datePublished">2022-09-18</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E4%BA%A7%E5%93%81%E7%BB%8F%E7%90%86/">产品经理</a>
+              </p>
+              <p class="item-title">
+                <a href="/2022/08/15/%E5%BF%83%E7%90%86%E5%AD%A6%E4%B8%8E%E7%94%9F%E6%B4%BB/%E7%8E%B0%E4%BB%A3%E5%BF%83%E7%90%86%E5%AD%A6%E4%B8%83%E7%A7%8D%E8%A7%82%E7%82%B9/" class="title">现代心理学七种观点</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-08-14T16:00:00.000Z" itemprop="datePublished">2022-08-15</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/JavaScript-2022/">JavaScript-2022</a>
+              </p>
+              <p class="item-title">
+                <a href="/2022/07/29/pinia%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/pinia%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E3%80%905%E3%80%91-%20150%E8%A1%8C%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0mini%E7%89%88pinia/" class="title">pinia源码分析【5】- 150行代码实现mini版pinia</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-07-28T16:00:00.000Z" itemprop="datePublished">2022-07-29</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<aside
+  class="sidebar sidebar-toc collapse  in "
+  id="collapseToc"
+  itemscope
+  itemtype="http://schema.org/WPSideBar"
+>
+  <div class="slimContent">
+    <nav id="toc" class="article-toc">
+      <h3 class="toc-title">文章目录</h3>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E7%B3%BB%E5%88%97%E6%96%87%E7%AB%A0"><span class="toc-number">1.</span> <span class="toc-text">源码解析系列文章</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">2.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#mini%E7%89%88%E9%80%BB%E8%BE%91%E6%B5%81%E7%A8%8B%E5%9B%BE"><span class="toc-number">3.</span> <span class="toc-text">mini版逻辑流程图</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AE%80%E5%8D%95%E7%89%88%E5%AE%9E%E7%8E%B0"><span class="toc-number">4.</span> <span class="toc-text">简单版实现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B3%A8%E5%86%8C%E5%88%B0vue"><span class="toc-number">4.1.</span> <span class="toc-text">注册到vue</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9E%E7%8E%B0defineStore"><span class="toc-number">4.2.</span> <span class="toc-text">实现defineStore</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#defineStore"><span class="toc-number">4.3.</span> <span class="toc-text">defineStore</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#createOptionsStore"><span class="toc-number">4.4.</span> <span class="toc-text">createOptionsStore</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#createSetupStore"><span class="toc-number">4.5.</span> <span class="toc-text">createSetupStore</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A2%9E%E5%8A%A0%E4%B8%80%E4%BA%9B%E6%96%B9%E6%B3%95"><span class="toc-number">4.6.</span> <span class="toc-text">增加一些方法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#patch"><span class="toc-number">4.6.1.</span> <span class="toc-text">$patch</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#reset"><span class="toc-number">4.6.2.</span> <span class="toc-text">$reset</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#dispose"><span class="toc-number">4.6.3.</span> <span class="toc-text">$dispose</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95%E4%BD%BF%E7%94%A8"><span class="toc-number">4.7.</span> <span class="toc-text">测试使用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#mini%E7%89%88pinia%E6%B5%8B%E8%AF%95"><span class="toc-number">5.</span> <span class="toc-text">mini版pinia测试</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%93%E8%AF%AD"><span class="toc-number">6.</span> <span class="toc-text">结语</span></a></li></ol>
+    </nav>
+  </div>
+</aside>
+
+<script>
+  // 移动端不显示菜单
+  if (
+    navigator.userAgent.match(
+      /(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i
+    )
+  ) {
+    let self = document.querySelector(".sidebar-toc");
+    var parent = self.parentElement;
+    parent.removeChild(self);
+  } else {
+  }
+</script>
+
+
+
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-pinia源码解读/pinia源码分析【5】- 150行代码实现mini版pinia" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      pinia源码分析【5】- 150行代码实现mini版pinia
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2022/07/29/pinia%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/pinia%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E3%80%905%E3%80%91-%20150%E8%A1%8C%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0mini%E7%89%88pinia/" class="article-date">
+	  <time datetime="2022-07-28T16:00:00.000Z" itemprop="datePublished">2022-07-29</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/JavaScript-2022/">JavaScript-2022</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/Pinia/" rel="tag">Pinia</a>
+  </span>
+
+
+        
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/07/29/pinia%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/pinia%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E3%80%905%E3%80%91-%20150%E8%A1%8C%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0mini%E7%89%88pinia/#comments" class="article-comment-link">评论</a></span>
+        
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <h2 id="源码解析系列文章"><a href="#源码解析系列文章" class="headerlink" title="源码解析系列文章"></a>源码解析系列文章</h2><p><a target="_blank" rel="noopener" href="https://juejin.cn/post/7124279061035089927">分析pinia源码之前必须知道的API</a></p>
+<p><a target="_blank" rel="noopener" href="https://juejin.cn/post/7117131804229763079">Pinia源码分析【1】- 源码分析环境搭建</a></p>
+<p><a target="_blank" rel="noopener" href="https://juejin.cn/post/7119788423501578277">Pinia源码分析【2】- createPinia</a></p>
+<p><a target="_blank" rel="noopener" href="https://juejin.cn/post/7121661056044236831">pinia源码分析【3】- defineStore</a></p>
+<p><a target="_blank" rel="noopener" href="https://juejin.cn/post/7123504805892325406">pinia源码分析【4】- Pinia Methods</a></p>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><blockquote>
+<p>别人还在学习使用pinia，看过文章的你直接了解核心原理，无论是实际使用，还是面试都将更上一层楼~</p>
+</blockquote>
+<p>​	前段时间完成了对<code>pinia</code>核心源码的解读，因为源码存在难度，也间接到了分析文章具有较高的阅读门槛，为了解决这一问题，可以让更多人参与到pinia的源码阅读中，所以今天给大家带来一个mini版pinia的核心实现，核心代码压缩到100行左右，极大了降低了源码阅读难度。</p>
+<p>​	mini版pinia实现了<strong>state，getters，action，$patch，$reset，$dispose</strong>；居家旅行<strong>面试</strong>常备~</p>
+<p>​	同时为了降低阅读门槛，方便TypeScript不熟练的同学，本版本全部使用any，话不多说我们直接开始！</p>
+<p>​	mini版pinia开源地址：<a target="_blank" rel="noopener" href="https://github.com/vkcyan/mini-pinia">https://github.com/vkcyan/mini-pinia</a></p>
+<h2 id="mini版逻辑流程图"><a href="#mini版逻辑流程图" class="headerlink" title="mini版逻辑流程图"></a>mini版逻辑流程图</h2><p><img src="https://www.vkcyan.top/image-20220729092737403.png" alt="image-20220729092737403"></p>
+<h2 id="简单版实现"><a href="#简单版实现" class="headerlink" title="简单版实现"></a>简单版实现</h2><p>我们在代码结构上尽量与正式源码保持一致，仅仅做一些逻辑上的简化与压缩，保证核心实现的质量。</p>
+<h3 id="注册到vue"><a href="#注册到vue" class="headerlink" title="注册到vue"></a>注册到vue</h3><blockquote>
+<p>这里主要参照官方实现，如果不清楚effectScope，请看<a target="_blank" rel="noopener" href="https://juejin.cn/post/7124279061035089927">分析pinia源码之前必须知道的API</a>，如果想深入了解createPinia，请看<a target="_blank" rel="noopener" href="https://juejin.cn/post/7119788423501578277">Pinia源码分析【2】- createPinia</a></p>
+</blockquote>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 创建Pinia</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">createPinia</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="comment">// 创建响应空间</span></span><br><span class="line">  <span class="keyword">const</span> scope = <span class="title function_">effectScope</span>(<span class="literal">true</span>);</span><br><span class="line">  <span class="keyword">const</span> state = scope.<span class="property">run</span>&lt;<span class="title class_">Ref</span>&lt;<span class="title class_">Record</span>&lt;<span class="built_in">string</span>, <span class="title class_">StateTree</span>&gt;&gt;&gt;(<span class="function">() =&gt;</span></span><br><span class="line">    ref&lt;<span class="title class_">Record</span>&lt;<span class="built_in">string</span>, <span class="title class_">StateTree</span>&gt;&gt;(&#123;&#125;)</span><br><span class="line">  )!;</span><br><span class="line">  <span class="comment">// markRaw使其不具备响应式</span></span><br><span class="line">  <span class="keyword">const</span> pinia = <span class="title function_">markRaw</span>(&#123;</span><br><span class="line">    <span class="title function_">install</span>(<span class="params">app: App</span>) &#123;</span><br><span class="line">      <span class="comment">// 注入pinia</span></span><br><span class="line">      app.<span class="title function_">provide</span>(piniaSymbol, pinia);</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="title function_">use</span>(<span class="params"></span>) &#123;&#125;,</span><br><span class="line">    <span class="attr">_s</span>: <span class="keyword">new</span> <span class="title class_">Map</span>&lt;<span class="built_in">string</span>, <span class="title class_">StoreGeneric</span>&gt;(), <span class="comment">// 保存处理后的store数据全部数据</span></span><br><span class="line">    state, <span class="comment">// 保存可访问state</span></span><br><span class="line">    <span class="attr">_e</span>: scope, <span class="comment">// 相应空间</span></span><br><span class="line">  &#125;);</span><br><span class="line">  <span class="keyword">return</span> pinia;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="实现defineStore"><a href="#实现defineStore" class="headerlink" title="实现defineStore"></a>实现defineStore</h3><p>实现一个基础功能的pinia，简单来说，我们只需要做最核心的两件事</p>
+<ol>
+<li><strong>将state转为ref，使其具有响应式</strong></li>
+<li><strong>将getters处理为computed</strong></li>
+<li>如果需要实现$Action还需要对action中所有事件进行拦截处理（mini版不实现$Action）</li>
+</ol>
+<h3 id="defineStore"><a href="#defineStore" class="headerlink" title="defineStore"></a>defineStore</h3><blockquote>
+<p>defineStore中的useStore主要做一些初始化判断，如果是store第一次被使用，则需要初始化，进入createOptionsStore，非第一次直接获取_s中已被处理好的缓存。</p>
+</blockquote>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 创建store（仅支持单对象创建方式）</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> <span class="variable">options</span></span></span><br><span class="line"><span class="comment"> * <span class="doctag">@returns</span></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">defineStore</span>(<span class="params">options: &#123;</span></span><br><span class="line"><span class="params">  id: string;</span></span><br><span class="line"><span class="params">  state: any;</span></span><br><span class="line"><span class="params">  getters: any;</span></span><br><span class="line"><span class="params">  actions: any;</span></span><br><span class="line"><span class="params">&#125;</span>) &#123;</span><br><span class="line">  <span class="keyword">let</span> &#123; id &#125; = options;</span><br><span class="line">  <span class="comment">// 实际运行函数</span></span><br><span class="line">  <span class="keyword">function</span> <span class="title function_">useStore</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> currentInstance = <span class="title function_">getCurrentInstance</span>(); <span class="comment">// 获取实例</span></span><br><span class="line">    <span class="keyword">let</span> <span class="attr">pinia</span>: any;</span><br><span class="line">    <span class="keyword">if</span> (currentInstance) &#123;</span><br><span class="line">      pinia = <span class="title function_">inject</span>(piniaSymbol); <span class="comment">// 获取install阶段的pinia</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (!pinia) &#123;</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">Error</span>(<span class="string">&quot;super-mini-pinia在mian中注册了吗?&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (!pinia.<span class="property">_s</span>.<span class="title function_">has</span>(id)) &#123;</span><br><span class="line">      <span class="comment">// 第一次会不存在，单例模式</span></span><br><span class="line">      <span class="title function_">createOptionsStore</span>(id, options, pinia);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">const</span> store = pinia.<span class="property">_s</span>.<span class="title function_">get</span>(id); <span class="comment">// 获取当前store的全部数据</span></span><br><span class="line">    <span class="keyword">return</span> store;</span><br><span class="line">  &#125;</span><br><span class="line">  useStore.<span class="property">$id</span> = id;</span><br><span class="line">  <span class="keyword">return</span> useStore;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="createOptionsStore"><a href="#createOptionsStore" class="headerlink" title="createOptionsStore"></a>createOptionsStore</h3><blockquote>
+<p><strong>使用ref处理state，使用computed处理getters</strong>，但是此处尚未运行，将setup函数作为参数传值到createSetupStore。</p>
+</blockquote>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 处理state getters</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> <span class="variable">id</span></span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> <span class="variable">options</span></span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> <span class="variable">pinia</span></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">createOptionsStore</span>(<span class="params">id: string, options: any, pinia: any</span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> &#123; state, actions, getters &#125; = options;</span><br><span class="line">  <span class="keyword">function</span> <span class="title function_">setup</span>(<span class="params"></span>) &#123;</span><br><span class="line">    pinia.<span class="property">state</span>.<span class="property">value</span>[id] = state ? <span class="title function_">state</span>() : &#123;&#125;; <span class="comment">// pinia.state是Ref</span></span><br><span class="line">    <span class="keyword">const</span> localState = <span class="title function_">toRefs</span>(pinia.<span class="property">state</span>.<span class="property">value</span>[id]);</span><br><span class="line">    <span class="keyword">return</span> <span class="title class_">Object</span>.<span class="title function_">assign</span>(</span><br><span class="line">      localState, <span class="comment">// 被ref处理后的state</span></span><br><span class="line">      actions, <span class="comment">// store的action</span></span><br><span class="line">      <span class="title class_">Object</span>.<span class="title function_">keys</span>(getters || &#123;&#125;).<span class="title function_">reduce</span>(<span class="function">(<span class="params">computedGetters, name</span>) =&gt;</span> &#123;</span><br><span class="line">        computedGetters[name] = <span class="title function_">markRaw</span>(</span><br><span class="line">          <span class="title function_">computed</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">            <span class="keyword">const</span> store = pinia.<span class="property">_s</span>.<span class="title function_">get</span>(id)!;</span><br><span class="line">            <span class="keyword">return</span> getters![name].<span class="title function_">call</span>(store, store);</span><br><span class="line">          &#125;)</span><br><span class="line">        );</span><br><span class="line">        <span class="keyword">return</span> computedGetters;</span><br><span class="line">      &#125;, &#123;&#125; <span class="keyword">as</span> <span class="title class_">Record</span>&lt;string, <span class="title class_">ComputedRef</span>&gt;) <span class="comment">// 将getters处理为computed</span></span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">let</span> store = <span class="title function_">createSetupStore</span>(id, setup, pinia);</span><br><span class="line">  <span class="keyword">return</span> store;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="createSetupStore"><a href="#createSetupStore" class="headerlink" title="createSetupStore"></a>createSetupStore</h3><blockquote>
+<p>​	声明当前store的方法，并且运行上一个函数组建的setup函数，其中包含state，getters，我们将其响应式存储到pinia._e中，便于后面对数据变化进行监听，以及统一管理。</p>
+<p>​	最后将setup返回的对象与存放方法的partialStore对象进行assign，完成store的全部初始化逻辑，并将其加入_s，下次使用该store则直接取值，最后返回当前store。全部逻辑结束。</p>
+</blockquote>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 处理action以及配套API将其加入store</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> <span class="variable">$id</span></span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> <span class="variable">setup</span></span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> <span class="variable">pinia</span></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">createSetupStore</span>(<span class="params">$id: string, setup: any, pinia: any</span>) &#123;</span><br><span class="line">  <span class="comment">// 所有pinia的methods</span></span><br><span class="line">  <span class="keyword">let</span> partialStore = &#123;</span><br><span class="line">    <span class="attr">_p</span>: pinia,</span><br><span class="line">    $id,</span><br><span class="line">    <span class="attr">$reset</span>: <span class="function">() =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;reset&quot;</span>), <span class="comment">// 该版本不实现</span></span><br><span class="line">    <span class="attr">$patch</span>: <span class="function">() =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;patch&quot;</span>), <span class="comment">// 该版本不实现</span></span><br><span class="line">    <span class="attr">$onAction</span>: <span class="function">() =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;onAction&quot;</span>), <span class="comment">// 该版本不实现</span></span><br><span class="line">    <span class="attr">$subscribe</span>: <span class="function">() =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;subscribe&quot;</span>), <span class="comment">// 该版本不实现</span></span><br><span class="line">    <span class="attr">$dispose</span>: <span class="function">() =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;dispose&quot;</span>), <span class="comment">// 该版本不实现</span></span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 将effect数据存放如pinia._e、setupStore</span></span><br><span class="line">  <span class="keyword">let</span> scope!: <span class="title class_">EffectScope</span>;</span><br><span class="line">  <span class="keyword">const</span> setupStore = pinia.<span class="property">_e</span>.<span class="title function_">run</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    scope = <span class="title function_">effectScope</span>();</span><br><span class="line">    <span class="keyword">return</span> scope.<span class="title function_">run</span>(<span class="function">() =&gt;</span> <span class="title function_">setup</span>());</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 合并methods与store</span></span><br><span class="line">  <span class="keyword">const</span> <span class="attr">store</span>: any = <span class="title function_">reactive</span>(</span><br><span class="line">    <span class="title class_">Object</span>.<span class="title function_">assign</span>(<span class="title function_">toRaw</span>(&#123;&#125;), partialStore, setupStore)</span><br><span class="line">  );</span><br><span class="line">  <span class="comment">// 将其加入pinia</span></span><br><span class="line">  pinia.<span class="property">_s</span>.<span class="title function_">set</span>($id, store);</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">return</span> store;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>​	我们nimi版pinia的核心实现便完成了，真实的pinia源码中存在许多边际判断，为了方便阅读作者仅仅保留核心逻辑，剔除ts，简化分叉流程，极大的降低了了解pinia核心实现的门槛。</p>
+<h3 id="增加一些方法"><a href="#增加一些方法" class="headerlink" title="增加一些方法"></a>增加一些方法</h3><blockquote>
+<p>$Action $subscribe因为涉及到<strong>订阅发布模块</strong>，所以代码量比较大，mini版就忽略了，对其原理有兴趣的请看<a target="_blank" rel="noopener" href="https://juejin.cn/post/7123504805892325406">pinia源码分析【4】- Pinia Methods</a></p>
+</blockquote>
+<h4 id="patch"><a href="#patch" class="headerlink" title="$patch"></a>$patch</h4><blockquote>
+<p>将状态补丁应用于当前状态</p>
+</blockquote>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">$patch</span>(<span class="params">partialStateOrMutator: any</span>) &#123;</span><br><span class="line">    <span class="comment">// mini版实现仅支持传入function</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">typeof</span> partialStateOrMutator === <span class="string">&quot;function&quot;</span>) &#123;</span><br><span class="line">        <span class="title function_">partialStateOrMutator</span>(pinia.<span class="property">state</span>.<span class="property">value</span>[$id]);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="reset"><a href="#reset" class="headerlink" title="$reset"></a>$reset</h4><blockquote>
+<p>初始化state</p>
+</blockquote>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">store.<span class="property">$reset</span> = <span class="keyword">function</span> <span class="title function_">$reset</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> newState = state ? <span class="title function_">state</span>() : &#123;&#125;; <span class="comment">// 通过闭包获取最初定义的state</span></span><br><span class="line">    <span class="variable language_">this</span>.$patch(<span class="function">(<span class="params">$state: any</span>) =&gt;</span> &#123; <span class="comment">// 借用$patch完成state数据的替换</span></span><br><span class="line">        <span class="title class_">Object</span>.<span class="title function_">assign</span>($state, newState);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="dispose"><a href="#dispose" class="headerlink" title="$dispose"></a>$dispose</h4><blockquote>
+<p>停止store的所有effect，并且删除其注册信息</p>
+</blockquote>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">$dispose</span>(<span class="params"></span>) &#123;</span><br><span class="line">    scope.<span class="title function_">stop</span>(); <span class="comment">// effect作用于停止</span></span><br><span class="line">    pinia.<span class="property">_s</span>.<span class="title function_">delete</span>($id); <span class="comment">// 删除effectMap结构</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="测试使用"><a href="#测试使用" class="headerlink" title="测试使用"></a>测试使用</h3><p>我们首先将实现的函数导出出去</p>
+<p><code>src\super-mini-pinia\index.ts</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">import &#123; createPinia &#125; from &quot;./createPinia&quot;;</span><br><span class="line">import &#123; defineStore &#125; from &quot;./store&quot;;</span><br><span class="line"></span><br><span class="line">export &#123; createPinia as myCreatePinia, defineStore &#125;;</span><br></pre></td></tr></table></figure>
+
+<p>在项目中的main.ts进行注册</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; createApp &#125; <span class="keyword">from</span> <span class="string">&quot;vue&quot;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; myCreatePinia &#125; <span class="keyword">from</span> <span class="string">&quot;./super-mini-pinia/index&quot;</span>;</span><br><span class="line"><span class="keyword">import</span> <span class="title class_">App</span> <span class="keyword">from</span> <span class="string">&quot;./App-super-mini.vue&quot;</span>;</span><br><span class="line"><span class="keyword">const</span> app = <span class="title function_">createApp</span>(<span class="title class_">App</span>);</span><br><span class="line">app.<span class="title function_">use</span>(<span class="title function_">myCreatePinia</span>());</span><br><span class="line">app.<span class="title function_">mount</span>(<span class="string">&quot;#app&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>在页面增加一些测试代码</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div&gt;</span><br><span class="line">    &lt;div&gt;state.num:&#123;&#123; useStore.num &#125;&#125;&lt;/div&gt;</span><br><span class="line">    &lt;div&gt;getters.dnum:&#123;&#123; useStore.dnum &#125;&#125;&lt;/div&gt;</span><br><span class="line">    &lt;button @click=&quot;addNum&quot;&gt;增加&lt;/button&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script setup lang=&quot;ts&quot;&gt;</span><br><span class="line">import &#123; watchEffect &#125; from &quot;vue&quot;;</span><br><span class="line">import &#123; useCounterStore &#125; from &quot;./super-mini-store/counter&quot;;</span><br><span class="line"></span><br><span class="line">const useStore = useCounterStore();</span><br><span class="line"></span><br><span class="line">watchEffect(() =&gt; &#123;</span><br><span class="line">  console.log(useStore.num);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">function addNum() &#123;</span><br><span class="line">  useStore.addNum();</span><br><span class="line">&#125;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<p>预期效果</p>
+<ol>
+<li>action正常触发</li>
+<li>num与dnum随着action的触发更新UI</li>
+</ol>
+<h2 id="mini版pinia测试"><a href="#mini版pinia测试" class="headerlink" title="mini版pinia测试"></a>mini版pinia测试</h2><p><img src="https://www.vkcyan.top/59mhu-59cji.gif" alt="59mhu-59cji"></p>
+<p>​	 到此为止，我们便完成了mini版pinia的开发，代码虽少，但是核心逻辑五脏俱全，看懂了mini版pinia便是了解了pinia最核心的实现逻辑。</p>
+<p>​	 我已将mini版pinia的开源到<a target="_blank" rel="noopener" href="https://github.com/vkcyan/mini-pinia">github</a>，如果你对pinia核心实现有兴趣，欢迎fock、clone，有任何问题请评论区留言。</p>
+<h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><p>​	到此为止pinia源码解读系列便全部结束了，总体来说难度不算太大，作者前前后后花费了半个月时间，从零开始搭建环境，逐步深入阅读，读懂pinia源码的也让作者vue3 reactivity核心响应机制，闭包，订阅发布有了更深入的理解，值得阅读；也欢迎大家一起阅读源码，交流讨论~</p>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://vkcyan.github.io/2022/07/29/pinia%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/pinia%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E3%80%905%E3%80%91-%20150%E8%A1%8C%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0mini%E7%89%88pinia/" title="pinia源码分析【5】- 150行代码实现mini版pinia" target="_blank" rel="external">https://vkcyan.github.io/2022/07/29/pinia源码解读/pinia源码分析【5】- 150行代码实现mini版pinia/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/vkcyan" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/vkcyan" target="_blank"><span class="text-dark">vkcyan</span><small class="ml-1x">Web Developer &amp; Product Manager</small></a></h3>
+        <div>一切都是为了实现技术的价值</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2022/08/15/%E5%BF%83%E7%90%86%E5%AD%A6%E4%B8%8E%E7%94%9F%E6%B4%BB/%E7%8E%B0%E4%BB%A3%E5%BF%83%E7%90%86%E5%AD%A6%E4%B8%83%E7%A7%8D%E8%A7%82%E7%82%B9/" title="现代心理学七种观点"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2022/07/18/pinia%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/pinia%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E3%80%903%E3%80%91-%20defineStore/" title="pinia源码分析【3】- defineStore"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+    <li class="toggle-toc">
+      <a class="toggle-btn " data-toggle="collapse" href="#collapseToc" aria-expanded="false" title="文章目录" role="button">    <span>[&nbsp;</span><span>文章目录</span>
+        <i class="text-collapsed icon icon-anchor"></i>
+        <i class="text-in icon icon-close"></i>
+        <span>]</span>
+      </a>
+    </li>
+    
+  </ul>
+  
+  
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-fancy btn-donate pop-onhover bg-gradient-warning" data-toggle="modal" data-target="#donateModal"><span>赏</span></button>
+  <!-- <div class="wave-icon wave-icon-danger btn-donate" data-toggle="modal" data-target="#donateModal">
+    <div class="wave-circle"><span class="icon"><i class="icon icon-bill"></i></span></div>
+  </div> -->
+  
+  
+  <div class="bar-right">
+    
+  </div>
+  </div>
+</nav>
+  
+<!-- Modal -->
+<div class="modal modal-center modal-small modal-xs-full fade" id="donateModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content donate">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <div class="modal-body">
+        <div class="donate-box">
+          <div class="donate-head">
+            <p>感谢您的支持，我会继续努力的!</p>
+          </div>
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade active in" id="alipay">
+              <div class="donate-payimg">
+                <img src="/images/donate/alipayimg.jpg" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开支付宝扫一扫，即可进行扫码打赏哦</p>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="wechatpay">
+              <div class="donate-payimg">
+                <img src="/images/donate/wechatpayimg.jpg" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开微信扫一扫，即可进行扫码打赏哦</p>
+            </div>
+          </div>
+          <div class="donate-footer">
+            <ul class="nav nav-tabs nav-justified" role="tablist">
+              <li role="presentation" class="active">
+                <a href="#alipay" id="alipay-tab" role="tab" data-toggle="tab" aria-controls="alipay" aria-expanded="true"><i class="icon icon-alipay"></i> 支付宝</a>
+              </li>
+              <li role="presentation" class="">
+                <a href="#wechatpay" role="tab" id="wechatpay-tab" data-toggle="tab" aria-controls="wechatpay" aria-expanded="false"><i class="icon icon-wepay"></i> 微信支付</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/vkcyan" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://juejin.cn/user/3720403077840519" target="_blank" title="Juejin" data-toggle=tooltip data-placement=top><i class="icon icon-juejin"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="https://cdn.staticfile.org/jquery/1.12.4/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+   
+
+
+
+
+
+
+</body>
+</html>

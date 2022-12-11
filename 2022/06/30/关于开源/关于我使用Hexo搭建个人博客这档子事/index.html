@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>关于我使用Hexo搭建个人博客这档子事 | vkcyan Blog</title>
+  <meta name="description" content="前言​	在我刚工作的那年，便搭建过一次Hexo静态站点到github Pages，那时候输出不多，几乎全都是技术类文章，于是我便把学习记录、文章都放在github仓库中，也会把精品文章发布到掘金；这样的情况下，自建博客没有被维护下去。 ​	时间来到2022年，随着输出类型越来越多，自然便需要一个空间来存储所有的输出，调研了很多在线文档工具，比如语雀，飞书，Notion，都是非常不错的，不过我个人非">
+<meta property="og:type" content="article">
+<meta property="og:title" content="关于我使用Hexo搭建个人博客这档子事">
+<meta property="og:url" content="https://vkcyan.github.io/2022/06/30/%E5%85%B3%E4%BA%8E%E5%BC%80%E6%BA%90/%E5%85%B3%E4%BA%8E%E6%88%91%E4%BD%BF%E7%94%A8Hexo%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E8%BF%99%E6%A1%A3%E5%AD%90%E4%BA%8B/index.html">
+<meta property="og:site_name" content="vkcya Blog">
+<meta property="og:description" content="前言​	在我刚工作的那年，便搭建过一次Hexo静态站点到github Pages，那时候输出不多，几乎全都是技术类文章，于是我便把学习记录、文章都放在github仓库中，也会把精品文章发布到掘金；这样的情况下，自建博客没有被维护下去。 ​	时间来到2022年，随着输出类型越来越多，自然便需要一个空间来存储所有的输出，调研了很多在线文档工具，比如语雀，飞书，Notion，都是非常不错的，不过我个人非">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://www.vkcyan.top/image-20220630092811787.png">
+<meta property="og:image" content="http://www.vkcyan.top/Fr5GDqqz86brApdn8L_jCkRQETWT.png">
+<meta property="og:image" content="https://www.vkcyan.top/FnYUcxkH02d8-kUCfbjfA6wISWdw.png">
+<meta property="og:image" content="https://www.vkcyan.top/image-20220630104617165.png">
+<meta property="og:image" content="https://www.vkcyan.top/image-20220628135401927.png">
+<meta property="og:image" content="http://www.vkcyan.top/image-20220628143934942.png">
+<meta property="og:image" content="https://www.vkcyan.top/image-20220630105611019.png">
+<meta property="og:image" content="http://www.vkcyan.top/image-20220628144123522.png">
+<meta property="og:image" content="https://www.vkcyan.top/image-20220628145010327.png">
+<meta property="og:image" content="https://www.vkcyan.top/image-20220628182610145.png">
+<meta property="og:image" content="https://www.vkcyan.top/image-20220628163232358.png">
+<meta property="article:published_time" content="2022-06-29T16:00:00.000Z">
+<meta property="article:modified_time" content="2022-12-11T13:51:24.085Z">
+<meta property="article:author" content="vkcyan">
+<meta property="article:tag" content="Hexo">
+<meta property="article:tag" content="个人博客">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://www.vkcyan.top/image-20220630092811787.png">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://vkcyan.github.io/2022/06/30/%E5%85%B3%E4%BA%8E%E5%BC%80%E6%BA%90/%E5%85%B3%E4%BA%8E%E6%88%91%E4%BD%BF%E7%94%A8Hexo%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E8%BF%99%E6%A1%A3%E5%AD%90%E4%BA%8B/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="vkcya Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+
+<body class="main-center theme-black" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/vkcyan" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">vkcyan</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Web Developer &amp; Product Manager</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> HeFei, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-books">
+          <a href="/books">
+            
+            <i class="icon icon-book-fill"></i>
+            
+            <span class="menu-title">书单</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">友链</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/vkcyan" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://juejin.cn/user/3720403077840519" target="_blank" title="Juejin" data-toggle=tooltip data-placement=top><i class="icon icon-juejin"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>往者不可谏，来者犹可追</p><br/>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript/">JavaScript</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript-2021/">JavaScript-2021</a><span class="category-list-count">10</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript-2022/">JavaScript-2022</a><span class="category-list-count">15</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Javascript-2022/">Javascript-2022</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%BA%A7%E5%93%81%E7%BB%8F%E7%90%86/">产品经理</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/">数据结构与算法</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%97%A5%E5%B8%B8/">日常</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%97%A5%E5%B8%B8%E5%BC%80%E5%8F%91/">日常开发</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%9D%82%E8%B0%88/">杂谈</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%8E%A9%E6%9C%BA%E6%8A%80%E5%B7%A7/">玩机技巧</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%A7%BB%E5%8A%A8%E7%AB%AF/">移动端</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%9A%8F%E6%83%B3%E9%9B%86/">随想集</a><span class="category-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/" rel="tag">Hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a><span class="tag-list-count">18</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NPDP/" rel="tag">NPDP</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Pinia/" rel="tag">Pinia</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue/" rel="tag">Vue</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue3/" rel="tag">Vue3</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/h5%E8%A3%85%E4%BF%AE/" rel="tag">h5装修</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vue3/" rel="tag">vue3</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vw/" rel="tag">vw</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/webpack5/" rel="tag">webpack5</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/" rel="tag">个人博客</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%A7%E5%93%81%E5%88%86%E6%9E%90/" rel="tag">产品分析</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%A7%E5%93%81%E6%97%A5%E5%B8%B8/" rel="tag">产品日常</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BB%B7%E5%80%BC%E8%A7%82/" rel="tag">价值观</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BD%8E%E4%BB%A3%E7%A0%81/" rel="tag">低代码</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%85%B3%E4%BA%8EC%E7%AB%AF/" rel="tag">关于C端</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%85%BC%E5%AE%B9%E6%80%A7/" rel="tag">兼容性</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%93%8D%E5%BA%94%E5%BC%8F/" rel="tag">响应式</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag">数据结构</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%97%A0%E9%9A%9C%E7%A2%8D/" rel="tag">无障碍</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%A7%BB%E5%8A%A8%E7%AB%AF/" rel="tag">移动端</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AB%A5%E5%B9%B4/" rel="tag">童年</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%B0%E5%BD%95/" rel="tag">记录</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%BE%93%E5%87%BA/" rel="tag">输出</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9A%8F%E6%83%B3/" rel="tag">随想</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9A%8F%E9%80%89%E6%9C%97%E8%AF%BB/" rel="tag">随选朗读</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/Hexo/" style="font-size: 13px;">Hexo</a> <a href="/tags/JavaScript/" style="font-size: 14px;">JavaScript</a> <a href="/tags/NPDP/" style="font-size: 13.75px;">NPDP</a> <a href="/tags/Pinia/" style="font-size: 13.5px;">Pinia</a> <a href="/tags/Vue/" style="font-size: 13px;">Vue</a> <a href="/tags/Vue3/" style="font-size: 13px;">Vue3</a> <a href="/tags/h5%E8%A3%85%E4%BF%AE/" style="font-size: 13px;">h5装修</a> <a href="/tags/vue3/" style="font-size: 13px;">vue3</a> <a href="/tags/vw/" style="font-size: 13px;">vw</a> <a href="/tags/webpack5/" style="font-size: 13px;">webpack5</a> <a href="/tags/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/" style="font-size: 13px;">个人博客</a> <a href="/tags/%E4%BA%A7%E5%93%81%E5%88%86%E6%9E%90/" style="font-size: 13px;">产品分析</a> <a href="/tags/%E4%BA%A7%E5%93%81%E6%97%A5%E5%B8%B8/" style="font-size: 13px;">产品日常</a> <a href="/tags/%E4%BB%B7%E5%80%BC%E8%A7%82/" style="font-size: 13px;">价值观</a> <a href="/tags/%E4%BD%8E%E4%BB%A3%E7%A0%81/" style="font-size: 13px;">低代码</a> <a href="/tags/%E5%85%B3%E4%BA%8EC%E7%AB%AF/" style="font-size: 13px;">关于C端</a> <a href="/tags/%E5%85%BC%E5%AE%B9%E6%80%A7/" style="font-size: 13px;">兼容性</a> <a href="/tags/%E5%93%8D%E5%BA%94%E5%BC%8F/" style="font-size: 13px;">响应式</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="font-size: 13.75px;">数据结构</a> <a href="/tags/%E6%97%A0%E9%9A%9C%E7%A2%8D/" style="font-size: 13px;">无障碍</a> <a href="/tags/%E7%A7%BB%E5%8A%A8%E7%AB%AF/" style="font-size: 13px;">移动端</a> <a href="/tags/%E7%AB%A5%E5%B9%B4/" style="font-size: 13px;">童年</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 13.25px;">算法</a> <a href="/tags/%E8%AE%B0%E5%BD%95/" style="font-size: 13.25px;">记录</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 13px;">设计模式</a> <a href="/tags/%E8%BE%93%E5%87%BA/" style="font-size: 13.25px;">输出</a> <a href="/tags/%E9%9A%8F%E6%83%B3/" style="font-size: 13px;">随想</a> <a href="/tags/%E9%9A%8F%E9%80%89%E6%9C%97%E8%AF%BB/" style="font-size: 13px;">随选朗读</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/12/">十二月 2022</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/09/">九月 2022</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/08/">八月 2022</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/07/">七月 2022</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/06/">六月 2022</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/05/">五月 2022</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/03/">三月 2022</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/12/">十二月 2021</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/10/">十月 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/09/">九月 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/06/">六月 2021</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/03/">三月 2021</a><span class="archive-list-count">9</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E6%97%A5%E5%B8%B8/">日常</a>
+              </p>
+              <p class="item-title">
+                <a href="/2022/12/31/%E6%97%A5%E5%B8%B8/2022%E5%B9%B4%E7%BB%88%E6%80%BB%E7%BB%93/" class="title">2022年终总结</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-12-30T16:00:00.000Z" itemprop="datePublished">2022-12-31</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E4%BA%A7%E5%93%81%E7%BB%8F%E7%90%86/">产品经理</a>
+              </p>
+              <p class="item-title">
+                <a href="/2022/09/19/NPDP%E4%BA%A7%E5%93%81%E7%BB%8F%E7%90%86/%E7%BE%8A%E4%BA%86%E4%B8%AA%E7%BE%8A%E7%88%86%E7%81%AB%EF%BC%8C%E5%88%B0%E5%BA%95%E5%8F%91%E7%94%9F%E4%BA%86%E4%BB%80%E4%B9%88%EF%BC%9F/" class="title">羊了个羊，怎么突然爆火了？</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-09-18T16:00:00.000Z" itemprop="datePublished">2022-09-19</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/Javascript-2022/">Javascript-2022</a>
+              </p>
+              <p class="item-title">
+                <a href="/2022/09/18/%E5%85%B3%E4%BA%8Evue3%E7%9A%84%E7%A0%94%E7%A9%B6/vue3%E7%9B%B8%E5%AF%B9%E4%BA%8Evue2%E5%81%9A%E4%BA%86%E4%BB%80%E4%B9%88%EF%BC%9F/" class="title">vue3相对于vue2做了什么？</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-09-17T16:00:00.000Z" itemprop="datePublished">2022-09-18</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E4%BA%A7%E5%93%81%E7%BB%8F%E7%90%86/">产品经理</a>
+              </p>
+              <p class="item-title">
+                <a href="/2022/08/15/%E5%BF%83%E7%90%86%E5%AD%A6%E4%B8%8E%E7%94%9F%E6%B4%BB/%E7%8E%B0%E4%BB%A3%E5%BF%83%E7%90%86%E5%AD%A6%E4%B8%83%E7%A7%8D%E8%A7%82%E7%82%B9/" class="title">现代心理学七种观点</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-08-14T16:00:00.000Z" itemprop="datePublished">2022-08-15</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/JavaScript-2022/">JavaScript-2022</a>
+              </p>
+              <p class="item-title">
+                <a href="/2022/07/29/pinia%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/pinia%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E3%80%905%E3%80%91-%20150%E8%A1%8C%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0mini%E7%89%88pinia/" class="title">pinia源码分析【5】- 150行代码实现mini版pinia</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-07-28T16:00:00.000Z" itemprop="datePublished">2022-07-29</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<aside
+  class="sidebar sidebar-toc collapse  in "
+  id="collapseToc"
+  itemscope
+  itemtype="http://schema.org/WPSideBar"
+>
+  <div class="slimContent">
+    <nav id="toc" class="article-toc">
+      <h3 class="toc-title">文章目录</h3>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%80%82%E5%90%88%E4%BA%BA%E7%BE%A4"><span class="toc-number">2.</span> <span class="toc-text">适合人群</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Hexo%E4%BB%8B%E7%BB%8D"><span class="toc-number">3.</span> <span class="toc-text">Hexo介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#githubPages%E4%BB%8B%E7%BB%8D"><span class="toc-number">4.</span> <span class="toc-text">githubPages介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83%E8%A6%81%E6%B1%82"><span class="toc-number">5.</span> <span class="toc-text">环境要求</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%9B%E5%BB%BAgithub-Pages%E4%BB%93%E5%BA%93"><span class="toc-number">6.</span> <span class="toc-text">创建github Pages仓库</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%85%8D%E7%BD%AEhexo"><span class="toc-number">7.</span> <span class="toc-text">配置hexo</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%90%AD%E5%BB%BA%E7%8E%AF%E5%A2%83"><span class="toc-number">7.1.</span> <span class="toc-text">搭建环境</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#hexo%E6%96%87%E4%BB%B6%E8%AF%B4%E6%98%8E"><span class="toc-number">7.2.</span> <span class="toc-text">hexo文件说明</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#config-yml"><span class="toc-number">7.2.1.</span> <span class="toc-text">_config.yml</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#themes"><span class="toc-number">7.2.2.</span> <span class="toc-text">themes</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#source"><span class="toc-number">7.2.3.</span> <span class="toc-text">source</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#public"><span class="toc-number">7.2.4.</span> <span class="toc-text">public</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B0%86%E6%96%87%E7%AB%A0%E5%8F%91%E5%B8%83%E5%88%B0Hexo%E4%B8%AD"><span class="toc-number">7.3.</span> <span class="toc-text">将文章发布到Hexo中</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B0%86hexo%E5%8F%91%E5%B8%83%E5%88%B0githubPages"><span class="toc-number">8.</span> <span class="toc-text">将hexo发布到githubPages</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E4%B8%BB%E9%A2%98"><span class="toc-number">9.</span> <span class="toc-text">自定义主题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8F%92%E4%BB%B6%E5%8A%9F%E8%83%BD"><span class="toc-number">10.</span> <span class="toc-text">插件功能</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98"><span class="toc-number">11.</span> <span class="toc-text">常见问题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AB%99%E7%82%B9%E5%BE%88%E6%85%A2"><span class="toc-number">11.1.</span> <span class="toc-text">站点很慢</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%82%B9%E5%87%BB%E8%8F%9C%E5%8D%95404"><span class="toc-number">11.2.</span> <span class="toc-text">点击菜单404</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%93%E5%AD%98%E9%97%AE%E9%A2%98"><span class="toc-number">11.3.</span> <span class="toc-text">缓存问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%83%A8%E7%BD%B2%E6%8A%A5%E9%94%99"><span class="toc-number">11.4.</span> <span class="toc-text">部署报错</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B6%E4%BB%96%E9%9D%99%E6%80%81%E6%9E%84%E5%BB%BA%E5%B7%A5%E5%85%B7"><span class="toc-number">12.</span> <span class="toc-text">其他静态构建工具</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Vuepress"><span class="toc-number">12.1.</span> <span class="toc-text">Vuepress</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#jekyll"><span class="toc-number">12.2.</span> <span class="toc-text">jekyll</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Hugo"><span class="toc-number">12.3.</span> <span class="toc-text">Hugo</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%93%E8%AF%AD"><span class="toc-number">13.</span> <span class="toc-text">结语</span></a></li></ol>
+    </nav>
+  </div>
+</aside>
+
+<script>
+  // 移动端不显示菜单
+  if (
+    navigator.userAgent.match(
+      /(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i
+    )
+  ) {
+    let self = document.querySelector(".sidebar-toc");
+    var parent = self.parentElement;
+    parent.removeChild(self);
+  } else {
+  }
+</script>
+
+
+
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-关于开源/关于我使用Hexo搭建个人博客这档子事" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      关于我使用Hexo搭建个人博客这档子事
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2022/06/30/%E5%85%B3%E4%BA%8E%E5%BC%80%E6%BA%90/%E5%85%B3%E4%BA%8E%E6%88%91%E4%BD%BF%E7%94%A8Hexo%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E8%BF%99%E6%A1%A3%E5%AD%90%E4%BA%8B/" class="article-date">
+	  <time datetime="2022-06-29T16:00:00.000Z" itemprop="datePublished">2022-06-30</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/JavaScript-2022/">JavaScript-2022</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/Hexo/" rel="tag">Hexo</a>, <a class="article-tag-link-link" href="/tags/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/" rel="tag">个人博客</a>
+  </span>
+
+
+        
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/06/30/%E5%85%B3%E4%BA%8E%E5%BC%80%E6%BA%90/%E5%85%B3%E4%BA%8E%E6%88%91%E4%BD%BF%E7%94%A8Hexo%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E8%BF%99%E6%A1%A3%E5%AD%90%E4%BA%8B/#comments" class="article-comment-link">评论</a></span>
+        
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>​	在我刚工作的那年，便搭建过一次Hexo静态站点到github Pages，那时候输出不多，几乎全都是技术类文章，于是我便把学习记录、文章都放在github仓库中，也会把精品文章发布到掘金；这样的情况下，自建博客没有被维护下去。</p>
+<p>​	时间来到2022年，随着输出类型越来越多，自然便需要一个空间来存储所有的输出，调研了很多在线文档工具，比如语雀，飞书，Notion，都是非常不错的，不过我个人非常喜欢用Typora，也不太习惯其他文档工具，同时作者也是比较喜欢自由的人，思来想去还是自建博客吧，这便是再次搭建github Pages的原因。</p>
+<p>​	博客搭建过程也花费了一些时间，遇到了若干小问题，希望后来人不要踩前人已经踩过的坑，这也是这篇文章的由来，希望借此可以帮到大家。</p>
+<p>​	接下来就让我们正式开始吧。</p>
+<h2 id="适合人群"><a href="#适合人群" class="headerlink" title="适合人群"></a>适合人群</h2><ul>
+<li>爱折腾、爱自由的开发者</li>
+<li>需要一个美观的空间来存储各类文章的开发者</li>
+<li>通过个人博客让面试加分的开发者</li>
+</ul>
+<h2 id="Hexo介绍"><a href="#Hexo介绍" class="headerlink" title="Hexo介绍"></a>Hexo介绍</h2><p>​	<a href="https://link.zhihu.com/?target=https://hexo.io/zh-cn/">Hexo</a>是一个快速、简洁且高效的博客框架。Hexo 使用 <a href="https://link.zhihu.com/?target=http://daringfireball.net/projects/markdown/">Markdown</a>（或其他渲染引擎）解析文章，在几秒内，即可利用靓丽的主题生成静态网页。即把用户的markdown文件，按照指定的主题解析成静态网页。</p>
+<h2 id="githubPages介绍"><a href="#githubPages介绍" class="headerlink" title="githubPages介绍"></a>githubPages介绍</h2><p>​	GitHub Pages 是一种静态站点托管服务，它直接从 GitHub 上的存储库获取 HTML、CSS 和 JavaScript 文件，可选择通过构建过程运行文件，然后发布网站。您可以在<a target="_blank" rel="noopener" href="https://github.com/collections/github-pages-examples">GitHub Pages 示例集合</a>中查看 GitHub Pages 站点示例。</p>
+<p>​	通过上面的介绍我们便可以得到一个结论：<strong>githubPages + Hexo &#x3D; 个人博客</strong>，下面让我们正式开始搭建个人博客吧！</p>
+<h2 id="环境要求"><a href="#环境要求" class="headerlink" title="环境要求"></a>环境要求</h2><ul>
+<li>nodejs环境</li>
+<li>安装git并</li>
+<li>注册github账号，并已经将当前电脑的ssh秘钥添加到了Github（相当于告诉github，这台电脑有权操作你的github数据）</li>
+</ul>
+<h2 id="创建github-Pages仓库"><a href="#创建github-Pages仓库" class="headerlink" title="创建github Pages仓库"></a>创建github Pages仓库</h2><p><img src="https://www.vkcyan.top/image-20220630092811787.png" alt="image-20220630092811787"></p>
+<p>最后点击下方的<code> Create repository </code>，完成创建即可。</p>
+<h2 id="配置hexo"><a href="#配置hexo" class="headerlink" title="配置hexo"></a>配置hexo</h2><h3 id="搭建环境"><a href="#搭建环境" class="headerlink" title="搭建环境"></a>搭建环境</h3><p>首先全局安装hexo</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -g hexo-cli</span><br></pre></td></tr></table></figure>
+
+<p>然后创建存放站点资源的文件夹，在你认为合适的目录下执行</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hexo init 文件夹名称 // 建议username.github.io</span><br><span class="line"><span class="built_in">cd</span> username.github.io // 刚才创建的文件夹</span><br><span class="line">npm install</span><br></pre></td></tr></table></figure>
+
+<p>install完成后，在该文件夹下执行</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo s // hexo server的缩写</span><br></pre></td></tr></table></figure>
+
+<p>正常情况下会看到以下信息</p>
+<p><img src="http://www.vkcyan.top/Fr5GDqqz86brApdn8L_jCkRQETWT.png"></p>
+<p>然后我们访问<code>http://localhost:4000/</code>,便可以看到hexo生成的站点</p>
+<p><img src="https://www.vkcyan.top/FnYUcxkH02d8-kUCfbjfA6wISWdw.png"></p>
+<p>能到这一步就算搭建成功了，接下来我们需要认识hexo生成文件中的配置，来个性化定制我们的个人站点</p>
+<h3 id="hexo文件说明"><a href="#hexo文件说明" class="headerlink" title="hexo文件说明"></a>hexo文件说明</h3><h4 id="config-yml"><a href="#config-yml" class="headerlink" title="_config.yml"></a>_config.yml</h4><blockquote>
+<p>一定要仔细看每一项配置哦，比如语言，博客简介，等等</p>
+</blockquote>
+<p>非常重要的文件，配置网站的基本信息信息，比如名称 描述 分页 主题等信息。具体含义看这里 <a target="_blank" rel="noopener" href="https://hexo.io/zh-cn/docs/configuration">配置参数</a></p>
+<h4 id="themes"><a href="#themes" class="headerlink" title="themes"></a>themes</h4><p>​	第三方网站主题存放目录，后面我们会用到</p>
+<h4 id="source"><a href="#source" class="headerlink" title="source"></a>source</h4><p>​	该文件夹是存放站点文章的地方，_post目录为文章存放处，除 <code>_posts</code> 文件夹之外，开头命名为 <code>_</code> (下划线)的文件 &#x2F; 文件夹和隐藏的文件将会被忽略。</p>
+<h4 id="public"><a href="#public" class="headerlink" title="public"></a>public</h4><p>​	所有打包生产的文件都会被输出到public中，其中<code>MD</code> <code>html</code>文件将会被解析再存放在其中，其他文件会被拷贝进去。</p>
+<h3 id="将文章发布到Hexo中"><a href="#将文章发布到Hexo中" class="headerlink" title="将文章发布到Hexo中"></a>将文章发布到Hexo中</h3><blockquote>
+<p>可以将搬运到hexo，但是需要修改&#x2F;增加文章头部的配置信息，让hexo得以自动化归类</p>
+</blockquote>
+<p>我们在<code>_post</code>中增加一个<code>md</code>文件，然后文章开头处写入以下信息，使用过<code>wordPress</code>的同学应该很熟悉，这是对当前文章的属性描述，具体配置可以看<a target="_blank" rel="noopener" href="https://hexo.io/zh-cn/docs/front-matter">官方配置</a>，之后便是填入文章内容，还记得我们通过<code>hexo s</code>启动的本地服务器吗，文章编写完成后，让我们去看看是是否存在变化。</p>
+<p><img src="https://www.vkcyan.top/image-20220630104617165.png" alt="image-20220630104617165"></p>
+<p>不出意外的话应该可以看到我们刚才写的文章出现在网页中了,如果这里未显示可以尝试重启服务</p>
+<p>在文章头部编写的<strong>categories</strong>，<strong>tags</strong>字段，hexo会按照关键字自动生成索引。</p>
+<p><img src="https://www.vkcyan.top/image-20220628135401927.png" alt="image-20220628135401927"></p>
+<p>下一步我们便要将其发布到github Pages中，让所有人都可以访问到。</p>
+<h2 id="将hexo发布到githubPages"><a href="#将hexo发布到githubPages" class="headerlink" title="将hexo发布到githubPages"></a>将hexo发布到githubPages</h2><p>​	我们之前已经处理过了git本地环境与仓库，hexo的部署十分简单</p>
+<ol>
+<li>安装快速部署脚本</li>
+</ol>
+<p>该脚本会在你的目录下生成<code>.deploy_git/</code>执行更新命令的时候就会将该文件夹下的所有文件上传到指定的仓库中。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-deployer-git --save</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>填写相关配置</li>
+</ol>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">deploy:</span></span><br><span class="line">  <span class="attr">type:</span> <span class="string">git</span></span><br><span class="line">  <span class="attr">repo:</span> <span class="string">https://github.com/username/username.github.io</span> <span class="string">//</span> <span class="string">替换这里的username</span></span><br><span class="line">  <span class="attr">branch:</span> <span class="string">master</span> <span class="string">//</span> <span class="string">填写部署的GitHub分支，默认为gh-pages</span></span><br><span class="line">  <span class="attr">message:</span> <span class="string">&#x27;&#x27;</span> <span class="string">//</span> <span class="string">提交信息，存在默认值，可以不填写</span></span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>部署到仓库</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hexo clean // 清除缓存文件 db.json与public/ (建议每次部署之前清除缓存)</span><br><span class="line">hexo d //  deploy的缩写，读取yml中deploy的配置并部署</span><br></pre></td></tr></table></figure>
+
+<p><img src="http://www.vkcyan.top/image-20220628143934942.png"></p>
+<p>看到以上日志则说明部署成功</p>
+<p>接下来我们前往仓库，就会发现仓库master分支中已经存在代码，再设置一下github Pages的分支，让博客资源文件可以被正常读取。</p>
+<p><img src="https://www.vkcyan.top/image-20220630105611019.png" alt="image-20220630105611019"></p>
+<p>最后点击<code>Action</code>查看部署任务是否正常完成，正常情况下<code>Action</code>会在60s左右完成，部署完成后我们便可以访问线上站点了，<a target="_blank" rel="noopener" href="https://username.github.io/">https://username.github.io/</a></p>
+<p><img src="http://www.vkcyan.top/image-20220628144123522.png"></p>
+<p><img src="https://www.vkcyan.top/image-20220628145010327.png" alt="image-20220628145010327"></p>
+<p>只要可以看到我们的文章，便是部署成功了~（可能访问速度还有些慢，我们后面再优化）</p>
+<p>这里肯定有好奇的小伙伴要问了，为什么你的样子和我部署的不一样？</p>
+<p>这就是下面要说的，自定义主题。</p>
+<h2 id="自定义主题"><a href="#自定义主题" class="headerlink" title="自定义主题"></a>自定义主题</h2><p>​	一个风格优美的博客可以为读者带来更好的体验，也是作者个性的一种表达，这也是自建博客的优势所在， hexo中存在大量官方提供 + 个人维护的<a target="_blank" rel="noopener" href="https://hexo.io/themes/">Themes</a></p>
+<p><img src="https://www.vkcyan.top/image-20220628182610145.png" alt="image-20220628182610145"></p>
+<p>​	如果出现Hexo官网的Themes无法正常访问，可以在github中搜索<a target="_blank" rel="noopener" href="https://github.com/search?q=hexo-theme">hexo-theme</a>，同样可以看到受欢迎的hexo主题，每个主题都会有使用文档，只需要仔细阅读文档并进行配置即可使用主题，感谢开源大佬们，别忘记给他们一个Star。</p>
+<p>​	主题文件都存在在项目的<strong>themes</strong>文件夹中，并且需要将根目录的<code>_config.yml</code>的<strong>themes</strong>字段改为主题名称。</p>
+<h2 id="插件功能"><a href="#插件功能" class="headerlink" title="插件功能"></a>插件功能</h2><p>​	自建博客的虽然不存在后端服务，但是借助第三方服务依旧可以实现交互能力，例如评论系统，统计系统，等等非常有趣的插件，常见的插件第三方主题的README中都会有相关介绍，本文就不做过多赘述了，建议大家看专门介绍相关内容的文章。</p>
+<h2 id="常见问题"><a href="#常见问题" class="headerlink" title="常见问题"></a>常见问题</h2><h3 id="站点很慢"><a href="#站点很慢" class="headerlink" title="站点很慢"></a>站点很慢</h3><p>​	github Pages访问很慢，绝大部分原因都是因为JS脚本加载阻塞问题，在不加任何异步属性的情况下，script的下载和执行都会阻塞dom的渲染。</p>
+<p>​	例如项目依赖了jQuery，但是其CDN因为某些原因加载缓慢甚至超时失败，都会导致页面的长时间白屏，这会非常影响访问者的用户体验，以及作者的创作热情。</p>
+<p>​	如果出现此类情况，我们就打开<strong>Chrome devTool</strong>查看<strong>NetWork</strong>中<strong>加载缓慢</strong>的脚本文件，然后复制其名称，在hexo源码中找到，再百度搜索国内的高速CDN替换掉即可。（注意不要修改打包后代码）</p>
+<h3 id="点击菜单404"><a href="#点击菜单404" class="headerlink" title="点击菜单404"></a>点击菜单404</h3><p>​	有些第三方主题自带的一些菜单点击可能会出现白屏的情况，这是因为没有建立标签页</p>
+<p><img src="https://www.vkcyan.top/image-20220628163232358.png" alt="image-20220628163232358"></p>
+<p>执行以下命令建立不存在的页面即可，新建的md具体内容还是需要参考使用的主题文档</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo new page books // </span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="缓存问题"><a href="#缓存问题" class="headerlink" title="缓存问题"></a>缓存问题</h3><p>​	修改了一篇文章，但是打包到github Pages依旧没有被删除，类似这样的缓存问题怎么办？</p>
+<p>​	我们只需要在每次push到github之前清除hexo生成的缓存文件即可</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo clean</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="部署报错"><a href="#部署报错" class="headerlink" title="部署报错"></a>部署报错</h3><p>执行<code>hexo d</code>，得到错误：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">fatal: unable to access <span class="string">&#x27;https://github.com/username/username.github.io/&#x27;</span>: OpenSSL SSL_read: Connection was reset, errno 10054</span><br><span class="line">FATAL &#123;</span><br><span class="line">  err: Error: Spawn failed</span><br><span class="line">      at ChildProcess.&lt;anonymous&gt; (xxx\username.github.io\node_modules\hexo-util\lib\spawn.js:51:21)</span><br><span class="line">      at ChildProcess.emit (node:events:390:28)</span><br><span class="line">      at ChildProcess.cp.emit (xxx\username.github.io\node_modules\cross-spawn\lib\enoent.js:34:29)</span><br><span class="line">      at Process.ChildProcess._handle.onexit (node:internal/child_process:290:12) &#123;</span><br><span class="line">    code: 128</span><br><span class="line">  &#125;</span><br><span class="line">&#125; Something<span class="string">&#x27;s wrong. Maybe you can find the solution here: %s https://hexo.io/docs/troubleshooting.html</span></span><br></pre></td></tr></table></figure>
+
+<p>​	网络问题，重试即可。</p>
+<h2 id="其他静态构建工具"><a href="#其他静态构建工具" class="headerlink" title="其他静态构建工具"></a>其他静态构建工具</h2><h3 id="Vuepress"><a href="#Vuepress" class="headerlink" title="Vuepress"></a>Vuepress</h3><p>​		Vue出品的静态站点生成工具，用来写文档非常不错，但是如果你对个性化要求较高，可能他不是很适合你。</p>
+<h3 id="jekyll"><a href="#jekyll" class="headerlink" title="jekyll"></a>jekyll</h3><p>​	非常老牌的静态网站生成工具，使用Ruby语言进行开发，这就意味着使用jekyll需要安装Ruby环境，据说构建速度相对较慢，相对于Hexo未发现明显优势，喜欢的小伙伴可以试用一下。</p>
+<h3 id="Hugo"><a href="#Hugo" class="headerlink" title="Hugo"></a>Hugo</h3><p>​	基于Go语言开发的静态网站构建工具，不过它并不需要Go环境，对于非前端开发者还是不错的选择，他号称是最快的构建框架；在搭建完hexo后才看到hugo，感觉有点意思，喜欢折腾的朋友可以试用一下，目前拥有59.8k的Star，是静态构建工具中最受欢迎的项目。</p>
+<h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><p>​	搭建好github Pages并不是一件很困难的事情，但是保持输出习惯却是一件有难度的事情，通过这篇文章成功搭建起了个人博客，非常恭喜，你完成了万里长征非常重要的第一步，希望你可以坚持输出，从小的知识点开始做起，保持对可输出点的敏感嗅觉，并将其输出，逐渐搭建起自己的知识库，这对知识积累，将来跳槽也有很大的帮助。</p>
+<p>​	如果一个正在被使用的技术方案当事人却无法教会别人，这便不算完全掌握，浅尝辄止是技术岗位的大忌。在输出的过程中，也是重新梳理的过程，在过程中会发现一些开发中未注意到潜在问题，逻辑漏洞，而为了完成输出，便会自我驱动解决遇到的问题；</p>
+<p>​	用输入驱动输出，用输出倒逼输入，将复杂的知识通过简单平实的话说出来，并教会别人，才是完全掌握，这也是输出的意义，这也是个人博客的意义。</p>
+<p>​	</p>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://vkcyan.github.io/2022/06/30/%E5%85%B3%E4%BA%8E%E5%BC%80%E6%BA%90/%E5%85%B3%E4%BA%8E%E6%88%91%E4%BD%BF%E7%94%A8Hexo%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E8%BF%99%E6%A1%A3%E5%AD%90%E4%BA%8B/" title="关于我使用Hexo搭建个人博客这档子事" target="_blank" rel="external">https://vkcyan.github.io/2022/06/30/关于开源/关于我使用Hexo搭建个人博客这档子事/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/vkcyan" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/vkcyan" target="_blank"><span class="text-dark">vkcyan</span><small class="ml-1x">Web Developer &amp; Product Manager</small></a></h3>
+        <div>一切都是为了实现技术的价值</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2022/07/05/pinia%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/%E5%88%86%E6%9E%90pinia%E6%BA%90%E7%A0%81%E4%B9%8B%E5%89%8D%E5%BF%85%E9%A1%BB%E7%9F%A5%E9%81%93%E7%9A%84API/" title="分析pinia源码之前必须知道的API"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2022/06/28/%E9%9A%8F%E6%83%B3/%E5%85%B3%E4%BA%8E%E6%B6%88%E8%B4%B9%E9%99%8D%E7%BA%A7/" title="关于消费降级"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+    <li class="toggle-toc">
+      <a class="toggle-btn " data-toggle="collapse" href="#collapseToc" aria-expanded="false" title="文章目录" role="button">    <span>[&nbsp;</span><span>文章目录</span>
+        <i class="text-collapsed icon icon-anchor"></i>
+        <i class="text-in icon icon-close"></i>
+        <span>]</span>
+      </a>
+    </li>
+    
+  </ul>
+  
+  
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-fancy btn-donate pop-onhover bg-gradient-warning" data-toggle="modal" data-target="#donateModal"><span>赏</span></button>
+  <!-- <div class="wave-icon wave-icon-danger btn-donate" data-toggle="modal" data-target="#donateModal">
+    <div class="wave-circle"><span class="icon"><i class="icon icon-bill"></i></span></div>
+  </div> -->
+  
+  
+  <div class="bar-right">
+    
+  </div>
+  </div>
+</nav>
+  
+<!-- Modal -->
+<div class="modal modal-center modal-small modal-xs-full fade" id="donateModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content donate">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <div class="modal-body">
+        <div class="donate-box">
+          <div class="donate-head">
+            <p>感谢您的支持，我会继续努力的!</p>
+          </div>
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade active in" id="alipay">
+              <div class="donate-payimg">
+                <img src="/images/donate/alipayimg.jpg" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开支付宝扫一扫，即可进行扫码打赏哦</p>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="wechatpay">
+              <div class="donate-payimg">
+                <img src="/images/donate/wechatpayimg.jpg" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开微信扫一扫，即可进行扫码打赏哦</p>
+            </div>
+          </div>
+          <div class="donate-footer">
+            <ul class="nav nav-tabs nav-justified" role="tablist">
+              <li role="presentation" class="active">
+                <a href="#alipay" id="alipay-tab" role="tab" data-toggle="tab" aria-controls="alipay" aria-expanded="true"><i class="icon icon-alipay"></i> 支付宝</a>
+              </li>
+              <li role="presentation" class="">
+                <a href="#wechatpay" role="tab" id="wechatpay-tab" data-toggle="tab" aria-controls="wechatpay" aria-expanded="false"><i class="icon icon-wepay"></i> 微信支付</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/vkcyan" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://juejin.cn/user/3720403077840519" target="_blank" title="Juejin" data-toggle=tooltip data-placement=top><i class="icon icon-juejin"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="https://cdn.staticfile.org/jquery/1.12.4/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+   
+
+
+
+
+
+
+</body>
+</html>

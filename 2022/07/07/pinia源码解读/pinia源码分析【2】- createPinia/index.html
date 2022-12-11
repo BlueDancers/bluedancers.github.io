@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>Pinia源码分析【2】- createPinia | vkcyan Blog</title>
+  <meta name="description" content="专栏导航分析pinia源码之前必须知道的API Pinia源码分析【1】- 源码分析环境搭建 Pinia源码分析【2】- createPinia pinia源码分析【3】- defineStore pinia源码分析【4】- Pinia Methods 前言参考源码pinia V2.0.14 源码分析仓库：https:&#x2F;&#x2F;github.com&#x2F;vkcyan&#x2F;goto-pinia 上一篇文章我们主要">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Pinia源码分析【2】- createPinia">
+<meta property="og:url" content="https://vkcyan.github.io/2022/07/07/pinia%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/pinia%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E3%80%902%E3%80%91-%20createPinia/index.html">
+<meta property="og:site_name" content="vkcya Blog">
+<meta property="og:description" content="专栏导航分析pinia源码之前必须知道的API Pinia源码分析【1】- 源码分析环境搭建 Pinia源码分析【2】- createPinia pinia源码分析【3】- defineStore pinia源码分析【4】- Pinia Methods 前言参考源码pinia V2.0.14 源码分析仓库：https:&#x2F;&#x2F;github.com&#x2F;vkcyan&#x2F;goto-pinia 上一篇文章我们主要">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://www.vkcyan.top/image-20220713153012540.png">
+<meta property="og:image" content="https://www.vkcyan.top/image-20220713170645056.png">
+<meta property="article:published_time" content="2022-07-06T16:00:00.000Z">
+<meta property="article:modified_time" content="2022-12-11T13:51:24.080Z">
+<meta property="article:author" content="vkcyan">
+<meta property="article:tag" content="Pinia">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://www.vkcyan.top/image-20220713153012540.png">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://vkcyan.github.io/2022/07/07/pinia%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/pinia%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E3%80%902%E3%80%91-%20createPinia/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="vkcya Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+
+<body class="main-center theme-black" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/vkcyan" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">vkcyan</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Web Developer &amp; Product Manager</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> HeFei, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-books">
+          <a href="/books">
+            
+            <i class="icon icon-book-fill"></i>
+            
+            <span class="menu-title">书单</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">友链</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/vkcyan" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://juejin.cn/user/3720403077840519" target="_blank" title="Juejin" data-toggle=tooltip data-placement=top><i class="icon icon-juejin"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>往者不可谏，来者犹可追</p><br/>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript/">JavaScript</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript-2021/">JavaScript-2021</a><span class="category-list-count">10</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript-2022/">JavaScript-2022</a><span class="category-list-count">15</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Javascript-2022/">Javascript-2022</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%BA%A7%E5%93%81%E7%BB%8F%E7%90%86/">产品经理</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/">数据结构与算法</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%97%A5%E5%B8%B8/">日常</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%97%A5%E5%B8%B8%E5%BC%80%E5%8F%91/">日常开发</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%9D%82%E8%B0%88/">杂谈</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%8E%A9%E6%9C%BA%E6%8A%80%E5%B7%A7/">玩机技巧</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%A7%BB%E5%8A%A8%E7%AB%AF/">移动端</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%9A%8F%E6%83%B3%E9%9B%86/">随想集</a><span class="category-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/" rel="tag">Hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a><span class="tag-list-count">18</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NPDP/" rel="tag">NPDP</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Pinia/" rel="tag">Pinia</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue/" rel="tag">Vue</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue3/" rel="tag">Vue3</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/h5%E8%A3%85%E4%BF%AE/" rel="tag">h5装修</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vue3/" rel="tag">vue3</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vw/" rel="tag">vw</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/webpack5/" rel="tag">webpack5</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/" rel="tag">个人博客</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%A7%E5%93%81%E5%88%86%E6%9E%90/" rel="tag">产品分析</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%A7%E5%93%81%E6%97%A5%E5%B8%B8/" rel="tag">产品日常</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BB%B7%E5%80%BC%E8%A7%82/" rel="tag">价值观</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BD%8E%E4%BB%A3%E7%A0%81/" rel="tag">低代码</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%85%B3%E4%BA%8EC%E7%AB%AF/" rel="tag">关于C端</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%85%BC%E5%AE%B9%E6%80%A7/" rel="tag">兼容性</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%93%8D%E5%BA%94%E5%BC%8F/" rel="tag">响应式</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag">数据结构</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%97%A0%E9%9A%9C%E7%A2%8D/" rel="tag">无障碍</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%A7%BB%E5%8A%A8%E7%AB%AF/" rel="tag">移动端</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AB%A5%E5%B9%B4/" rel="tag">童年</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%B0%E5%BD%95/" rel="tag">记录</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%BE%93%E5%87%BA/" rel="tag">输出</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9A%8F%E6%83%B3/" rel="tag">随想</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9A%8F%E9%80%89%E6%9C%97%E8%AF%BB/" rel="tag">随选朗读</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/Hexo/" style="font-size: 13px;">Hexo</a> <a href="/tags/JavaScript/" style="font-size: 14px;">JavaScript</a> <a href="/tags/NPDP/" style="font-size: 13.75px;">NPDP</a> <a href="/tags/Pinia/" style="font-size: 13.5px;">Pinia</a> <a href="/tags/Vue/" style="font-size: 13px;">Vue</a> <a href="/tags/Vue3/" style="font-size: 13px;">Vue3</a> <a href="/tags/h5%E8%A3%85%E4%BF%AE/" style="font-size: 13px;">h5装修</a> <a href="/tags/vue3/" style="font-size: 13px;">vue3</a> <a href="/tags/vw/" style="font-size: 13px;">vw</a> <a href="/tags/webpack5/" style="font-size: 13px;">webpack5</a> <a href="/tags/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/" style="font-size: 13px;">个人博客</a> <a href="/tags/%E4%BA%A7%E5%93%81%E5%88%86%E6%9E%90/" style="font-size: 13px;">产品分析</a> <a href="/tags/%E4%BA%A7%E5%93%81%E6%97%A5%E5%B8%B8/" style="font-size: 13px;">产品日常</a> <a href="/tags/%E4%BB%B7%E5%80%BC%E8%A7%82/" style="font-size: 13px;">价值观</a> <a href="/tags/%E4%BD%8E%E4%BB%A3%E7%A0%81/" style="font-size: 13px;">低代码</a> <a href="/tags/%E5%85%B3%E4%BA%8EC%E7%AB%AF/" style="font-size: 13px;">关于C端</a> <a href="/tags/%E5%85%BC%E5%AE%B9%E6%80%A7/" style="font-size: 13px;">兼容性</a> <a href="/tags/%E5%93%8D%E5%BA%94%E5%BC%8F/" style="font-size: 13px;">响应式</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="font-size: 13.75px;">数据结构</a> <a href="/tags/%E6%97%A0%E9%9A%9C%E7%A2%8D/" style="font-size: 13px;">无障碍</a> <a href="/tags/%E7%A7%BB%E5%8A%A8%E7%AB%AF/" style="font-size: 13px;">移动端</a> <a href="/tags/%E7%AB%A5%E5%B9%B4/" style="font-size: 13px;">童年</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 13.25px;">算法</a> <a href="/tags/%E8%AE%B0%E5%BD%95/" style="font-size: 13.25px;">记录</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 13px;">设计模式</a> <a href="/tags/%E8%BE%93%E5%87%BA/" style="font-size: 13.25px;">输出</a> <a href="/tags/%E9%9A%8F%E6%83%B3/" style="font-size: 13px;">随想</a> <a href="/tags/%E9%9A%8F%E9%80%89%E6%9C%97%E8%AF%BB/" style="font-size: 13px;">随选朗读</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/12/">十二月 2022</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/09/">九月 2022</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/08/">八月 2022</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/07/">七月 2022</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/06/">六月 2022</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/05/">五月 2022</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/03/">三月 2022</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/12/">十二月 2021</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/10/">十月 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/09/">九月 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/06/">六月 2021</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/03/">三月 2021</a><span class="archive-list-count">9</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E6%97%A5%E5%B8%B8/">日常</a>
+              </p>
+              <p class="item-title">
+                <a href="/2022/12/31/%E6%97%A5%E5%B8%B8/2022%E5%B9%B4%E7%BB%88%E6%80%BB%E7%BB%93/" class="title">2022年终总结</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-12-30T16:00:00.000Z" itemprop="datePublished">2022-12-31</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E4%BA%A7%E5%93%81%E7%BB%8F%E7%90%86/">产品经理</a>
+              </p>
+              <p class="item-title">
+                <a href="/2022/09/19/NPDP%E4%BA%A7%E5%93%81%E7%BB%8F%E7%90%86/%E7%BE%8A%E4%BA%86%E4%B8%AA%E7%BE%8A%E7%88%86%E7%81%AB%EF%BC%8C%E5%88%B0%E5%BA%95%E5%8F%91%E7%94%9F%E4%BA%86%E4%BB%80%E4%B9%88%EF%BC%9F/" class="title">羊了个羊，怎么突然爆火了？</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-09-18T16:00:00.000Z" itemprop="datePublished">2022-09-19</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/Javascript-2022/">Javascript-2022</a>
+              </p>
+              <p class="item-title">
+                <a href="/2022/09/18/%E5%85%B3%E4%BA%8Evue3%E7%9A%84%E7%A0%94%E7%A9%B6/vue3%E7%9B%B8%E5%AF%B9%E4%BA%8Evue2%E5%81%9A%E4%BA%86%E4%BB%80%E4%B9%88%EF%BC%9F/" class="title">vue3相对于vue2做了什么？</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-09-17T16:00:00.000Z" itemprop="datePublished">2022-09-18</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E4%BA%A7%E5%93%81%E7%BB%8F%E7%90%86/">产品经理</a>
+              </p>
+              <p class="item-title">
+                <a href="/2022/08/15/%E5%BF%83%E7%90%86%E5%AD%A6%E4%B8%8E%E7%94%9F%E6%B4%BB/%E7%8E%B0%E4%BB%A3%E5%BF%83%E7%90%86%E5%AD%A6%E4%B8%83%E7%A7%8D%E8%A7%82%E7%82%B9/" class="title">现代心理学七种观点</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-08-14T16:00:00.000Z" itemprop="datePublished">2022-08-15</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/JavaScript-2022/">JavaScript-2022</a>
+              </p>
+              <p class="item-title">
+                <a href="/2022/07/29/pinia%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/pinia%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E3%80%905%E3%80%91-%20150%E8%A1%8C%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0mini%E7%89%88pinia/" class="title">pinia源码分析【5】- 150行代码实现mini版pinia</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-07-28T16:00:00.000Z" itemprop="datePublished">2022-07-29</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<aside
+  class="sidebar sidebar-toc collapse  in "
+  id="collapseToc"
+  itemscope
+  itemtype="http://schema.org/WPSideBar"
+>
+  <div class="slimContent">
+    <nav id="toc" class="article-toc">
+      <h3 class="toc-title">文章目录</h3>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%93%E6%A0%8F%E5%AF%BC%E8%88%AA"><span class="toc-number">1.</span> <span class="toc-text">专栏导航</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">2.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%AD%A3%E6%96%87"><span class="toc-number">3.</span> <span class="toc-text">正文</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%BA%90%E7%A0%81%E5%9C%B0%E5%9D%80"><span class="toc-number">3.1.</span> <span class="toc-text">源码地址</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#createPinia%E5%87%BD%E6%95%B0"><span class="toc-number">3.2.</span> <span class="toc-text">createPinia函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%94%E5%9B%9E%E5%80%BC%E7%9A%84%E5%90%AB%E4%B9%89%E4%BB%A5%E5%8F%8A%E4%BD%9C%E7%94%A8"><span class="toc-number">3.3.</span> <span class="toc-text">返回值的含义以及作用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E4%BA%8EVue2"><span class="toc-number">4.</span> <span class="toc-text">关于Vue2</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E4%BA%8EdevTool"><span class="toc-number">5.</span> <span class="toc-text">关于devTool</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%93%E8%AF%AD"><span class="toc-number">6.</span> <span class="toc-text">结语</span></a></li></ol>
+    </nav>
+  </div>
+</aside>
+
+<script>
+  // 移动端不显示菜单
+  if (
+    navigator.userAgent.match(
+      /(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i
+    )
+  ) {
+    let self = document.querySelector(".sidebar-toc");
+    var parent = self.parentElement;
+    parent.removeChild(self);
+  } else {
+  }
+</script>
+
+
+
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-pinia源码解读/pinia源码分析【2】- createPinia" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Pinia源码分析【2】- createPinia
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2022/07/07/pinia%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/pinia%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E3%80%902%E3%80%91-%20createPinia/" class="article-date">
+	  <time datetime="2022-07-06T16:00:00.000Z" itemprop="datePublished">2022-07-07</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/JavaScript-2022/">JavaScript-2022</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/Pinia/" rel="tag">Pinia</a>
+  </span>
+
+
+        
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/07/07/pinia%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/pinia%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E3%80%902%E3%80%91-%20createPinia/#comments" class="article-comment-link">评论</a></span>
+        
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <h2 id="专栏导航"><a href="#专栏导航" class="headerlink" title="专栏导航"></a>专栏导航</h2><p><a target="_blank" rel="noopener" href="https://juejin.cn/post/7124279061035089927">分析pinia源码之前必须知道的API</a></p>
+<p><a target="_blank" rel="noopener" href="https://juejin.cn/post/7117131804229763079">Pinia源码分析【1】- 源码分析环境搭建</a></p>
+<p><a target="_blank" rel="noopener" href="https://juejin.cn/post/7119788423501578277">Pinia源码分析【2】- createPinia</a></p>
+<p><a target="_blank" rel="noopener" href="https://juejin.cn/post/7121661056044236831">pinia源码分析【3】- defineStore</a></p>
+<p><a target="_blank" rel="noopener" href="https://juejin.cn/post/7123504805892325406">pinia源码分析【4】- Pinia Methods</a></p>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>参考源码<code>pinia V2.0.14</code></p>
+<p>源码分析仓库：<a target="_blank" rel="noopener" href="https://github.com/vkcyan/goto-pinia">https://github.com/vkcyan/goto-pinia</a></p>
+<p>上一篇文章我们主要介绍了如何搭建一个pinia源码阅读环境；本文主要介绍pinia在vue3初始化阶段相关逻辑，以及如何构建pinia对象。</p>
+<h2 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h2><p>根据官方文档，我们使用<code>pinia</code>首先需要是将它注册到<code>vue</code>中</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> pinia = <span class="title function_">createPinia</span>();</span><br><span class="line">app.<span class="title function_">use</span>(pinia);</span><br></pre></td></tr></table></figure>
+
+<p><code>createPinia</code>阶段究竟做了什么，他又是如何被注册到vue中呢？我们要从<code>createPinia</code>中寻找答案。</p>
+<h3 id="源码地址"><a href="#源码地址" class="headerlink" title="源码地址"></a>源码地址</h3><p>我们通过<code>pinia\src\index.ts</code>找到</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> &#123; createPinia &#125; <span class="keyword">from</span> <span class="string">&#x27;./createPinia&#x27;</span> <span class="comment">// `pinia\src\createPinia.ts为源码文件`</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="createPinia函数"><a href="#createPinia函数" class="headerlink" title="createPinia函数"></a>createPinia函数</h3><p>​	在函数的最开头，我们就可以看到通过<code>effectScope</code>声明了一个<code>ref</code>，并赋值给了<strong>state</strong>，这里的<code>effectScope</code>是高级API，未来会单独介绍，有兴趣的同学可以看一下<a target="_blank" rel="noopener" href="https://vuejs.org/api/reactivity-advanced.html#effectscope">官方文档</a>，我们将其<strong>简单理解为声明了一个ref并赋值给state</strong>。</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">createPinia</span>(<span class="params"></span>): <span class="title class_">Pinia</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> scope = <span class="title function_">effectScope</span>(<span class="literal">true</span>);</span><br><span class="line">    <span class="keyword">const</span> state = scope.<span class="property">run</span>&lt;<span class="title class_">Ref</span>&lt;<span class="title class_">Record</span>&lt;<span class="built_in">string</span>, <span class="title class_">StateTree</span>&gt;&gt;&gt;(<span class="function">() =&gt;</span></span><br><span class="line">       ref&lt;<span class="title class_">Record</span>&lt;<span class="built_in">string</span>, <span class="title class_">StateTree</span>&gt;&gt;(&#123;&#125;)</span><br><span class="line">    )!;</span><br><span class="line">    <span class="comment">// 简化理解</span></span><br><span class="line">    <span class="comment">// const state = ref(&#123;&#125;)</span></span><br><span class="line">    </span><br><span class="line">   	<span class="comment">// ...</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<p>​	<code>pinia</code>通过<code>markRaw</code>进行包装，将其<strong>标记为不会转化为响应式</strong>，最终<code>pinia</code>对象被<code>createPinia</code>函数返回，执行<code>vue.use(pinia)</code>的时候便会执行<code>pinia</code>对象中的<code>install</code>函数。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">createPinia</span>(<span class="params"></span>): <span class="title class_">Pinia</span> &#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  <span class="keyword">let</span> <span class="attr">_p</span>: <span class="title class_">Pinia</span>[<span class="string">&quot;_p&quot;</span>] = []; <span class="comment">// 所有需要安装的插件</span></span><br><span class="line">  <span class="keyword">let</span> <span class="attr">toBeInstalled</span>: <span class="title class_">PiniaPlugin</span>[] = []; <span class="comment">// install之前保存的待安装插件</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// 使用markRaw标记pinia使其不会被响应式</span></span><br><span class="line">  <span class="keyword">const</span> <span class="attr">pinia</span>: <span class="title class_">Pinia</span> = <span class="title function_">markRaw</span>(&#123;</span><br><span class="line">    <span class="comment">// vue.use实际执行逻辑</span></span><br><span class="line">    <span class="title function_">install</span>(<span class="params">app: App</span>) &#123;</span><br><span class="line">      <span class="title function_">setActivePinia</span>(pinia); <span class="comment">// 设置当前使用的 pinia</span></span><br><span class="line">      <span class="keyword">if</span> (!isVue2) &#123; <span class="comment">// 如果是vue2，全局注册已经在PiniaVuePlugin完成，所以这段逻辑将跳过</span></span><br><span class="line">        pinia.<span class="property">_a</span> = app; <span class="comment">// 保存app实例</span></span><br><span class="line">        app.<span class="title function_">provide</span>(piniaSymbol, pinia); <span class="comment">// 通过provide传递pinia实例，提供给后续使用</span></span><br><span class="line">        app.<span class="property">config</span>.<span class="property">globalProperties</span>.<span class="property">$pinia</span> = pinia; <span class="comment">// 设置全局属性 $pinia</span></span><br><span class="line">        toBeInstalled.<span class="title function_">forEach</span>(<span class="function">(<span class="params">plugin</span>) =&gt;</span> _p.<span class="title function_">push</span>(plugin)); <span class="comment">// 处理未执行插件</span></span><br><span class="line">        toBeInstalled = [];</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="title function_">use</span>(<span class="params">plugin</span>) &#123;</span><br><span class="line">      <span class="keyword">if</span> (!<span class="variable language_">this</span>.<span class="property">_a</span> &amp;&amp; !isVue2) &#123; <span class="comment">// 如果use阶段为初始化完成则暂存toBeInstalled中</span></span><br><span class="line">        toBeInstalled.<span class="title function_">push</span>(plugin);</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        _p.<span class="title function_">push</span>(plugin);</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">return</span> <span class="variable language_">this</span>;</span><br><span class="line">    &#125;,</span><br><span class="line">    _p, <span class="comment">// 所有pinia的插件</span></span><br><span class="line">    <span class="attr">_a</span>: <span class="literal">null</span>, <span class="comment">// app实例，在install的时候会被设置</span></span><br><span class="line">    <span class="attr">_e</span>: scope, <span class="comment">// pinia的作用域对象，每个store都是单独的scope</span></span><br><span class="line">    <span class="attr">_s</span>: <span class="keyword">new</span> <span class="title class_">Map</span>&lt;string, <span class="title class_">StoreGeneric</span>&gt;(),  <span class="comment">// store缓存 key为pinia的id value为pinia的对外暴露数据</span></span><br><span class="line">    state, <span class="comment">// pinia所有state的合集 key为pinia的id value为store下的所有state（所有可访问变量）</span></span><br><span class="line">  &#125;);</span><br><span class="line">  <span class="keyword">return</span> pinia;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="返回值的含义以及作用"><a href="#返回值的含义以及作用" class="headerlink" title="返回值的含义以及作用"></a>返回值的含义以及作用</h3><p><img src="https://www.vkcyan.top/image-20220713153012540.png" alt="image-20220713153012540"></p>
+<p>​	初始化的逻辑相对比较简单，只需要了解<code>effectScope</code> <code>markRaw</code>便能完全读懂，<code>install</code>阶段组成的<code>pinia</code>对象被<code>setActivePinia</code>保存了下来，而这个对象贯穿<code>pinia</code>整个生命周期，每个字段的作用在后面的源码解读中都会有所体现。</p>
+<h2 id="关于Vue2"><a href="#关于Vue2" class="headerlink" title="关于Vue2"></a>关于Vue2</h2><p>​	通过<code>pinia</code>官网，我们可以了解到<code>pinia</code>支持<code>vue2</code>，不过<code>vue2</code>环境需要在使用<code>createPinia</code>之前，预先安装插件<code>PiniaVuePlugin</code>，通过<code>pinia</code>的入口文件了解到<code>PiniaVuePlugin</code>的源码入口为<code>pinia\src\vue2-plugin.ts</code></p>
+<p>​	<code>PiniaVuePlugin</code>是<code>vue2</code>插件比较主流的实现方式，<strong>获取Vue实例，通过mixin实现数据共享</strong>。如果了解过<code>vuex</code>的源码，相信对以下代码会十分熟悉。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> <span class="title class_">PiniaVuePlugin</span>: <span class="title class_">Plugin</span> = <span class="keyword">function</span> (<span class="params">_Vue</span>) &#123;</span><br><span class="line">    <span class="comment">// Equivalent of</span></span><br><span class="line">    <span class="comment">// app.config.globalProperties.$pinia = pinia</span></span><br><span class="line">    <span class="comment">// pinia在vue2中的注册逻辑与vuex核心逻辑几乎一致，</span></span><br><span class="line">    <span class="comment">// 注入全局mixin的beforeCreate</span></span><br><span class="line">    _Vue.<span class="title function_">mixin</span>(&#123;</span><br><span class="line">        <span class="title function_">beforeCreate</span>(<span class="params"></span>) &#123;</span><br><span class="line">            <span class="keyword">const</span> options = <span class="variable language_">this</span>.<span class="property">$options</span>;</span><br><span class="line">            <span class="comment">// 在根节点通过vue.use中注册了pinia</span></span><br><span class="line">            <span class="keyword">if</span> (options.<span class="property">pinia</span>) &#123;</span><br><span class="line">                <span class="keyword">const</span> pinia = options.<span class="property">pinia</span> <span class="keyword">as</span> <span class="title class_">Pinia</span>;</span><br><span class="line">                <span class="comment">// defineProperty版provided实现</span></span><br><span class="line">                <span class="keyword">if</span> (!(<span class="variable language_">this</span> <span class="keyword">as</span> any).<span class="property">_provided</span>实现) &#123;</span><br><span class="line">                    <span class="keyword">const</span> provideCache = &#123;&#125;;</span><br><span class="line">                    <span class="title class_">Object</span>.<span class="title function_">defineProperty</span>(<span class="variable language_">this</span>, <span class="string">&quot;_provided&quot;</span>, &#123;</span><br><span class="line">                        <span class="attr">get</span>: <span class="function">() =&gt;</span> provideCache,</span><br><span class="line">                        <span class="attr">set</span>: <span class="function">(<span class="params">v</span>) =&gt;</span> <span class="title class_">Object</span>.<span class="title function_">assign</span>(provideCache, v),</span><br><span class="line">                    &#125;);</span><br><span class="line">                &#125;</span><br><span class="line">                (<span class="variable language_">this</span> <span class="keyword">as</span> any).<span class="property">_provided</span>[piniaSymbol <span class="keyword">as</span> any] = pinia;</span><br><span class="line"></span><br><span class="line">                <span class="comment">// 首次注册变量不存在，进行存储</span></span><br><span class="line">                <span class="keyword">if</span> (!<span class="variable language_">this</span>.<span class="property">$pinia</span>) &#123;</span><br><span class="line">                    <span class="variable language_">this</span>.<span class="property">$pinia</span> = pinia;</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                <span class="comment">// 保存Vue实例</span></span><br><span class="line">                pinia.<span class="property">_a</span> = <span class="variable language_">this</span> <span class="keyword">as</span> any;</span><br><span class="line">                <span class="keyword">if</span> (<span class="variable constant_">IS_CLIENT</span>) &#123;</span><br><span class="line">                    <span class="title function_">setActivePinia</span>(pinia);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (!<span class="variable language_">this</span>.<span class="property">$pinia</span> &amp;&amp; options.<span class="property">parent</span> &amp;&amp; options.<span class="property">parent</span>.<span class="property">$pinia</span>) &#123;</span><br><span class="line">                <span class="comment">// 所有子组件/页面都继承上一层的pinia</span></span><br><span class="line">                <span class="variable language_">this</span>.<span class="property">$pinia</span> = options.<span class="property">parent</span>.<span class="property">$pinia</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="title function_">destroyed</span>(<span class="params"></span>) &#123;</span><br><span class="line">            <span class="keyword">delete</span> <span class="variable language_">this</span>.<span class="property">_pStores</span>;</span><br><span class="line">        &#125;,</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="关于devTool"><a href="#关于devTool" class="headerlink" title="关于devTool"></a>关于devTool</h2><p>在<code>createPinia</code>中存在这样一段代码</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (__DEV__ &amp;&amp; <span class="variable constant_">IS_CLIENT</span> &amp;&amp; !__TEST__) &#123;</span><br><span class="line">    pinia.<span class="title function_">use</span>(devtoolsPlugin);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果是开发环境，并且是浏览器环境，并且不是测试环境，就会向pinia注册<code>devtoolsPlugin</code>，也就是将<code>pinia</code>注册到浏览器插件<strong>Vue.js devtools</strong>中。</p>
+<p><img src="https://www.vkcyan.top/image-20220713170645056.png" alt="image-20220713170645056"></p>
+<h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><p>​	<strong>createPinia</strong>的源码解读就全部结束了，现在我们已经了解初始化的具体流程，以及生成的pinia对象中存在什么参数，这些参数在运行阶段都会发挥它应用的价值。</p>
+<p>​	下一章我们将要解析<strong>创建以及使用pinia</strong>的相关源码，<code>defindStore</code>函数实现逻辑，在<code>defindStore</code>中我们将会了解到<code>install</code>阶段每个字段的实际用途，以及pinia的核心响应原理。</p>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://vkcyan.github.io/2022/07/07/pinia%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/pinia%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E3%80%902%E3%80%91-%20createPinia/" title="Pinia源码分析【2】- createPinia" target="_blank" rel="external">https://vkcyan.github.io/2022/07/07/pinia源码解读/pinia源码分析【2】- createPinia/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/vkcyan" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/vkcyan" target="_blank"><span class="text-dark">vkcyan</span><small class="ml-1x">Web Developer &amp; Product Manager</small></a></h3>
+        <div>一切都是为了实现技术的价值</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2022/07/18/pinia%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/pinia%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E3%80%904%E3%80%91-%20Pinia%20Methods/" title="pinia源码分析【4】- Pinia Methods"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2022/07/06/pinia%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/pinia%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E3%80%901%E3%80%91-%20%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/" title="Pinia源码分析【1】- 源码分析环境搭建"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+    <li class="toggle-toc">
+      <a class="toggle-btn " data-toggle="collapse" href="#collapseToc" aria-expanded="false" title="文章目录" role="button">    <span>[&nbsp;</span><span>文章目录</span>
+        <i class="text-collapsed icon icon-anchor"></i>
+        <i class="text-in icon icon-close"></i>
+        <span>]</span>
+      </a>
+    </li>
+    
+  </ul>
+  
+  
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-fancy btn-donate pop-onhover bg-gradient-warning" data-toggle="modal" data-target="#donateModal"><span>赏</span></button>
+  <!-- <div class="wave-icon wave-icon-danger btn-donate" data-toggle="modal" data-target="#donateModal">
+    <div class="wave-circle"><span class="icon"><i class="icon icon-bill"></i></span></div>
+  </div> -->
+  
+  
+  <div class="bar-right">
+    
+  </div>
+  </div>
+</nav>
+  
+<!-- Modal -->
+<div class="modal modal-center modal-small modal-xs-full fade" id="donateModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content donate">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <div class="modal-body">
+        <div class="donate-box">
+          <div class="donate-head">
+            <p>感谢您的支持，我会继续努力的!</p>
+          </div>
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade active in" id="alipay">
+              <div class="donate-payimg">
+                <img src="/images/donate/alipayimg.jpg" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开支付宝扫一扫，即可进行扫码打赏哦</p>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="wechatpay">
+              <div class="donate-payimg">
+                <img src="/images/donate/wechatpayimg.jpg" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开微信扫一扫，即可进行扫码打赏哦</p>
+            </div>
+          </div>
+          <div class="donate-footer">
+            <ul class="nav nav-tabs nav-justified" role="tablist">
+              <li role="presentation" class="active">
+                <a href="#alipay" id="alipay-tab" role="tab" data-toggle="tab" aria-controls="alipay" aria-expanded="true"><i class="icon icon-alipay"></i> 支付宝</a>
+              </li>
+              <li role="presentation" class="">
+                <a href="#wechatpay" role="tab" id="wechatpay-tab" data-toggle="tab" aria-controls="wechatpay" aria-expanded="false"><i class="icon icon-wepay"></i> 微信支付</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/vkcyan" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://juejin.cn/user/3720403077840519" target="_blank" title="Juejin" data-toggle=tooltip data-placement=top><i class="icon icon-juejin"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="https://cdn.staticfile.org/jquery/1.12.4/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+   
+
+
+
+
+
+
+</body>
+</html>
