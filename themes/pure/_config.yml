@@ -119,7 +119,7 @@ repository:
 # Gitment
 # Introduction: https://imsun.net/posts/gitment-introduction/
 comment:
-  type: livere
+  type:
   disqus: # enter disqus shortname here
   youyan:
     uid:  # enter youyan uid
