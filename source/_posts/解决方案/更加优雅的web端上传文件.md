@@ -1,4 +1,14 @@
-# 更加优雅的web端上传文件 
+---
+title: 更加优雅的web端上传文件 
+categories:
+  - JavaScript-2023
+tags:
+  - JavaScript
+toc: true
+date: 2023-01-03
+---
+
+
 
 ## 前言
 
@@ -40,14 +50,14 @@ npm i choose-to-file
 
 我们会发现，上传文件必须通过特定的标签才能触发。这么来看似乎与函数式相违背。
 
-但这并不是死路一条，我们可以动态创建input标签，然后通过`MouseEvent`创建自动点击事件；核心逻辑就是这样。
+但这并不是死路一条，我们可以通过`input.click()`，自动指定点击事件，核心逻辑就是这样。
 
 
 
 ## 实现思路
 
-- 函数触发的时候，在body标签尾部插入上传文件的`<input />`标签，同时样式上做隐藏处理。
-- 通过`MouseEvent`事件，自动触发`<input />`的点击事件。
+- 创建`input`标签
+- 触发`<input />`的`click`事件
 - 监听上传结果，并作为结果返回，同时对临时数据进行销毁。
 
 
@@ -69,24 +79,17 @@ async function uploadImg() {
 }
 ```
 
-接下来开始实现`chooseToFile`，首先是在`body`底部插入`input`标签
+接下来开始实现`chooseToFile`，首先我们创建input标签
 
 ```js
-let body = document.body
 let input = document.createElement('input')
 input.type = 'file'
-input.style.position = 'absolute'
-input.style.top = '0'
-input.style.opacity = '0'
-input.style.zIndex = '-9999'
-body.appendChild(input)
 ```
 
 创建完成后，立刻执行自动点击事件
 
 ````js
-	var event = new MouseEvent('click')
-	input.dispatchEvent(event)
+	input.click()
 ````
 
 然后监听`input`的`onchange` callback，并通过`Promise resolve`进行返回。
