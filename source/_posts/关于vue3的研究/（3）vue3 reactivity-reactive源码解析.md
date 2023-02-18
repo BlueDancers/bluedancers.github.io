@@ -10,15 +10,23 @@ date: 2023-02-01
 
 
 
+## 专栏前言
+
+​	本文是**vue3源码解析系列**的第三篇文档，在前2篇文章中，我们了解了vue3源码的运行、调试，以及阅读前的一些前置知识，从本节开始，我们就可以正式的开始vue3的源码阅读了。
+
+​	我们首先阅读的模块式**@vue/reactivity** 中的**reactive**以及相关**api**，**effect**的源代码。
+
+
+
 ## 前言
 
-​	从本篇文章开始，我们正式进入源码解析环节，**vue3**源码相对清晰，每个模块相互独立，我们首先分析**@vue/reactivity** 中的**reactive**。
+​	reactive这个api的含义字如其名，通过reactive创建的对象都是具备响应式的。即reactive对象的改变会造成**“副作用”**。基于此我们引入副作用API，**effect**，即effect如果其内部依赖了reactive，**reactive的改变会重新触发effect**。
+
+​	现在让我们走进案例与源码，看看究竟是如何实现响应式的。
 
 
 
-## 正文
-
-### 测试代码
+## 案例
 
 ```js
  let { reactive, effect } = Vue
@@ -35,13 +43,15 @@ setTimeout(() => {
 }, 2000)
 ```
 
-​	以上测试案例，我们涉及到了reactive的**初始化、读取、修改、响应**，接下来走入源码的世界，看看功能是如何实现的。
+以上测试案例，我们涉及到了**reactive的初始化、读取、修改**，最后形成了**reactive的改变会重新触发effect**的现象。
+
+我们就从以上三个角度去切入源码实现。
 
 
 
-### reactive初始化
+## reactive初始化
 
-> 为了方便阅读与理解，文中仅贴出最核心的代码
+> 为了方便阅读与理解，以下仅贴出核心源码
 
 `packages/reactivity/src/reactive.ts`
 
@@ -89,9 +99,11 @@ export const mutableHandlers = {
 
 ​	接下来，让我们看看**proxy**中核心的**get set**函数吧，看看内部做了些什么。
 
-### 读取（get）
+### 初始化读取（get）
 
 当触发`obj.name`的读取行为的时候，就会触发代理对象的**get**函数
+
+`packages/reactivity/src/baseHandlers.ts`
 
 ```js
 const get = createGetter()
@@ -117,9 +129,11 @@ function createGetter() {
 
 
 
-### 修改（set）
+### 初始化修改（set）
 
 当触发`obj.name`的修改行为，将会触发代理对象的**set**函数
+
+`packages/reactivity/src/baseHandlers.ts`
 
 ```js
 const set = createSetter()
@@ -148,7 +162,7 @@ function createSetter(shallow = false) {
 
 
 
-### 依赖收集（track）
+## 读取 - 依赖收集（track）
 
 ​	我们回到测试demo中，根据我们使用**vue3**的预期，在初始化完成后，**effect**会触发一次，若干时间后，**setTimeout**内**set**触发，依赖`obj.name`的 **effect**的函数还会被触发一次，这又是如何实现的呢？
 
@@ -187,6 +201,8 @@ export class ReactiveEffect {
 effect方法内部最终执行了一次**fn**，但是在执行之前，将activeEffect赋值为this，将自身保存到了公共变量之中。
 
 而匿名函数的内部读取了`obj.name`，**触发了被代理对象obj的get方法**，所以接下来我们回到get方法中，查看之前忽略的依赖收集逻辑。
+
+`packages/reactivity/src/baseHandlers.ts`
 
 ````js
 function createGetter(isReadonly = false, shallow = false) {
@@ -237,7 +253,7 @@ export function trackEffects(
 }
 ````
 
-### 小结
+## 小结
 
 ​	**effect**内部的**fn**被触发，也是我们看到的初始化阶段的第一次执行，**fn**执行中触发了**obj**的**get**，**get**内部触发了**依赖收集（track）**，**track**内部构建了一个复杂对象**targetMap**，来维护变量与**effect**之间的关系。
 
@@ -257,11 +273,13 @@ export function trackEffects(
 
 
 
-### 响应（trigger）
+## 修改 - 依赖触发（trigger）
 
 ​	继续回到demo中，2s后，**obj.name**赋值为李四，此时的现象是effect中的函数自动执行了，这又是如何实现的呢？
 
 ​	此处首先一定是触发了代理对象的**set**，所以我们由此处开始分析。
+
+`packages/reactivity/src/baseHandlers.ts`
 
 ````js
 function createSetter(shallow = false) {
@@ -340,53 +358,9 @@ function triggerEffect(
 7. **trigger**内部通过**当前代理对象**以及**具体修改的属性**，在依赖收集阶段保存的**WeakMap**中，找到所有需要触发的effect的fn。
 8. 触发effect的fn，完成响应式
 
-
-
 最后反映在我们眼前，就是`obj.name`改变的同时，所有使用到**obj.name**的**effet**都被自动触发了**fn**，完成响应式。
 
-
-
-### 补充知识（WeakMap）
-
-​	虽然我们完成了源码阅读，但是我们还需要补充一个重点API，**WeakMap**，**weakMap**和**map**一样都是**key value**格式的对象，但是他们还是存在一些差别。
-
-- **weakMap**的**key**必须是对象，并且是**弱引用**关系
-- **Map**的**key**可以是任何值（基础类型+对象），但是key所引用的对象是**强引用**关系
-
-​	通过查阅MDN我们可以发现，**weakMap**可以实现的功能，**Map**也是可以实现的，那为什么**Vue3**内部使用了**WeakMap**呢，问题就在**引用关系**上
-
-
-
-**强引用：不会因为引用被清除而失效**
-
-**弱引用：会因为引用被清除而自动被垃圾回收**
-
-概念似乎还无法体现其实际作用，我们通过以下案例即可明白
-
-```js
-// Map
-let obj = { name: '张三' }
-let map = new Map()
-map.set(obj, 'name')
-obj = null // obj的引用类型被垃圾回收
-console.log(map) // map中key obj依旧存在
-
-// WeakMap
-let obj = { name: '张三' }
-let map = new WeakMap()
-map.set(obj, 'name')
-obj = null // obj的引用类型被垃圾回收
-console.log(map) // weakMap中key为obj的键值对已经不存在
-```
-
-通过以上案例我们可以了解到
-
-- 弱引用在**对象与key共存**场景存在优势，**作为key的对象被销毁的同时，WeakMap中的key value也自动销毁了**。
-- 弱引用也解释了为什么**weakMap**的**key**不能是基础类型，因为基础类型存在栈内存中，不存在弱引用关系；
-
-
-
-反映到Vue3源码中，一旦被代理对象被置为null，**weakMap**中该**key**将会被垃圾回收，达到性能最大化的目的。
+还记得我们前一篇文章谈到的WeakMap吗，一旦被代理对象被置为null，**weakMap**中该**key**将会被垃圾回收，达到性能最大化的目的
 
 
 

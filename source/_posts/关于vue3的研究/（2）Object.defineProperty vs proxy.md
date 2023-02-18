@@ -10,17 +10,25 @@ date: 2023-01-30
 
 
 
+## 专栏前言
+
+本文是**vue3源码解析系列**的第二篇文章，这一章我们主要学习**vue3**源码中涉及到的一些核心**api**。
+
+后续的源码解读是非常复杂的，所以相关基础知识一定要牢固哦~
+
+
+
 ## 前言
 
-熟悉**vue3**的同学都知道，**vue3**的底层的响应式实现由**Object.defineProperty**更换成了**Proxy**；
+大部分使用过**vue3**的同学都知道，**vue3**的底层的响应式实现由**Object.defineProperty**更换成了**Proxy**。
 
 **为什么vue3要更换呢？proxy相对于前者又有何优势呢？**
 
-接下来让我们一起找出问题的答案。
+接下来让我们通过案例去一探究竟吧！
 
 ​	
 
-## 当响应式不存在的时候
+## 当响应式不存在
 
 我们先看一个例子
 
@@ -284,9 +292,61 @@ let dataProxy = new Proxy(data, {
 
 
 
+## 补充章节（WeakMap）
+
+​	通过以上文章，我们了解到了**object.defineproperty**相较于**proxy**的劣势，以及搭配**proxy**同时出现的**Reflect**的原因，这是**vue3**最核心的**api**。
+
+​	但是仅仅知道理解**proxy+reflect**，还不太够，为了尽量轻松的阅读**Vue3**源码，我们还要学习一个**原生API**，那就是**WeakMap**。
+
+[WeakMap MDN中文文档地址](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/WeakMap)
+
+​	**weakMap**和**map**一样都是**key value**格式，但是他们还是存在一些差别。
+
+- **weakMap**的**key**必须是对象，并且是**弱引用**关系
+- **Map**的**key**可以是任何值（基础类型+对象），但是key所引用的对象是**强引用**关系
+
+​	通过查阅MDN我们可以发现，**weakMap**可以实现的功能，**Map**也是可以实现的，那为什么**Vue3**内部使用了**WeakMap**呢，问题就在**引用关系**上
+
+
+
+**强引用：不会因为引用被清除而失效**
+
+**弱引用：会因为引用被清除而自动被垃圾回收**
+
+概念似乎还无法体现其实际作用，我们通过以下案例即可明白
+
+```js
+// Map
+let obj = { name: '张三' }
+let map = new Map()
+map.set(obj, 'name')
+obj = null // obj的引用类型被垃圾回收
+console.log(map) // map中key obj依旧存在
+
+// WeakMap
+let obj = { name: '张三' }
+let map = new WeakMap()
+map.set(obj, 'name')
+obj = null // obj的引用类型被垃圾回收
+console.log(map) // weakMap中key为obj的键值对已经不存在
+```
+
+通过以上案例我们可以了解到
+
+- 弱引用在**对象与key共存**场景存在优势，**作为key的对象被销毁的同时，WeakMap中的key value也自动销毁了**。
+- 弱引用也解释了为什么**weakMap**的**key**不能是基础类型，因为基础类型存在栈内存中，不存在弱引用关系；
+
+在vue3的依赖收集阶段，源码中用到了WeakMap，具体什么作用？我们下一节进行解答。
+
+
+
 ## 结语
 
-​	通过本篇文章，我们认识到了**object.defineproperty**相较于**proxy**的劣势，以及搭配proxy出现的Reflect其存在的原因，了解了这些，我们接下来就可以走进vue3的源码世界了。
+​	通过本篇文章，我们认识到了**object.defineproperty**相较于**proxy**的劣势，以及搭配**proxy**同时出现的**Reflect**的原因，还有一个**Map**的原生的**API**，**WeakMap**的作用。
+
+​	接下来我们就可以正式走进**vue3**源码的世界~
+
+
 
 
 
