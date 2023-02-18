@@ -202,15 +202,15 @@ profile:
   articleSelfBlock: true # 关闭文章下方的自我介绍
   avatar: images/avatar.jpg
   gravatar: # Gravatar email address, if you enable Gravatar, your avatar config will be overriden
-  author: vkcyan
+  author: bluedancers
   author_title: Web Developer & Product Manager
   author_description: 一切都是为了实现技术的价值
   location: HeFei, China
-  follow: https://github.com/vkcyan
+  follow: https://github.com/bluedancers
   # Social Links
   social:
     links:
-      github: https://github.com/vkcyan
+      github: https://github.com/bluedancers
       juejin: https://juejin.cn/user/3720403077840519
       # twitter: https://twitter.com/iwebued
       # facebook: /
@@ -226,7 +226,7 @@ profile:
 
   # My Personal Links
   links:
-    Github: https://github.com/vkcyan
+    Github: https://github.com/bluedancers
     Eamil: wu.vkcyan@gmail.com
     juejin: https://juejin.cn/user/3720403077840519
 
@@ -241,16 +241,16 @@ profile:
   # My Personal Works
   works:
     易动3:
-      link: https://github.com/vkcyan/YD
+      link: https://github.com/bluedancers/YD
       date: 2022
     Vuex时间旅行:
-      link: https://github.com/vkcyan/vue-vuex-revoke
+      link: https://github.com/bluedancers/vue-vuex-revoke
       date: 2021
     易动1（停止维护）:
-      link: https://github.com/vkcyan/activity-YD
+      link: https://github.com/bluedancers/activity-YD
       date: 2020
     Vue2.x动态路由案例:
-      link: https://github.com/vkcyan/vue-element-asyncLogin
+      link: https://github.com/bluedancers/vue-element-asyncLogin
       date: 2020
 
   # My Personal Projects
