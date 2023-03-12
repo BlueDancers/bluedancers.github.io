@@ -1,5 +1,5 @@
 ---
-title: （4）vue3 reactivity-ref源码解析
+title: （4）vue3 ref源码解析
 categories:
   - Javascript-2023
 tags:
@@ -116,7 +116,9 @@ class RefImpl<T> {
     this._value = toReactive(value)
   }
 
-  get value() {}
+  get value() {
+    return this._value
+  }
 
   set value(newVal) {
     newVal = toRaw(newVal)
