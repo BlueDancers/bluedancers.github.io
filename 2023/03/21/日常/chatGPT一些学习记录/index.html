@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>chatGPT一些学习记录 | vkcyan Blog</title>
+  <meta name="description" content="最早​	自然语言处理模型，最早出圈的是2018年google发布的bert，他是一个双向Transformer编码的过程（完形填空），可以对一段文本做到深入的理解与分析，并生成高质量的语言表达。 ​	那他究竟是什么原理呢？ ​	从一段文本中，随机扣掉一部分字，然后模型不断学习此处到底应该填写什么，所谓学习与训练就是从大量的数据中学习理解复杂的上下文关系。 ​	注：学习 无监督学习 训练 有监督学习">
+<meta property="og:type" content="article">
+<meta property="og:title" content="chatGPT一些学习记录">
+<meta property="og:url" content="https://bluedancers.github.io/2023/03/21/%E6%97%A5%E5%B8%B8/chatGPT%E4%B8%80%E4%BA%9B%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/index.html">
+<meta property="og:site_name" content="vkcya Blog">
+<meta property="og:description" content="最早​	自然语言处理模型，最早出圈的是2018年google发布的bert，他是一个双向Transformer编码的过程（完形填空），可以对一段文本做到深入的理解与分析，并生成高质量的语言表达。 ​	那他究竟是什么原理呢？ ​	从一段文本中，随机扣掉一部分字，然后模型不断学习此处到底应该填写什么，所谓学习与训练就是从大量的数据中学习理解复杂的上下文关系。 ​	注：学习 无监督学习 训练 有监督学习">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://www.vkcyan.top/FgOCZQEw2fTJZsn40Q_b5KP5EvZy.png">
+<meta property="article:published_time" content="2023-03-20T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-03-21T10:12:22.049Z">
+<meta property="article:author" content="bluedancers">
+<meta property="article:tag" content="chatGPT">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://www.vkcyan.top/FgOCZQEw2fTJZsn40Q_b5KP5EvZy.png">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://bluedancers.github.io/2023/03/21/%E6%97%A5%E5%B8%B8/chatGPT%E4%B8%80%E4%BA%9B%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="vkcya Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+
+<body class="main-center theme-black" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/bluedancers" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">bluedancers</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Web Developer &amp; Product Manager</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> HeFei, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-books">
+          <a href="/books">
+            
+            <i class="icon icon-book-fill"></i>
+            
+            <span class="menu-title">书单</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">友链</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/bluedancers" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://juejin.cn/user/3720403077840519" target="_blank" title="Juejin" data-toggle=tooltip data-placement=top><i class="icon icon-juejin"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>往者不可谏，来者犹可追</p><br/>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript/">JavaScript</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript-2021/">JavaScript-2021</a><span class="category-list-count">10</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript-2022/">JavaScript-2022</a><span class="category-list-count">15</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript-2023/">JavaScript-2023</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Javascript-2022/">Javascript-2022</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Javascript-2023/">Javascript-2023</a><span class="category-list-count">12</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%BA%A7%E5%93%81%E7%BB%8F%E7%90%86/">产品经理</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/">数据结构与算法</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%97%A5%E5%B8%B8/">日常</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%97%A5%E5%B8%B8%E5%BC%80%E5%8F%91/">日常开发</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%9D%82%E8%B0%88/">杂谈</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%8E%A9%E6%9C%BA%E6%8A%80%E5%B7%A7/">玩机技巧</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%A7%BB%E5%8A%A8%E7%AB%AF/">移动端</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%98%85%E8%AF%BB-2023/">阅读-2023</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%9A%8F%E6%83%B3%E9%9B%86/">随想集</a><span class="category-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/" rel="tag">Hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a><span class="tag-list-count">19</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NPDP/" rel="tag">NPDP</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Pinia/" rel="tag">Pinia</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue/" rel="tag">Vue</a><span class="tag-list-count">13</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue3/" rel="tag">Vue3</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/chatGPT/" rel="tag">chatGPT</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/h5%E8%A3%85%E4%BF%AE/" rel="tag">h5装修</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vue3/" rel="tag">vue3</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vw/" rel="tag">vw</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/webpack5/" rel="tag">webpack5</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/" rel="tag">个人博客</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%A7%E5%93%81%E5%88%86%E6%9E%90/" rel="tag">产品分析</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%A7%E5%93%81%E6%97%A5%E5%B8%B8/" rel="tag">产品日常</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BB%B7%E5%80%BC%E8%A7%82/" rel="tag">价值观</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BD%8E%E4%BB%A3%E7%A0%81/" rel="tag">低代码</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%85%B3%E4%BA%8EC%E7%AB%AF/" rel="tag">关于C端</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%85%B3%E4%BA%8Eproxy/" rel="tag">关于proxy</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%85%BC%E5%AE%B9%E6%80%A7/" rel="tag">兼容性</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%93%8D%E5%BA%94%E5%BC%8F/" rel="tag">响应式</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag">数据结构</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%97%A0%E9%9A%9C%E7%A2%8D/" rel="tag">无障碍</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%A7%BB%E5%8A%A8%E7%AB%AF/" rel="tag">移动端</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AB%A5%E5%B9%B4/" rel="tag">童年</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%B0%E5%BD%95/" rel="tag">记录</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%BE%93%E5%87%BA/" rel="tag">输出</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%98%85%E8%AF%BB/" rel="tag">阅读</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9A%8F%E6%83%B3/" rel="tag">随想</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9A%8F%E9%80%89%E6%9C%97%E8%AF%BB/" rel="tag">随选朗读</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/Hexo/" style="font-size: 13px;">Hexo</a> <a href="/tags/JavaScript/" style="font-size: 14px;">JavaScript</a> <a href="/tags/NPDP/" style="font-size: 13.6px;">NPDP</a> <a href="/tags/Pinia/" style="font-size: 13.4px;">Pinia</a> <a href="/tags/Vue/" style="font-size: 13.8px;">Vue</a> <a href="/tags/Vue3/" style="font-size: 13px;">Vue3</a> <a href="/tags/chatGPT/" style="font-size: 13px;">chatGPT</a> <a href="/tags/h5%E8%A3%85%E4%BF%AE/" style="font-size: 13px;">h5装修</a> <a href="/tags/vue3/" style="font-size: 13px;">vue3</a> <a href="/tags/vw/" style="font-size: 13px;">vw</a> <a href="/tags/webpack5/" style="font-size: 13px;">webpack5</a> <a href="/tags/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/" style="font-size: 13px;">个人博客</a> <a href="/tags/%E4%BA%A7%E5%93%81%E5%88%86%E6%9E%90/" style="font-size: 13px;">产品分析</a> <a href="/tags/%E4%BA%A7%E5%93%81%E6%97%A5%E5%B8%B8/" style="font-size: 13px;">产品日常</a> <a href="/tags/%E4%BB%B7%E5%80%BC%E8%A7%82/" style="font-size: 13px;">价值观</a> <a href="/tags/%E4%BD%8E%E4%BB%A3%E7%A0%81/" style="font-size: 13px;">低代码</a> <a href="/tags/%E5%85%B3%E4%BA%8EC%E7%AB%AF/" style="font-size: 13px;">关于C端</a> <a href="/tags/%E5%85%B3%E4%BA%8Eproxy/" style="font-size: 13px;">关于proxy</a> <a href="/tags/%E5%85%BC%E5%AE%B9%E6%80%A7/" style="font-size: 13px;">兼容性</a> <a href="/tags/%E5%93%8D%E5%BA%94%E5%BC%8F/" style="font-size: 13px;">响应式</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="font-size: 13.6px;">数据结构</a> <a href="/tags/%E6%97%A0%E9%9A%9C%E7%A2%8D/" style="font-size: 13px;">无障碍</a> <a href="/tags/%E7%A7%BB%E5%8A%A8%E7%AB%AF/" style="font-size: 13px;">移动端</a> <a href="/tags/%E7%AB%A5%E5%B9%B4/" style="font-size: 13px;">童年</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 13.2px;">算法</a> <a href="/tags/%E8%AE%B0%E5%BD%95/" style="font-size: 13.2px;">记录</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 13px;">设计模式</a> <a href="/tags/%E8%BE%93%E5%87%BA/" style="font-size: 13px;">输出</a> <a href="/tags/%E9%98%85%E8%AF%BB/" style="font-size: 13px;">阅读</a> <a href="/tags/%E9%9A%8F%E6%83%B3/" style="font-size: 13px;">随想</a> <a href="/tags/%E9%9A%8F%E9%80%89%E6%9C%97%E8%AF%BB/" style="font-size: 13px;">随选朗读</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/03/">三月 2023</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/02/">二月 2023</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/01/">一月 2023</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/09/">九月 2022</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/08/">八月 2022</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/07/">七月 2022</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/06/">六月 2022</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/05/">五月 2022</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/03/">三月 2022</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/12/">十二月 2021</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/10/">十月 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/09/">九月 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/06/">六月 2021</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/03/">三月 2021</a><span class="archive-list-count">9</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/Javascript-2023/">Javascript-2023</a>
+              </p>
+              <p class="item-title">
+                <a href="/2023/03/21/%E5%85%B3%E4%BA%8Evue3%E7%9A%84%E7%A0%94%E7%A9%B6/Vue3%E7%A1%AC%E6%A0%B8%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E7%B3%BB%E5%88%97%EF%BC%886%EF%BC%89%20100%E8%A1%8C%E4%BB%A3%E7%A0%81%20%E5%AE%9E%E7%8E%B0mini%E7%89%88ref/" class="title">Vue3硬核源码解析系列（6） 100行代码 实现mini版ref</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-03-20T16:00:00.000Z" itemprop="datePublished">2023-03-21</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E6%97%A5%E5%B8%B8/">日常</a>
+              </p>
+              <p class="item-title">
+                <a href="/2023/03/21/%E6%97%A5%E5%B8%B8/chatGPT%E4%B8%80%E4%BA%9B%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/" class="title">chatGPT一些学习记录</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-03-20T16:00:00.000Z" itemprop="datePublished">2023-03-21</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/Javascript-2023/">Javascript-2023</a>
+              </p>
+              <p class="item-title">
+                <a href="/2023/03/13/%E5%85%B3%E4%BA%8Evue3%E7%9A%84%E7%A0%94%E7%A9%B6/Vue3%E7%A1%AC%E6%A0%B8%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E7%B3%BB%E5%88%97%EF%BC%884%EF%BC%89%20200%E8%A1%8C%E4%BB%A3%E7%A0%81%20%E5%AE%9E%E7%8E%B0mini%E7%89%88reactive%20+%20effect/" class="title">（3.1）vue3 手摸手实现mini版reactive.md</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-03-12T16:00:00.000Z" itemprop="datePublished">2023-03-13</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2023/02/20/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/Vue3%E7%89%88%E5%90%8E%E5%8F%B0%E9%89%B4%E6%9D%83%E4%B9%8B%E5%8A%A8%E6%80%81%E8%B7%AF%E7%94%B1%E6%96%B9%E6%A1%88%E6%9D%A5%E4%BA%86%EF%BC%81/" class="title">(no title)</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-02-20T03:50:52.159Z" itemprop="datePublished">2023-02-20</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/Javascript-2023/">Javascript-2023</a>
+              </p>
+              <p class="item-title">
+                <a href="/2023/02/18/%E5%85%B3%E4%BA%8Evue3%E7%9A%84%E7%A0%94%E7%A9%B6/%EF%BC%887%EF%BC%89vue3%20runtime-dom%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/" class="title">（7）vue3 runtime-dom源码解析</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-02-17T16:00:00.000Z" itemprop="datePublished">2023-02-18</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<aside
+  class="sidebar sidebar-toc collapse  in "
+  id="collapseToc"
+  itemscope
+  itemtype="http://schema.org/WPSideBar"
+>
+  <div class="slimContent">
+    <nav id="toc" class="article-toc">
+      <h3 class="toc-title">文章目录</h3>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%80%E6%97%A9"><span class="toc-number">1.</span> <span class="toc-text">最早</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#GPT2-GPT3"><span class="toc-number">2.</span> <span class="toc-text">GPT2 GPT3</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E4%BA%8E%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%EF%BC%88RL%EF%BC%89"><span class="toc-number">3.</span> <span class="toc-text">关于强化学习（RL）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#GPT%E5%AF%B9%E7%8E%B0%E4%BB%8A%E7%A4%BE%E4%BC%9A%E7%9A%84%E5%8F%AF%E8%83%BD%E5%BD%B1%E5%93%8D"><span class="toc-number">4.</span> <span class="toc-text">GPT对现今社会的可能影响</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%8E%E8%A1%8C%E4%B8%9A%E7%BB%93%E5%90%88%E7%9A%84%E5%8F%AF%E8%83%BD%E6%80%A7"><span class="toc-number">5.</span> <span class="toc-text">与行业结合的可能性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#GPT%E5%85%B7%E5%A4%87%E5%AF%B9%E6%96%87%E5%AD%97%E8%A1%8C%E4%B8%9A%E5%B7%A8%E5%A4%A7%E7%9A%84%E6%94%B9%E9%80%A0%E6%BD%9C%E5%8A%9B"><span class="toc-number">6.</span> <span class="toc-text">GPT具备对文字行业巨大的改造潜力</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#GPT%E5%AF%B9%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E7%9A%84%E5%B7%A8%E5%A4%A7%E6%8C%91%E6%88%98"><span class="toc-number">7.</span> <span class="toc-text">GPT对网络安全的巨大挑战</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A4%BE%E4%BC%9A%E5%BD%B1%E5%93%8D"><span class="toc-number">8.</span> <span class="toc-text">社会影响</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%90%8D%E8%AF%8D%E8%A7%A3%E9%87%8A"><span class="toc-number">9.</span> <span class="toc-text">名词解释</span></a></li></ol>
+    </nav>
+  </div>
+</aside>
+
+<script>
+  // 移动端不显示菜单
+  if (
+    navigator.userAgent.match(
+      /(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i
+    )
+  ) {
+    let self = document.querySelector(".sidebar-toc");
+    var parent = self.parentElement;
+    parent.removeChild(self);
+  } else {
+  }
+</script>
+
+
+
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-日常/chatGPT一些学习记录" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      chatGPT一些学习记录
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2023/03/21/%E6%97%A5%E5%B8%B8/chatGPT%E4%B8%80%E4%BA%9B%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/" class="article-date">
+	  <time datetime="2023-03-20T16:00:00.000Z" itemprop="datePublished">2023-03-21</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/%E6%97%A5%E5%B8%B8/">日常</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/chatGPT/" rel="tag">chatGPT</a>
+  </span>
+
+
+        
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2023/03/21/%E6%97%A5%E5%B8%B8/chatGPT%E4%B8%80%E4%BA%9B%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/#comments" class="article-comment-link">评论</a></span>
+        
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <h2 id="最早"><a href="#最早" class="headerlink" title="最早"></a>最早</h2><p>​	自然语言处理模型，最早出圈的是2018年google发布的bert，他是一个双向Transformer编码的过程（完形填空），可以对一段文本做到深入的理解与分析，并生成高质量的语言表达。</p>
+<p>​	那他究竟是什么原理呢？</p>
+<p>​	从一段文本中，随机扣掉一部分字，然后模型不断学习此处到底应该填写什么，<strong>所谓学习与训练就是从大量的数据中学习理解复杂的上下文关系。</strong></p>
+<p>​	注：学习 无监督学习 训练 有监督学习</p>
+<p>​	bert的出现推动了自然语言处理领域的发展，在bert出现之前，我们都是基于规则与浅层神经网络（关键字理解）去解决，bert的出现使得深度学习在自然语言处理上得到了更加广泛的使用。</p>
+<p>​	在bert出现之前，openid就出版了GPT1，GPT1也是基于Transformers进行实现，但是gpt没有走双向Transformers的方向，而是走类似单字接龙的方向，由长文单字接龙的自回归所生成，不过GPT1并没有出现bert的惊人效果，所以早期的GPT没啥热度。</p>
+<h2 id="GPT2-GPT3"><a href="#GPT2-GPT3" class="headerlink" title="GPT2 GPT3"></a>GPT2 GPT3</h2><p>​	基于bert的成就，大家都看到深度学习在语言模型上的可行性，于是大家都开始各种预训练模型，完形填空，判断题，改错题，GPT2、3也确实是这个思路，开始提升训练数据量，这个成果我们称之为开卷有益（无监督学习）。</p>
+<p>​	让chatGPT对海量互联网文本做单字接龙，以扩充模型的词汇量、语言只是、世界的信息与知识。是chatGPT从哑巴鹦鹉变成了脑容量超大的懂王鹦鹉，这个和人类的学习其实很相似，小孩刚刚来到这个解释，就是不断的输入信息。</p>
+<p>​	经过巨量的数据训练之后，我们下一步就需要情景学习（<strong>in-context learning</strong>），这两个阶段是NLP模型的基础工作流程，简单来说，就是让chatGPT对优质对话范例做单字接龙，以规范回答的对话模式和对话内容。是chatGPT变成懂规矩的博学鹦鹉，这里的场景标记几个就够了，机器一旦学会了规范，便可以应对此类所有问题。</p>
+<h2 id="关于强化学习（RL）"><a href="#关于强化学习（RL）" class="headerlink" title="关于强化学习（RL）"></a>关于强化学习（RL）</h2><p>​	几年前，alpha go击败了柯洁，几乎说明了，经过强化学习，机器可以做到近乎人类极限的程度，但是这样的场景有一个前提，一个非常明确的奖惩机制，alpha go并不理解围棋规则，但是他可以接收到成功、失败的反馈，模型会根据反馈不断调整策略，已达到更多次成功的目的。</p>
+<p>​	我们可以看到alpha go的强化学习规则书相对简单的，因为目标明确，而在NLP领域强化学习却很难实现。</p>
+<p>​	因为NLP是语言，语言是没有固定的对错，这就意味着无法设定奖惩机制，除非人工来做反馈。</p>
+<p>​	openid还就这么干了，这被称之为 <strong>RLHF（Reinforcement Learning from Human Feedback）</strong></p>
+<p>​	openid公司找了40家外包公司，不断帮助gpt筛选什么是好的，什么是坏的，通过这种方式构建了一个奖励（reward）模型。</p>
+<p>​	这样训练是为了让他学会举一反三的规律，开始出现类似人类的价值价值观与思考模式。</p>
+<p>​	于是gpt通过这样奖励模型，开始感知到真实世界，开始了与真实世界的拟合。甚至可以说奖励模型就是gpt的母体，他对人类的理解不取决于世界，而是取决于模型。</p>
+<p>​	这样引导学习的方式，在超大模型上出现惊人的效果，gpt在巨量的数据与规范 + 手动标注引导下，变成了看起来有心智的超级人工智能，甚至出现了理解、例子、思维链的能力。</p>
+<p>​	这样的方式也是存在缺点的，比如缺点是可能混淆记忆，无法直接查看个更新所学，并且高度依赖学习材料</p>
+<img src="https://www.vkcyan.top/FgOCZQEw2fTJZsn40Q_b5KP5EvZy.png" style="zoom:50%;" />
+
+
+
+<h2 id="GPT对现今社会的可能影响"><a href="#GPT对现今社会的可能影响" class="headerlink" title="GPT对现今社会的可能影响"></a>GPT对现今社会的可能影响</h2><p>​	chatGPT是里程碑的产品，就像流浪地球里面的行星发动机，刚开始大家都都不知道其潜力，经过验证后，地球上迅速出现了几万座行星发动机，并完成了最后的流浪地球，chatGPT这样大语言模型就像最开始几座行星发动机 ，最终也将会形成改变我们生活的推力</p>
+<p>​	合理的使用大预言模型，就可以让一个普通人快速准确的触及各行各业的平均知识， 以及具体解法</p>
+<p>​	所以我们可以畅想，未来我们也许不在需要学习如何打架，只需要对gpt发号施令，让机器去具体的做事即可</p>
+<p>​	除了chatGPT本身具备对人类的能力输出，chatGPT具备我们人类不具备的一点，那就是他可以在语言中学会世界知识。</p>
+<p>​	人脑是有限的，寿命是有限，个体死亡，一切都会消失，直到语言的发明，打通了过去与未来，知识以文字作为载体传承至今，一直以来我们通过纸质、或者其他物理形式进行存储，其效率是有限的，直到计算机的出现，我们开始用电子文档替代纸质， 信息传递的效率飞速提升，但是同时也带来了信息处理的巨大成本。</p>
+<p>​	所以人工智能领域的自然语言技术应运而生（NLP），其目标就是让机器理解人类的语言，协助人类处理工作，这是人工智能领域非常重要的发展方向，虽然这些年发展缓慢，但是依旧被很多公司加以厚望，因为机器不需要作息，没有情绪，效率极高，可以为企业节省大量的成本。</p>
+<h2 id="与行业结合的可能性"><a href="#与行业结合的可能性" class="headerlink" title="与行业结合的可能性"></a>与行业结合的可能性</h2><ul>
+<li>搜索引擎，帮助用户更加精准的筛选信息</li>
+<li>笔记工作结合，辅助阅读与写作</li>
+<li>办公软件结合，辅助文字处理，数据分析，演示制作</li>
+<li>教育培训结合，指定学习计划，寻找学习资料</li>
+<li>开发工具结合，辅助编写业务代码，调试纠错</li>
+<li>客服系统结合，全天候问答，</li>
+<li>视频会议结合，会议记录，总结，谈话查找</li>
+<li>审核机制结合，少选评论，统计舆论，给出提醒</li>
+<li>行业顾问，提供法律，医疗，健身等等建议</li>
+<li>社交媒体结合，帮助寻找兴趣相投的用户与话题</li>
+<li>与视频音乐结合，个性化推荐视频、音乐、小说、动漫</li>
+<li>游戏剧情结合，让NPC给玩家带来更加灵活的对话体验</li>
+</ul>
+<h2 id="GPT具备对文字行业巨大的改造潜力"><a href="#GPT具备对文字行业巨大的改造潜力" class="headerlink" title="GPT具备对文字行业巨大的改造潜力"></a>GPT具备对文字行业巨大的改造潜力</h2><ul>
+<li>学术界 创造知识</li>
+<li>教育行业 传承知识</li>
+<li>新闻行业 传播知识</li>
+</ul>
+<p>​	还有对传统教育行业的巨大挑战，不是GPT可以给学生写作业，而是对现有的人才教育模式存在很大的冲击。</p>
+<p>​	按照现在的教育模式（应试教育，传授既有知识）出来的学生，还能应对未来的5-10年的社会需求吗？</p>
+<p>​	其实现在已经不太符合了，因为社会变化太快了，以前人们可以通过学习的知识终生受益，现在能满足毕业后5年其实都比较难了，因为知识过时的太快了，人们就需要不断学习新的知识。</p>
+<p>​	正因如此，随着互联网时代的到来，终生学习的理念开始被人们推崇，同时教育模式也开始以【培养学习能力与创造能力】为主了，只有这样才能适应不断变化的时代。</p>
+<pre><code> 试想一下你学习了20年，掌握了一些知识，但是GPT却可以瞬间替代你完成你的能力，怎么办？以后人人都有一个熟读人类既有知识的超级大脑，市场不会因为学校的禁用，而集体不使用。
+</code></pre>
+<p>​	任何事物都存在两面性，好的一面是，GPT将方便人来对既有知识进行集成，推进教育去培养高层次人才</p>
+<h2 id="GPT对网络安全的巨大挑战"><a href="#GPT对网络安全的巨大挑战" class="headerlink" title="GPT对网络安全的巨大挑战"></a>GPT对网络安全的巨大挑战</h2><p>​	因为GPT的第一阶段，需要大量录入信息，这其中的信息难免会存在一个坏的信息，亦或者军事机密等等信息，所以国家与国家之间很难愿意共享数据，这也意味着，在不就得将来每个有实力的国家都会自己研发大语言模型</p>
+<p>​	同时在应用层面，大预言模型将会像口语、文字、电脑、互联网对社会进行再一次改造。</p>
+<h2 id="社会影响"><a href="#社会影响" class="headerlink" title="社会影响"></a>社会影响</h2><p>​	只有会工具的人取代不会使用工具的人，没有工具取代人的说法，所以真正需要害怕的是，我们成为无法成为使用工具的人，时代的车轮势不可挡，抵触新工具就意味着落后，学20年干一辈子的时代已经逐渐远去，我们身处加速时期，必须学会终生学习</p>
+<p>​	GPT正在改变人类群体应用知识的方式与继承知识的方式，甚至未来可能会形成人机合作的科研，改变人类创造知识的方式，甚至步入下一个文明形态。</p>
+<p>​	每个人的学习能力与理解能力，将是驾驭这项技术的瓶颈，也意味着是否可以充分发挥这一技术的优势，</p>
+<h2 id="名词解释"><a href="#名词解释" class="headerlink" title="名词解释"></a>名词解释</h2><p><strong>bert（Bidirectional Encoder Representations from Transformers 双向编码变换器）</strong></p>
+<p>​	BERT 基于 Transformers 模型架构，使用双向编码器来训练深度双向表示，并在多项自然语言处理任务上实现了最先进的性能</p>
+<p><strong>浅层神经网络（Shallow Neural Network）</strong></p>
+<p>​	浅层神经网络是一种神经网络，它只有一层或几层隐层，通常用于浅层特征学习和分类任务。与深层神经网络相比，浅层神经网络的参数量少，计算速度较快，但也可能会受到学习能力和表示能力的限制。</p>
+<p><strong>【UL】无监督学习（Unsupervised Learning）</strong></p>
+<p>​	无监督学习是一种机器学习的范畴，其目的是在没有明确的标签或目标函数的情况下，从数据中发现隐藏的结构和规律。在无监督学习中，模型需要从数据中学习如何将数据分组、降维、聚类等。</p>
+<p><strong>【SL】有监督学习（Supervised Learning）</strong></p>
+<p>​	有监督学习是一种机器学习的范畴，其目的是在有标签的训练数据上学习一个模型，使其能够预测新的数据。在有监督学习中，模型需要学习如何将输入映射到输出，并根据标签调整模型参数以提高预测性能。（特定的任务上进行微调，例如情感分析、文本分类、命名实体识别）</p>
+<p><strong>【RL】情景学习（Reinforcement Learning）</strong></p>
+<p>​	情景学习是一种机器学习的范畴，其目的是通过试错来学习如何在特定的情景下做出正确的决策。在情景学习中，模型需要学习如何在不断尝试和反馈的过程中最大化累计奖励。</p>
+<p><strong>【NLP】自然语言处理技术（Natural Language Processing）</strong></p>
+<p>​	自然语言处理技术是一种人工智能技术，旨在让计算机能够理解和生成自然语言。NLP 技术可以应用于文本分类、情感分析、机器翻译、问答系统等领域。</p>
+<p><strong>【LLM】大语言模型（Large Language Model）</strong></p>
+<p>​	大语言模型是一种基于神经网络的自然语言处理模型，它可以处理大量的文本数据，并学习语言的语法和语义。目前的大语言模型通常使用预训练加微调的方式进行训练，并在各种自然语言处理任务中取得了很好的表现。</p>
+<p><strong>【MLLM】多模态大语言模型（Multi modal Large Language Model）</strong></p>
+<p>​	多模态大语言模型是一种结合了自然语言处理和计算机视觉等多种模态的模型，旨在解决多模态数据的处理和理解问题。与传统的大语言模型不同，多模态大语言模型可以同时处理文字、图片、声音等不同类型的数据，并学习它们之间的交互和关联，从而提高自然语言处理和视觉任务的性能。</p>
+<p><strong>RLHF（Reinforcement Learning from Human Feedback 从人类反馈中强化学习）</strong></p>
+<p>​	这是一种机器学习的方法，旨在通过与人类交互来提高强化学习算法的性能。在 RLHF 中，算法会在执行任务的过程中接收人类反馈，并将其作为一种奖励信号来调整自己的策略。与传统的强化学习不同，RLHF 可以在学习过程中快速地获得关于任务的准确信息，并且更容易被应用于实际场景中，如自动驾驶、机器人控制等。</p>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://bluedancers.github.io/2023/03/21/%E6%97%A5%E5%B8%B8/chatGPT%E4%B8%80%E4%BA%9B%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/" title="chatGPT一些学习记录" target="_blank" rel="external">https://bluedancers.github.io/2023/03/21/日常/chatGPT一些学习记录/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/bluedancers" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/bluedancers" target="_blank"><span class="text-dark">bluedancers</span><small class="ml-1x">Web Developer &amp; Product Manager</small></a></h3>
+        <div>一切都是为了实现技术的价值</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2023/03/21/%E5%85%B3%E4%BA%8Evue3%E7%9A%84%E7%A0%94%E7%A9%B6/Vue3%E7%A1%AC%E6%A0%B8%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E7%B3%BB%E5%88%97%EF%BC%886%EF%BC%89%20100%E8%A1%8C%E4%BB%A3%E7%A0%81%20%E5%AE%9E%E7%8E%B0mini%E7%89%88ref/" title="Vue3硬核源码解析系列（6） 100行代码 实现mini版ref"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2023/03/13/%E5%85%B3%E4%BA%8Evue3%E7%9A%84%E7%A0%94%E7%A9%B6/Vue3%E7%A1%AC%E6%A0%B8%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E7%B3%BB%E5%88%97%EF%BC%884%EF%BC%89%20200%E8%A1%8C%E4%BB%A3%E7%A0%81%20%E5%AE%9E%E7%8E%B0mini%E7%89%88reactive%20+%20effect/" title="（3.1）vue3 手摸手实现mini版reactive.md"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+    <li class="toggle-toc">
+      <a class="toggle-btn " data-toggle="collapse" href="#collapseToc" aria-expanded="false" title="文章目录" role="button">    <span>[&nbsp;</span><span>文章目录</span>
+        <i class="text-collapsed icon icon-anchor"></i>
+        <i class="text-in icon icon-close"></i>
+        <span>]</span>
+      </a>
+    </li>
+    
+  </ul>
+  
+  
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-fancy btn-donate pop-onhover bg-gradient-warning" data-toggle="modal" data-target="#donateModal"><span>赏</span></button>
+  <!-- <div class="wave-icon wave-icon-danger btn-donate" data-toggle="modal" data-target="#donateModal">
+    <div class="wave-circle"><span class="icon"><i class="icon icon-bill"></i></span></div>
+  </div> -->
+  
+  
+  <div class="bar-right">
+    
+  </div>
+  </div>
+</nav>
+  
+<!-- Modal -->
+<div class="modal modal-center modal-small modal-xs-full fade" id="donateModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content donate">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <div class="modal-body">
+        <div class="donate-box">
+          <div class="donate-head">
+            <p>感谢您的支持，我会继续努力的!</p>
+          </div>
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade active in" id="alipay">
+              <div class="donate-payimg">
+                <img src="/images/donate/alipayimg.jpg" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开支付宝扫一扫，即可进行扫码打赏哦</p>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="wechatpay">
+              <div class="donate-payimg">
+                <img src="/images/donate/wechatpayimg.jpg" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开微信扫一扫，即可进行扫码打赏哦</p>
+            </div>
+          </div>
+          <div class="donate-footer">
+            <ul class="nav nav-tabs nav-justified" role="tablist">
+              <li role="presentation" class="active">
+                <a href="#alipay" id="alipay-tab" role="tab" data-toggle="tab" aria-controls="alipay" aria-expanded="true"><i class="icon icon-alipay"></i> 支付宝</a>
+              </li>
+              <li role="presentation" class="">
+                <a href="#wechatpay" role="tab" id="wechatpay-tab" data-toggle="tab" aria-controls="wechatpay" aria-expanded="false"><i class="icon icon-wepay"></i> 微信支付</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/bluedancers" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://juejin.cn/user/3720403077840519" target="_blank" title="Juejin" data-toggle=tooltip data-placement=top><i class="icon icon-juejin"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="https://cdn.staticfile.org/jquery/1.12.4/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+   
+
+
+
+
+    <script defer type="text/javascript">
+(function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'G-H48QGKLW34', 'auto');
+ga('send', 'pageview');
+
+</script>
+
+
+
+</body>
+</html>

@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>Vue3硬核源码解析系列（5）ref源码解析 | vkcyan Blog</title>
+  <meta name="description" content="前言​	本文是Vue3硬核源码解析系列的第五篇文章，在之前文章中，我们了解到了reactive effect的源码实现原理，并抽丝剥茧输出了mini版本的reactive + effect，带领大家充分理解reactive的实现原理，同时我们也发现了reactive在使用上的一些局限性，比如无法代理基础类型。 ​	正因为此，Vue3提供了另一个API ref，面对proxy无法代理基础类型数据的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Vue3硬核源码解析系列（5）ref源码解析">
+<meta property="og:url" content="https://bluedancers.github.io/2023/02/03/%E5%85%B3%E4%BA%8Evue3%E7%9A%84%E7%A0%94%E7%A9%B6/Vue3%E7%A1%AC%E6%A0%B8%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E7%B3%BB%E5%88%97%EF%BC%885%EF%BC%89%20ref%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/index.html">
+<meta property="og:site_name" content="vkcya Blog">
+<meta property="og:description" content="前言​	本文是Vue3硬核源码解析系列的第五篇文章，在之前文章中，我们了解到了reactive effect的源码实现原理，并抽丝剥茧输出了mini版本的reactive + effect，带领大家充分理解reactive的实现原理，同时我们也发现了reactive在使用上的一些局限性，比如无法代理基础类型。 ​	正因为此，Vue3提供了另一个API ref，面对proxy无法代理基础类型数据的">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/07d7fdd1b1a44560ae1fd052db6e37e0~tplv-k3u1fbpfcp-zoom-crop-mark:1512:1512:1512:851.awebp">
+<meta property="og:image" content="https://www.vkcyan.top/FkmdQj_dyMoiD6Rg7PaH-Lf7FdHO.png">
+<meta property="article:published_time" content="2023-02-02T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-03-21T09:37:42.175Z">
+<meta property="article:author" content="bluedancers">
+<meta property="article:tag" content="Vue">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/07d7fdd1b1a44560ae1fd052db6e37e0~tplv-k3u1fbpfcp-zoom-crop-mark:1512:1512:1512:851.awebp">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://bluedancers.github.io/2023/02/03/%E5%85%B3%E4%BA%8Evue3%E7%9A%84%E7%A0%94%E7%A9%B6/Vue3%E7%A1%AC%E6%A0%B8%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E7%B3%BB%E5%88%97%EF%BC%885%EF%BC%89%20ref%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="vkcya Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+
+<body class="main-center theme-black" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/bluedancers" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">bluedancers</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Web Developer &amp; Product Manager</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> HeFei, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-books">
+          <a href="/books">
+            
+            <i class="icon icon-book-fill"></i>
+            
+            <span class="menu-title">书单</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">友链</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/bluedancers" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://juejin.cn/user/3720403077840519" target="_blank" title="Juejin" data-toggle=tooltip data-placement=top><i class="icon icon-juejin"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>往者不可谏，来者犹可追</p><br/>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript/">JavaScript</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript-2021/">JavaScript-2021</a><span class="category-list-count">10</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript-2022/">JavaScript-2022</a><span class="category-list-count">15</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript-2023/">JavaScript-2023</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Javascript-2022/">Javascript-2022</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Javascript-2023/">Javascript-2023</a><span class="category-list-count">12</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%BA%A7%E5%93%81%E7%BB%8F%E7%90%86/">产品经理</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/">数据结构与算法</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%97%A5%E5%B8%B8/">日常</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%97%A5%E5%B8%B8%E5%BC%80%E5%8F%91/">日常开发</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%9D%82%E8%B0%88/">杂谈</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%8E%A9%E6%9C%BA%E6%8A%80%E5%B7%A7/">玩机技巧</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%A7%BB%E5%8A%A8%E7%AB%AF/">移动端</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%98%85%E8%AF%BB-2023/">阅读-2023</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%9A%8F%E6%83%B3%E9%9B%86/">随想集</a><span class="category-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/" rel="tag">Hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a><span class="tag-list-count">19</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NPDP/" rel="tag">NPDP</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Pinia/" rel="tag">Pinia</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue/" rel="tag">Vue</a><span class="tag-list-count">13</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue3/" rel="tag">Vue3</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/chatGPT/" rel="tag">chatGPT</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/h5%E8%A3%85%E4%BF%AE/" rel="tag">h5装修</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vue3/" rel="tag">vue3</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vw/" rel="tag">vw</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/webpack5/" rel="tag">webpack5</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/" rel="tag">个人博客</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%A7%E5%93%81%E5%88%86%E6%9E%90/" rel="tag">产品分析</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%A7%E5%93%81%E6%97%A5%E5%B8%B8/" rel="tag">产品日常</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BB%B7%E5%80%BC%E8%A7%82/" rel="tag">价值观</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BD%8E%E4%BB%A3%E7%A0%81/" rel="tag">低代码</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%85%B3%E4%BA%8EC%E7%AB%AF/" rel="tag">关于C端</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%85%B3%E4%BA%8Eproxy/" rel="tag">关于proxy</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%85%BC%E5%AE%B9%E6%80%A7/" rel="tag">兼容性</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%93%8D%E5%BA%94%E5%BC%8F/" rel="tag">响应式</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag">数据结构</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%97%A0%E9%9A%9C%E7%A2%8D/" rel="tag">无障碍</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%A7%BB%E5%8A%A8%E7%AB%AF/" rel="tag">移动端</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AB%A5%E5%B9%B4/" rel="tag">童年</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%B0%E5%BD%95/" rel="tag">记录</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%BE%93%E5%87%BA/" rel="tag">输出</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%98%85%E8%AF%BB/" rel="tag">阅读</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9A%8F%E6%83%B3/" rel="tag">随想</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9A%8F%E9%80%89%E6%9C%97%E8%AF%BB/" rel="tag">随选朗读</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/Hexo/" style="font-size: 13px;">Hexo</a> <a href="/tags/JavaScript/" style="font-size: 14px;">JavaScript</a> <a href="/tags/NPDP/" style="font-size: 13.6px;">NPDP</a> <a href="/tags/Pinia/" style="font-size: 13.4px;">Pinia</a> <a href="/tags/Vue/" style="font-size: 13.8px;">Vue</a> <a href="/tags/Vue3/" style="font-size: 13px;">Vue3</a> <a href="/tags/chatGPT/" style="font-size: 13px;">chatGPT</a> <a href="/tags/h5%E8%A3%85%E4%BF%AE/" style="font-size: 13px;">h5装修</a> <a href="/tags/vue3/" style="font-size: 13px;">vue3</a> <a href="/tags/vw/" style="font-size: 13px;">vw</a> <a href="/tags/webpack5/" style="font-size: 13px;">webpack5</a> <a href="/tags/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/" style="font-size: 13px;">个人博客</a> <a href="/tags/%E4%BA%A7%E5%93%81%E5%88%86%E6%9E%90/" style="font-size: 13px;">产品分析</a> <a href="/tags/%E4%BA%A7%E5%93%81%E6%97%A5%E5%B8%B8/" style="font-size: 13px;">产品日常</a> <a href="/tags/%E4%BB%B7%E5%80%BC%E8%A7%82/" style="font-size: 13px;">价值观</a> <a href="/tags/%E4%BD%8E%E4%BB%A3%E7%A0%81/" style="font-size: 13px;">低代码</a> <a href="/tags/%E5%85%B3%E4%BA%8EC%E7%AB%AF/" style="font-size: 13px;">关于C端</a> <a href="/tags/%E5%85%B3%E4%BA%8Eproxy/" style="font-size: 13px;">关于proxy</a> <a href="/tags/%E5%85%BC%E5%AE%B9%E6%80%A7/" style="font-size: 13px;">兼容性</a> <a href="/tags/%E5%93%8D%E5%BA%94%E5%BC%8F/" style="font-size: 13px;">响应式</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="font-size: 13.6px;">数据结构</a> <a href="/tags/%E6%97%A0%E9%9A%9C%E7%A2%8D/" style="font-size: 13px;">无障碍</a> <a href="/tags/%E7%A7%BB%E5%8A%A8%E7%AB%AF/" style="font-size: 13px;">移动端</a> <a href="/tags/%E7%AB%A5%E5%B9%B4/" style="font-size: 13px;">童年</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 13.2px;">算法</a> <a href="/tags/%E8%AE%B0%E5%BD%95/" style="font-size: 13.2px;">记录</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 13px;">设计模式</a> <a href="/tags/%E8%BE%93%E5%87%BA/" style="font-size: 13px;">输出</a> <a href="/tags/%E9%98%85%E8%AF%BB/" style="font-size: 13px;">阅读</a> <a href="/tags/%E9%9A%8F%E6%83%B3/" style="font-size: 13px;">随想</a> <a href="/tags/%E9%9A%8F%E9%80%89%E6%9C%97%E8%AF%BB/" style="font-size: 13px;">随选朗读</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/03/">三月 2023</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/02/">二月 2023</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/01/">一月 2023</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/09/">九月 2022</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/08/">八月 2022</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/07/">七月 2022</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/06/">六月 2022</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/05/">五月 2022</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/03/">三月 2022</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/12/">十二月 2021</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/10/">十月 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/09/">九月 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/06/">六月 2021</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/03/">三月 2021</a><span class="archive-list-count">9</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/Javascript-2023/">Javascript-2023</a>
+              </p>
+              <p class="item-title">
+                <a href="/2023/03/21/%E5%85%B3%E4%BA%8Evue3%E7%9A%84%E7%A0%94%E7%A9%B6/Vue3%E7%A1%AC%E6%A0%B8%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E7%B3%BB%E5%88%97%EF%BC%886%EF%BC%89%20100%E8%A1%8C%E4%BB%A3%E7%A0%81%20%E5%AE%9E%E7%8E%B0mini%E7%89%88ref/" class="title">Vue3硬核源码解析系列（6） 100行代码 实现mini版ref</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-03-20T16:00:00.000Z" itemprop="datePublished">2023-03-21</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E6%97%A5%E5%B8%B8/">日常</a>
+              </p>
+              <p class="item-title">
+                <a href="/2023/03/21/%E6%97%A5%E5%B8%B8/chatGPT%E4%B8%80%E4%BA%9B%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/" class="title">chatGPT一些学习记录</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-03-20T16:00:00.000Z" itemprop="datePublished">2023-03-21</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/Javascript-2023/">Javascript-2023</a>
+              </p>
+              <p class="item-title">
+                <a href="/2023/03/13/%E5%85%B3%E4%BA%8Evue3%E7%9A%84%E7%A0%94%E7%A9%B6/Vue3%E7%A1%AC%E6%A0%B8%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E7%B3%BB%E5%88%97%EF%BC%884%EF%BC%89%20200%E8%A1%8C%E4%BB%A3%E7%A0%81%20%E5%AE%9E%E7%8E%B0mini%E7%89%88reactive%20+%20effect/" class="title">（3.1）vue3 手摸手实现mini版reactive.md</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-03-12T16:00:00.000Z" itemprop="datePublished">2023-03-13</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2023/02/20/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/Vue3%E7%89%88%E5%90%8E%E5%8F%B0%E9%89%B4%E6%9D%83%E4%B9%8B%E5%8A%A8%E6%80%81%E8%B7%AF%E7%94%B1%E6%96%B9%E6%A1%88%E6%9D%A5%E4%BA%86%EF%BC%81/" class="title">(no title)</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-02-20T03:50:52.159Z" itemprop="datePublished">2023-02-20</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/Javascript-2023/">Javascript-2023</a>
+              </p>
+              <p class="item-title">
+                <a href="/2023/02/18/%E5%85%B3%E4%BA%8Evue3%E7%9A%84%E7%A0%94%E7%A9%B6/%EF%BC%887%EF%BC%89vue3%20runtime-dom%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/" class="title">（7）vue3 runtime-dom源码解析</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-02-17T16:00:00.000Z" itemprop="datePublished">2023-02-18</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<aside
+  class="sidebar sidebar-toc collapse  in "
+  id="collapseToc"
+  itemscope
+  itemtype="http://schema.org/WPSideBar"
+>
+  <div class="slimContent">
+    <nav id="toc" class="article-toc">
+      <h3 class="toc-title">文章目录</h3>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%80%BB%E8%BE%91%E5%9B%BE"><span class="toc-number">2.</span> <span class="toc-text">逻辑图</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E7%BD%AE%E7%9F%A5%E8%AF%86"><span class="toc-number">3.</span> <span class="toc-text">前置知识</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E7%A1%80%E7%B1%BB%E5%9E%8B%E5%9C%BA%E6%99%AF"><span class="toc-number">4.</span> <span class="toc-text">基础类型场景</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A1%88%E4%BE%8B"><span class="toc-number">4.1.</span> <span class="toc-text">案例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="toc-number">4.2.</span> <span class="toc-text">初始化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AF%BB%E5%8F%96"><span class="toc-number">4.3.</span> <span class="toc-text">读取</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B5%8B%E5%80%BC"><span class="toc-number">4.4.</span> <span class="toc-text">赋值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BE%9D%E8%B5%96%E6%94%B6%E9%9B%86%EF%BC%88trackRefValue%EF%BC%89"><span class="toc-number">4.5.</span> <span class="toc-text">依赖收集（trackRefValue）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BE%9D%E8%B5%96%E8%A7%A6%E5%8F%91%EF%BC%88triggerRefValue%EF%BC%89"><span class="toc-number">4.6.</span> <span class="toc-text">依赖触发（triggerRefValue）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B0%8F%E7%BB%93"><span class="toc-number">4.7.</span> <span class="toc-text">小结</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%8D%E6%9D%82%E7%B1%BB%E5%9E%8B%E5%9C%BA%E6%99%AF"><span class="toc-number">5.</span> <span class="toc-text">复杂类型场景</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A1%88%E4%BE%8B-1"><span class="toc-number">5.1.</span> <span class="toc-text">案例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Ref%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="toc-number">5.2.</span> <span class="toc-text">Ref初始化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AF%BB%E5%8F%96-1"><span class="toc-number">5.3.</span> <span class="toc-text">读取</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B5%8B%E5%80%BC-1"><span class="toc-number">5.4.</span> <span class="toc-text">赋值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BE%9D%E8%B5%96%E6%94%B6%E9%9B%86"><span class="toc-number">5.5.</span> <span class="toc-text">依赖收集</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#ref%E7%9A%84%E4%BE%9D%E8%B5%96%E6%94%B6%E9%9B%86%EF%BC%88trackRefValue%EF%BC%89"><span class="toc-number">5.5.1.</span> <span class="toc-text">ref的依赖收集（trackRefValue）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#proxy%E7%9A%84%E4%BE%9D%E8%B5%96%E6%94%B6%E9%9B%86%EF%BC%88track%EF%BC%89"><span class="toc-number">5.5.2.</span> <span class="toc-text">proxy的依赖收集（track）</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BE%9D%E8%B5%96%E8%A7%A6%E5%8F%91"><span class="toc-number">5.6.</span> <span class="toc-text">依赖触发</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AF%B9%E8%B1%A1%E5%B1%9E%E6%80%A7%E8%A7%A6%E5%8F%91%E4%BE%9D%E8%B5%96"><span class="toc-number">5.6.1.</span> <span class="toc-text">对象属性触发依赖</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AF%B9%E8%B1%A1%E8%A7%A6%E5%8F%91%E4%BE%9D%E8%B5%96"><span class="toc-number">5.6.2.</span> <span class="toc-text">对象触发依赖</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E4%BA%8Eref%E7%9A%84%E4%B8%80%E4%BA%9B%E9%97%AE%E9%A2%98"><span class="toc-number">6.</span> <span class="toc-text">关于ref的一些问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">7.</span> <span class="toc-text">总结</span></a></li></ol>
+    </nav>
+  </div>
+</aside>
+
+<script>
+  // 移动端不显示菜单
+  if (
+    navigator.userAgent.match(
+      /(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i
+    )
+  ) {
+    let self = document.querySelector(".sidebar-toc");
+    var parent = self.parentElement;
+    parent.removeChild(self);
+  } else {
+  }
+</script>
+
+
+
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-关于vue3的研究/Vue3硬核源码解析系列（5） ref源码解析" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Vue3硬核源码解析系列（5）ref源码解析
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2023/02/03/%E5%85%B3%E4%BA%8Evue3%E7%9A%84%E7%A0%94%E7%A9%B6/Vue3%E7%A1%AC%E6%A0%B8%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E7%B3%BB%E5%88%97%EF%BC%885%EF%BC%89%20ref%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/" class="article-date">
+	  <time datetime="2023-02-02T16:00:00.000Z" itemprop="datePublished">2023-02-03</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/Javascript-2023/">Javascript-2023</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/Vue/" rel="tag">Vue</a>
+  </span>
+
+
+        
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2023/02/03/%E5%85%B3%E4%BA%8Evue3%E7%9A%84%E7%A0%94%E7%A9%B6/Vue3%E7%A1%AC%E6%A0%B8%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E7%B3%BB%E5%88%97%EF%BC%885%EF%BC%89%20ref%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/#comments" class="article-comment-link">评论</a></span>
+        
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <p><img src="https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/07d7fdd1b1a44560ae1fd052db6e37e0~tplv-k3u1fbpfcp-zoom-crop-mark:1512:1512:1512:851.awebp"></p>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>​	本文是<a target="_blank" rel="noopener" href="https://juejin.cn/column/7199826518570172472"><strong>Vue3硬核源码解析系列</strong></a>的第五篇文章，在之前文章中，我们了解到了<strong>reactive effect</strong>的源码实现原理，并抽丝剥茧输出了<a target="_blank" rel="noopener" href="https://juejin.cn/post/7209967260898033722">mini版本的reactive + effect</a>，带领大家充分理解<strong>reactive</strong>的实现原理，同时我们也发现了<strong>reactive</strong>在使用上的一些局限性，比如无法代理基础类型。</p>
+<p>​	正因为此，<strong>Vue3</strong>提供了另一个API <strong>ref</strong>，面对<strong>proxy</strong>无法代理基础类型数据的问题，<strong>ref</strong>又是如何实现其响应式的呢，本文将带领大家一起走进vue3源码世界，看看<strong>ref</strong>的实现原理</p>
+<h2 id="逻辑图"><a href="#逻辑图" class="headerlink" title="逻辑图"></a>逻辑图</h2><p>因为<strong>ref</strong>既可以传入<strong>基础类型</strong>，也可以传入<strong>复杂类型</strong>，所以其实现逻辑要比<strong>reactive</strong>更加复杂，并且依赖<strong>reactive</strong>。</p>
+<p><img src="https://www.vkcyan.top/FkmdQj_dyMoiD6Rg7PaH-Lf7FdHO.png"></p>
+<h2 id="前置知识"><a href="#前置知识" class="headerlink" title="前置知识"></a>前置知识</h2><blockquote>
+<p>如果关于class get set已经很了解，请跳过前置知识</p>
+</blockquote>
+<p>为了降低大家理解<strong>ref</strong>源码的难度，我们在正式阅读源码之前，先学习一下JavaScript的 <strong>class</strong>以及修饰符<strong>get set</strong>相关知识点</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Obj</span> &#123;</span><br><span class="line">  _value = <span class="string">&#x27;张三&#x27;</span></span><br><span class="line">  <span class="keyword">get</span> <span class="title function_">value</span>() &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;value的get行为触发&#x27;</span>)</span><br><span class="line">    <span class="keyword">return</span> <span class="variable language_">this</span>.<span class="property">_value</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">set</span> <span class="title function_">value</span>(<span class="params">val</span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;value的set行为触发&#x27;</span>, val)</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">_value</span> = val</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> obj = <span class="keyword">new</span> <span class="title class_">Obj</span>()</span><br></pre></td></tr></table></figure>
+
+<p>get： 被get修饰的方法，允许通过<strong>属性读取</strong>的方式，触发方法</p>
+<p>set： 被set修饰的方法，允许通过<strong>属性赋值</strong>的方式，触发方法</p>
+<p>当访问<code>obj.value</code>的时候，会执行被<strong>get</strong>修饰的<strong>value()<strong>，打印log，并得到返回值</strong>‘张三’</strong></p>
+<p>当我们执行<code>obj.value = ’李四‘</code>，进行赋值的时候，将会执行被<strong>set</strong>修饰的**value()**方法，打印log，并完成变量_value的赋值</p>
+<p>​	看到这里，大家是否有点似曾相识的感觉，<strong>访问与赋值触发get set</strong>，和<strong>proxy</strong>代理的对象的<strong>get set</strong>很相似，大家能理解到这一点就足够了。</p>
+<p>​	因为ref可以代理<strong>简单类型</strong>，同时也可以代理<strong>复杂类型</strong>，并且这两种情况下的响应式实现逻辑是完全不同的。</p>
+<p>​	所以接下来，我们从这两个角度分别解读ref的源码实现，以及其核心逻辑。</p>
+<p>​	首先我们看相对简单的基础类型场景，从源码的角度去了解ref是如何实现响应式的。</p>
+<h2 id="基础类型场景"><a href="#基础类型场景" class="headerlink" title="基础类型场景"></a>基础类型场景</h2><h3 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> &#123; ref, effect &#125; = <span class="title class_">Vue</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> name = <span class="title function_">ref</span>(<span class="string">&#x27;卖鱼强&#x27;</span>)</span><br><span class="line"><span class="title function_">effect</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="variable language_">document</span>.<span class="title function_">querySelector</span>(<span class="string">&#x27;#app&#x27;</span>).<span class="property">innerText</span> = name.<span class="property">value</span></span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  name.<span class="property">value</span> = <span class="string">&#x27;狂飙强&#x27;</span></span><br><span class="line">&#125;, <span class="number">2000</span>)</span><br></pre></td></tr></table></figure>
+
+<p>​	上述代码现象：</p>
+<ol>
+<li><p>页面初始化的时候显示“卖鱼强”</p>
+</li>
+<li><p>2s之后，<strong>name</strong>发生改变，变成了“狂飙强”。</p>
+</li>
+</ol>
+<p>通过<strong>现象</strong>与我们之前分析<strong>reactive</strong>的经验，这个我们可以将<strong>ref</strong>的实现分为三大模块</p>
+<ol>
+<li><strong>初始化</strong></li>
+<li><strong>读取</strong>（依赖收集）</li>
+<li><strong>赋值</strong>（依赖触发）</li>
+</ol>
+<h3 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h3><p><code>packages/reactivity/src/ref.ts</code></p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">ref</span>(<span class="params">value?: <span class="built_in">unknown</span></span>) &#123;</span><br><span class="line">  <span class="comment">// ref 实际上就是createRef</span></span><br><span class="line">  <span class="keyword">return</span> <span class="title function_">createRef</span>(value, <span class="literal">false</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">createRef</span>(<span class="params">rawValue: <span class="built_in">unknown</span>, shallow: <span class="built_in">boolean</span></span>) &#123;</span><br><span class="line">  <span class="comment">// 如果已经是ref，则直接返回</span></span><br><span class="line">  <span class="keyword">if</span> (<span class="title function_">isRef</span>(rawValue)) &#123;</span><br><span class="line">    <span class="keyword">return</span> rawValue</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// ref API 参数shallow 为 false 含义是 代理是否是浅层的,浅层则只会代理第一层数据</span></span><br><span class="line">  <span class="comment">// ref 就是RefImpl的实例</span></span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">RefImpl</span>(rawValue, shallow)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">RefImpl</span>&lt;T&gt; &#123;</span><br><span class="line">  <span class="keyword">private</span> <span class="attr">_value</span>: T <span class="comment">// 被代理对象</span></span><br><span class="line">  <span class="keyword">private</span> <span class="attr">_rawValue</span>: T <span class="comment">// 原始对象</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">public</span> dep?: <span class="title class_">Dep</span> = <span class="literal">undefined</span> <span class="comment">// Dep是reative阶段声明的Set, 内部存放的是ReactiveEffect</span></span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">readonly</span> __v_isRef = <span class="literal">true</span> <span class="comment">// 将RefImpl实例默认为true, 未来的isRef判断就一定为true</span></span><br><span class="line"></span><br><span class="line">  <span class="title function_">constructor</span>(<span class="params">value: T, <span class="keyword">public</span> <span class="keyword">readonly</span> __v_isShallow: <span class="built_in">boolean</span></span>) &#123; </span><br><span class="line">    <span class="comment">// 寻找原始类型，如果是基础类型不会做任何处理</span></span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">_rawValue</span> = <span class="title function_">toRaw</span>(value) </span><br><span class="line">    <span class="comment">// 如果value是基础类型，toReactive内部不会做任何处理</span></span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">_value</span> = <span class="title function_">toReactive</span>(value)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">get</span> <span class="title function_">value</span>() &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="variable language_">this</span>.<span class="property">_value</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">set</span> <span class="title function_">value</span>(<span class="params">newVal</span>) &#123;</span><br><span class="line">    newVal = <span class="title function_">toRaw</span>(newVal)</span><br><span class="line">    <span class="comment">// 判断新旧值是否一致，不一致进入if</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="title function_">hasChanged</span>(newVal, <span class="variable language_">this</span>.<span class="property">_rawValue</span>)) &#123;</span><br><span class="line">      <span class="comment">// 每次value的值发生修改的时候，都保存一下原始对象</span></span><br><span class="line">      <span class="variable language_">this</span>.<span class="property">_rawValue</span> = newVal</span><br><span class="line">     	<span class="comment">// 如果value是基础类型 toReactive不会做任何处理</span></span><br><span class="line">     	<span class="comment">// 如果value是复杂类型，则重新进行proxy处理</span></span><br><span class="line">      <span class="variable language_">this</span>.<span class="property">_value</span> = <span class="title function_">toReactive</span>(newVal)</span><br><span class="line"> </span><br><span class="line">      <span class="comment">// 依赖触发，后面单独说</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>通过源码分析，我们可以发现，<strong>ref</strong>的本质就是<strong>new RefImpl</strong></p>
+<p>我们ref传入的参数 原始对象被保存到_rawValue，同时将参数（“卖鱼强”）保存到-value中，便于后续的get set</p>
+<h3 id="读取"><a href="#读取" class="headerlink" title="读取"></a>读取</h3><p>调用<code>name.value</code>的时候，会触发<strong>RefImpl</strong>的**get value()**，方法内部返回最新的_value，完成读取。</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">get</span> <span class="title function_">value</span>() &#123;</span><br><span class="line">  <span class="comment">// trackRefValue(this) // 依赖收集，后面单独说</span></span><br><span class="line">  </span><br><span class="line">  <span class="keyword">return</span> <span class="variable language_">this</span>.<span class="property">_value</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="赋值"><a href="#赋值" class="headerlink" title="赋值"></a>赋值</h3><p><code>name.value</code>发生赋值的时候，会触发<strong>RefImpl</strong>的**set value()**方法，方法内部进行_value的赋值，完成数据更新。</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">set</span> <span class="title function_">value</span>(<span class="params">newVal</span>) &#123;</span><br><span class="line">  <span class="comment">// 判断新旧值是否一致，不一致进入if</span></span><br><span class="line">  <span class="keyword">if</span> (<span class="title function_">hasChanged</span>(newVal, <span class="variable language_">this</span>.<span class="property">_rawValue</span>)) &#123;</span><br><span class="line">    <span class="comment">// 如果value是基础类型 toReactive不会做任何处理</span></span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">_value</span> = <span class="title function_">toReactive</span>(newVal)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// triggerRefValue(this)// 依赖触发，后面单独说</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>到此为止，<strong>ref</strong>的基础逻辑就完成，我们已经具备给<strong>ref</strong>赋值、读取的能力。</p>
+<p>但是还不具备响应式的能力，接下来就让我们看看，ref的响应式系统是如何实现的。</p>
+<h3 id="依赖收集（trackRefValue）"><a href="#依赖收集（trackRefValue）" class="headerlink" title="依赖收集（trackRefValue）"></a>依赖收集（trackRefValue）</h3><p>​	根据我们解读<strong>reactive</strong>的源码经验，我们可以猜到，<strong>ref</strong>一定是在<strong>get</strong>中完成依赖收集的，事实也是如此。</p>
+<p>​	而第一次<strong>ref</strong>的<strong>get</strong>是何时触发的呢？</p>
+<p>​	答案是初始化时期的<strong>effect</strong>，<strong>effect</strong>触发后，内部<strong>fn</strong>被保存到<strong>activeEffect</strong>中，并触发<strong>fn</strong>，<strong>fn</strong>访问了<code>name.value</code>，触发了<strong>ref</strong>的<strong>get</strong>行为，所以接下来我们前往<strong>RefImpl</strong>的<strong>get</strong>中，看看<strong>ref</strong>是如何完成依赖收集的。</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">get</span> <span class="title function_">value</span>() &#123;</span><br><span class="line">  <span class="comment">// 依赖收集函数 将当前RefImpl实例传入方法</span></span><br><span class="line">  <span class="title function_">trackRefValue</span>(<span class="variable language_">this</span>)</span><br><span class="line">  <span class="keyword">return</span> <span class="variable language_">this</span>.<span class="property">_value</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">trackRefValue</span>(<span class="params">ref</span>) &#123;</span><br><span class="line">  <span class="comment">// shouldTrack一定为true，activeEffect在effect执行阶段保存了fn，所以一定存在</span></span><br><span class="line">  <span class="keyword">if</span> (shouldTrack &amp;&amp; activeEffect) &#123;</span><br><span class="line">    <span class="comment">// createDep我们在reactive中见过，含义为创建一个Set</span></span><br><span class="line">    <span class="comment">// 所以这个实际函数是给RefImpl实例的dep赋值为Set，然后在传入trackEffects方法</span></span><br><span class="line">  	<span class="title function_">trackEffects</span>(ref.<span class="property">dep</span> || (ref.<span class="property">dep</span> = <span class="title function_">createDep</span>()))</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">trackEffects</span>(<span class="params">dep: Dep,</span>) &#123;</span><br><span class="line">  <span class="comment">// 将当前activeEffect，也就是effect的fn，保存到当前RefImpl实例的dep中，effect成功被ref依赖收集到实例的dep中</span></span><br><span class="line"> 	dep.<span class="title function_">add</span>(activeEffect)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>通过以上源码，我们可以发现，他们都公用了<strong>activeEffect</strong>部分的逻辑，但是<strong>ref</strong>收集依赖的方式与<strong>reactive</strong>是存在一些差别的</p>
+<ul>
+<li><strong>reactive</strong>的依赖收集通过<strong>WeakMap</strong>完成，实现<strong>属性、变量与effect fn</strong>的绑定关系</li>
+<li><strong>ref</strong>则通过自身实例内部的<strong>dep</strong>变量来保存所有相关的<strong>effect fn</strong></li>
+</ul>
+<h3 id="依赖触发（triggerRefValue）"><a href="#依赖触发（triggerRefValue）" class="headerlink" title="依赖触发（triggerRefValue）"></a>依赖触发（triggerRefValue）</h3><p>若干时间后，<code>name.value</code>的值被修改，触发<strong>RefImpl</strong>的<strong>set value</strong></p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">set</span> <span class="title function_">value</span>(<span class="params">newVal</span>) &#123;</span><br><span class="line">  <span class="comment">// 判断传入值是否与原始值不一致</span></span><br><span class="line">  <span class="keyword">if</span> (<span class="title function_">hasChanged</span>(newVal, <span class="variable language_">this</span>.<span class="property">_rawValue</span>)) &#123;</span><br><span class="line">    <span class="comment">// 完成赋值</span></span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">_value</span> = <span class="title function_">toReactive</span>(newVal)</span><br><span class="line">    <span class="comment">// 依赖触发</span></span><br><span class="line">    <span class="title function_">triggerRefValue</span>(<span class="variable language_">this</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">triggerRefValue</span>(<span class="params">ref: RefBase&lt;<span class="built_in">any</span>&gt;</span>) &#123;</span><br><span class="line">  <span class="keyword">if</span> (ref.<span class="property">dep</span>) &#123; <span class="comment">// dep为依赖收集阶段收集到的依赖，内部为effect的fn</span></span><br><span class="line">    <span class="title function_">triggerEffects</span>(ref.<span class="property">dep</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">triggerEffects</span>(<span class="params">dep: Dep</span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> effects = <span class="title function_">isArray</span>(dep) ? dep : [...dep] <span class="comment">// 转为数组</span></span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">const</span> effect <span class="keyword">of</span> effects) &#123;</span><br><span class="line">    	<span class="comment">// 进入依赖触发函数</span></span><br><span class="line">      <span class="title function_">triggerEffect</span>(effect)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">triggerEffect</span>(<span class="params">effect: ReactiveEffect</span>) &#123;</span><br><span class="line">  <span class="comment">// 依次通过run触发被收集的effect的fn，至此完成依赖触发工作</span></span><br><span class="line">  effect.<span class="title function_">run</span>()</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>依赖触发的逻辑就非常简单了，<strong>set value</strong>的同时，获取当前<strong>ref</strong>的<strong>dep</strong>，并遍历<strong>dep</strong>中的依赖，依次执行，完成依赖触发。</p>
+<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p>​	到此为止，我们基础类型场景的<strong>ref</strong>源码解读就结束了，我们简单做一下总结，</p>
+<p>​	相比较于<strong>reactive</strong>，该场景下的逻辑要稍微简单一点，相关依赖<strong>（effect fn）</strong>被实例本身的<strong>dep</strong>管理，没有构建复杂的<strong>WeakMap</strong>对象。</p>
+<p><strong>ref</strong>与<strong>reactive</strong>的收集与触发的逻辑也不相同</p>
+<ul>
+<li>ref实际上是一个<strong>class</strong> <strong>RefImpl</strong>的实例</li>
+<li>数据响应并不是通过<strong>proxy</strong>实现，而是通过<strong>class</strong> 的<strong>get</strong> <strong>set</strong>修饰符实现</li>
+<li>依赖收集、触发并不是通过<strong>WeakMap</strong>实现，而是通过<strong>RefImpl</strong>实例中的变量<strong>dep</strong>实现</li>
+</ul>
+<h2 id="复杂类型场景"><a href="#复杂类型场景" class="headerlink" title="复杂类型场景"></a>复杂类型场景</h2><p>​	大家都知道<strong>ref</strong>不仅可以实现基础类型的响应式，还可以实现复杂类型的响应式，我们可以说<strong>ref</strong>是<strong>reactive</strong>的超集，那<strong>ref</strong>是如何实现既支持基础类型也支持复杂类型的呢？</p>
+<p>​	接下来就让我们看看复杂类型场景下的<strong>ref</strong>是如何完成响应式的吧。</p>
+<h3 id="案例-1"><a href="#案例-1" class="headerlink" title="案例"></a>案例</h3><figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> &#123; ref, effect &#125; = <span class="title class_">Vue</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> obj = <span class="title function_">ref</span>(&#123;</span><br><span class="line">  <span class="attr">name</span>: <span class="string">&#x27;卖鱼强&#x27;</span></span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="title function_">effect</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="variable language_">document</span>.<span class="title function_">querySelector</span>(<span class="string">&#x27;#app&#x27;</span>).<span class="property">innerText</span> = obj.<span class="property">value</span>.<span class="property">name</span></span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  obj.<span class="property">value</span>.<span class="property">name</span> = <span class="string">&#x27;狂飙强&#x27;</span></span><br><span class="line">&#125;, <span class="number">4000</span>)</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="Ref初始化"><a href="#Ref初始化" class="headerlink" title="Ref初始化"></a>Ref初始化</h3><p>首先依旧是进入<strong>ref</strong>函数中，开始<strong>new RefImpl</strong>，前面流程完全一致，所以直接我们进入<strong>RefImpl</strong>内部</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">RefImpl</span>&lt;T&gt; &#123;</span><br><span class="line">  <span class="keyword">private</span> <span class="attr">_value</span>: T <span class="comment">// 被代理对象</span></span><br><span class="line">  <span class="keyword">private</span> <span class="attr">_rawValue</span>: T</span><br><span class="line"></span><br><span class="line">  <span class="keyword">public</span> dep?: <span class="title class_">Dep</span> = <span class="literal">undefined</span> <span class="comment">// Dep是reative阶段声明的Set,内部存放的是ReactiveEffect</span></span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">readonly</span> __v_isRef = <span class="literal">true</span> <span class="comment">// 将RefImpl的实例全部置为true,下次isRef判断就会为true</span></span><br><span class="line"></span><br><span class="line">  <span class="title function_">constructor</span>(<span class="params">value: T, <span class="keyword">public</span> <span class="keyword">readonly</span> __v_isShallow: <span class="built_in">boolean</span></span>) &#123;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">_rawValue</span> = <span class="title function_">toRaw</span>(value) <span class="comment">// toRaw 获取原始数据</span></span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">_value</span> = <span class="title function_">toReactive</span>(value) <span class="comment">// 跳转到toReactive函数中 并且最终会获取到一个proxy对象</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">get</span> <span class="title function_">value</span>() &#123;&#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">set</span> <span class="title function_">value</span>(<span class="params">newVal</span>) &#123;&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> toReactive = &lt;T <span class="keyword">extends</span> <span class="built_in">unknown</span>&gt;(<span class="attr">value</span>: T): <span class="function"><span class="params">T</span> =&gt;</span></span><br><span class="line">  <span class="title function_">isObject</span>(value) ? <span class="title function_">reactive</span>(value) : value <span class="comment">// value为object，进入reactive(value)逻辑 最终返回一个proxy的对象</span></span><br></pre></td></tr></table></figure>
+
+<p>​	在<strong>constructor</strong>逻辑中，我们可以看到<strong>this._value &#x3D; toReactive(value)<strong>，而</strong>toReactive</strong>函数中，会首先识别<strong>value</strong>类型，如果不是<strong>object</strong>，原路返回，如果是<strong>object</strong>，将会被<strong>reactive</strong>函数处理，所以在该场景下，<strong>value</strong>将被<strong>reactive</strong>函数处理成<strong>proxy</strong>对象。</p>
+<p>​	也就是说，此时<strong>ref</strong>内部的**_value<strong>实际上成了</strong>reactive**类型。</p>
+<h3 id="读取-1"><a href="#读取-1" class="headerlink" title="读取"></a>读取</h3><p>​	初始化阶段，<strong>effect</strong>触发的时候，将会读取<strong>obj.value.name</strong>，，首先会访问量<strong>obj.value</strong>，触发<strong>ref</strong>的<strong>get</strong>方法。</p>
+<p>​	<strong>obj.value</strong>获取完成后，继续去获取<strong>obj.value.name</strong>，而<strong>name</strong>已经在初始化阶段，被<strong>toReactive</strong>处理成了<strong>proxy</strong>，所以接下来，会再触发<strong>reactive</strong>的<strong>get</strong>，来获取<code>name</code></p>
+<p>​	也就是说，读取阶段，实际上触发了2次<strong>get</strong>，一次是<strong>ref</strong>的<strong>get value</strong>，一次是<strong>proxy</strong>的<strong>get</strong>，进而完成了变量的读取。</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">get</span> <span class="title function_">value</span>() &#123;</span><br><span class="line">  <span class="comment">// trackRefValue(this) // 依赖收集，后面单独说</span></span><br><span class="line">  <span class="keyword">return</span> <span class="variable language_">this</span>.<span class="property">_value</span> <span class="comment">// 获取到proxy类型的&#123;name: &#x27;张三&#x27;&#125;，进而再次触发proxy的get方法</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="赋值-1"><a href="#赋值-1" class="headerlink" title="赋值"></a>赋值</h3><p>若干时间后，<strong>obj.value.name</strong>发生<strong>set</strong>行为，首先依旧会触发<strong>ref</strong>的<strong>get</strong>，获取<code>obj.value</code>，然后再触发<strong>reactive</strong>的<strong>set</strong>方法，完成<strong>name</strong>的赋值。</p>
+<p>整个赋值过程，实际上分别触发了ref的<strong>get value</strong>，和proxy的<strong>set</strong>，进而完成变量的赋值</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//ref 本身的set在value为object，并且没有直接修改ref.value的情况下，不会被触发</span></span><br><span class="line"><span class="keyword">set</span> <span class="title function_">value</span>(<span class="params">newVal</span>) &#123;&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>到此为止，我们了解了ref在处理复杂对象时候的读取与赋值的逻辑。</p>
+<p>读取：<strong>先触发ref的get，再触发proxy的get</strong></p>
+<p>赋值：<strong>先触发ref的get，再触发proxy的set</strong></p>
+<h3 id="依赖收集"><a href="#依赖收集" class="headerlink" title="依赖收集"></a>依赖收集</h3><p>依赖收集是在<strong>get</strong>阶段进行完成，而通过上面的分析我们可以了解到，<strong>ref</strong>的<strong>get</strong>实际上其内部是两次<strong>get</strong>事件，所以我们分开来看。</p>
+<h4 id="ref的依赖收集（trackRefValue）"><a href="#ref的依赖收集（trackRefValue）" class="headerlink" title="ref的依赖收集（trackRefValue）"></a>ref的依赖收集（trackRefValue）</h4><p>effect初始化阶段执行的时候，会读取<code>obj.value.name</code>，首先会触发<strong>ref</strong>的<strong>get</strong>方法</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">get</span> <span class="title function_">value</span>() &#123;</span><br><span class="line">  <span class="comment">// 依赖收集函数 将当前ref本身传入方法</span></span><br><span class="line">  <span class="title function_">trackRefValue</span>(<span class="variable language_">this</span>)</span><br><span class="line">  <span class="keyword">return</span> <span class="variable language_">this</span>.<span class="property">_value</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>ref</strong>的<strong>get</strong>方法触发了<strong>trackRefValue</strong>，会在当前<strong>ref</strong>的<strong>dep</strong>中收集到<strong>effect</strong>，此处逻辑与<strong>ref</strong>为基础类型的逻辑一致。</p>
+<h4 id="proxy的依赖收集（track）"><a href="#proxy的依赖收集（track）" class="headerlink" title="proxy的依赖收集（track）"></a>proxy的依赖收集（track）</h4><p>​	<strong>ref</strong>的的<strong>get</strong>完成后，紧接着触发了<strong>reactive</strong>的<strong>get</strong>，然后<strong>get</strong>内部通过<strong>WeakMap</strong>再次完成依赖收集（相关逻辑参考<a target="_blank" rel="noopener" href="https://juejin.cn/post/7202132390549553211">Vue3硬核源码解析系列（3） reactive + effect源码解析</a>）。</p>
+<p>​	我们会发现，在该阶段，我们内部实际上<strong>触发了2次依赖收集</strong>，<strong>effect fn</strong>被<strong>ref</strong>收集的同时，也被<strong>proxy</strong>收集了。</p>
+<h3 id="依赖触发"><a href="#依赖触发" class="headerlink" title="依赖触发"></a>依赖触发</h3><p>因为ref内部是一个对象，所以赋值也存在多种方式，这依赖触发存在多种方式</p>
+<h4 id="对象属性触发依赖"><a href="#对象属性触发依赖" class="headerlink" title="对象属性触发依赖"></a>对象属性触发依赖</h4><figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">obj.<span class="property">value</span>.<span class="property">name</span> = <span class="string">&#x27;狂飙强&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>这种<strong>不会破坏RefImpl初始化阶段其内部构建的proxy</strong>，仅修改已有<strong>proxy</strong>内部变量的值。</p>
+<p>首先触发的是<strong>obj.value</strong>的<strong>get</strong>行为（此时没有<strong>effet</strong>在执行，不会发生依赖收集）。然后<strong>ref</strong>的<strong>get</strong>函数返回<strong>proxy</strong>对象 <code>&#123;name:&#39;卖鱼强&#39;&#125; </code>，紧接着触发<strong>proxy</strong>的<strong>set</strong>，并完成依赖触发（proxy的依赖触发请看这里<a target="_blank" rel="noopener" href="https://juejin.cn/post/7202132390549553211">Vue3硬核源码解析系列（3） reactive + effect源码解析</a>）。</p>
+<h4 id="对象触发依赖"><a href="#对象触发依赖" class="headerlink" title="对象触发依赖"></a>对象触发依赖</h4><figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">obj.<span class="property">value</span> = &#123;</span><br><span class="line">  <span class="attr">name</span>: <span class="string">&#x27;狂飙强&#x27;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>第二种方式首先触发<strong>obj.value</strong>的<strong>set</strong>行为，同时替换掉ref的值，<strong>注意这会破坏RefImpl初始化构建的_value的proxy</strong>，进而导致<strong>WeakMap</strong>中已有的<strong>依赖关系断裂</strong></p>
+<p>然后执行<strong>triggerRefValue</strong>，触发，ref本身在get阶段收集了相关effect fn，。</p>
+<p>effect fn被触发后，再次触发<strong>ref的get</strong>，<strong>proxy的get</strong>，并帮助<strong>proxy</strong>又重建了与<strong>effect fn</strong>之间的依赖关系。</p>
+<p>这就是为什么存在依赖收集2次的原因。</p>
+<p>到此为止，我们的<strong>ref</strong>核心源码分析就全部完毕了。</p>
+<h2 id="关于ref的一些问题"><a href="#关于ref的一些问题" class="headerlink" title="关于ref的一些问题"></a>关于ref的一些问题</h2><p><strong>Q：为啥一定要.value，不能干掉吗？</strong></p>
+<p>A：非常遗憾，value是去不掉的，因为ref依赖class get set 进行实现，在当前实现的场景下，可以简写为v，但是无法去除</p>
+<p><strong>Q：我是不是可以完全使用ref，不用reactive？</strong></p>
+<p>A：是的，可以完全使用ref，因为ref会根据你传入的类型，自动识别内部是否需要使用reactive，但是读过源码的同学知道ref在处理响应式系统中，存在重复收集依赖的场景，如果你有极致的性能要求，建议复杂类型依旧使用reactive完成，业务开发场景则无所谓。</p>
+<p>如果还有其他问题，请评论区提问~</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>​	通过对ref源码的阅读，我们可以察觉到，如果仅仅聚焦基础类型的ref，其实底层实现还是比较简单的，所以建议有兴趣的同学渐进式的阅读源码，先完成基础类型场景的源码解读，再进行复杂类型的源码解读，这样事半功倍~</p>
+<p>​	如果有任何问题，请评论区留言~</p>
+<p>​	下一个阶段，我将手摸手带大家完成<strong>mini版本vue3 ref API</strong>，帮助大家深入理解<strong>ref</strong>~</p>
+<p>​	</p>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://bluedancers.github.io/2023/02/03/%E5%85%B3%E4%BA%8Evue3%E7%9A%84%E7%A0%94%E7%A9%B6/Vue3%E7%A1%AC%E6%A0%B8%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E7%B3%BB%E5%88%97%EF%BC%885%EF%BC%89%20ref%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/" title="Vue3硬核源码解析系列（5）ref源码解析" target="_blank" rel="external">https://bluedancers.github.io/2023/02/03/关于vue3的研究/Vue3硬核源码解析系列（5） ref源码解析/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/bluedancers" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/bluedancers" target="_blank"><span class="text-dark">bluedancers</span><small class="ml-1x">Web Developer &amp; Product Manager</small></a></h3>
+        <div>一切都是为了实现技术的价值</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2023/02/14/%E5%85%B3%E4%BA%8Evue3%E7%9A%84%E7%A0%94%E7%A9%B6/%EF%BC%886%EF%BC%89vue3%20reactivity-watch%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/" title="（6）vue3 reactivity-watch源码解析"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2023/02/03/%E5%85%B3%E4%BA%8Evue3%E7%9A%84%E7%A0%94%E7%A9%B6/%EF%BC%886%EF%BC%89vue3%20computed%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/" title="（5）vue3 reactivity-computed源码解析"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+    <li class="toggle-toc">
+      <a class="toggle-btn " data-toggle="collapse" href="#collapseToc" aria-expanded="false" title="文章目录" role="button">    <span>[&nbsp;</span><span>文章目录</span>
+        <i class="text-collapsed icon icon-anchor"></i>
+        <i class="text-in icon icon-close"></i>
+        <span>]</span>
+      </a>
+    </li>
+    
+  </ul>
+  
+  
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-fancy btn-donate pop-onhover bg-gradient-warning" data-toggle="modal" data-target="#donateModal"><span>赏</span></button>
+  <!-- <div class="wave-icon wave-icon-danger btn-donate" data-toggle="modal" data-target="#donateModal">
+    <div class="wave-circle"><span class="icon"><i class="icon icon-bill"></i></span></div>
+  </div> -->
+  
+  
+  <div class="bar-right">
+    
+  </div>
+  </div>
+</nav>
+  
+<!-- Modal -->
+<div class="modal modal-center modal-small modal-xs-full fade" id="donateModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content donate">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <div class="modal-body">
+        <div class="donate-box">
+          <div class="donate-head">
+            <p>感谢您的支持，我会继续努力的!</p>
+          </div>
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade active in" id="alipay">
+              <div class="donate-payimg">
+                <img src="/images/donate/alipayimg.jpg" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开支付宝扫一扫，即可进行扫码打赏哦</p>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="wechatpay">
+              <div class="donate-payimg">
+                <img src="/images/donate/wechatpayimg.jpg" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开微信扫一扫，即可进行扫码打赏哦</p>
+            </div>
+          </div>
+          <div class="donate-footer">
+            <ul class="nav nav-tabs nav-justified" role="tablist">
+              <li role="presentation" class="active">
+                <a href="#alipay" id="alipay-tab" role="tab" data-toggle="tab" aria-controls="alipay" aria-expanded="true"><i class="icon icon-alipay"></i> 支付宝</a>
+              </li>
+              <li role="presentation" class="">
+                <a href="#wechatpay" role="tab" id="wechatpay-tab" data-toggle="tab" aria-controls="wechatpay" aria-expanded="false"><i class="icon icon-wepay"></i> 微信支付</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/bluedancers" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://juejin.cn/user/3720403077840519" target="_blank" title="Juejin" data-toggle=tooltip data-placement=top><i class="icon icon-juejin"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="https://cdn.staticfile.org/jquery/1.12.4/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+   
+
+
+
+
+    <script defer type="text/javascript">
+(function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'G-H48QGKLW34', 'auto');
+ga('send', 'pageview');
+
+</script>
+
+
+
+</body>
+</html>

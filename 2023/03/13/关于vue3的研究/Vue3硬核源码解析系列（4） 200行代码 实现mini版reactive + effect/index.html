@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>（3.1）vue3 手摸手实现mini版reactive.md | vkcyan Blog</title>
+  <meta name="description" content="专栏前言​	在上一节，我们完成了vue3的reactive的核心源码解读，总的来说还是非常复杂，文章的表现能力有限，我想可能有很多同学无法完全理解其精髓，所以在本节，我将带领大家完成mini版本源码的输出。 ​	仅保留最核心逻辑，极大减低阅读难度，200行代码实现reactive + effect，话不多说，我们直接开始！ 简易版vue3仓库地址，还请大家不要吝啬star，留个标记，下次迷路~ 逻">
+<meta property="og:type" content="article">
+<meta property="og:title" content="（3.1）vue3 手摸手实现mini版reactive.md">
+<meta property="og:url" content="https://bluedancers.github.io/2023/03/13/%E5%85%B3%E4%BA%8Evue3%E7%9A%84%E7%A0%94%E7%A9%B6/Vue3%E7%A1%AC%E6%A0%B8%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E7%B3%BB%E5%88%97%EF%BC%884%EF%BC%89%20200%E8%A1%8C%E4%BB%A3%E7%A0%81%20%E5%AE%9E%E7%8E%B0mini%E7%89%88reactive%20+%20effect/index.html">
+<meta property="og:site_name" content="vkcya Blog">
+<meta property="og:description" content="专栏前言​	在上一节，我们完成了vue3的reactive的核心源码解读，总的来说还是非常复杂，文章的表现能力有限，我想可能有很多同学无法完全理解其精髓，所以在本节，我将带领大家完成mini版本源码的输出。 ​	仅保留最核心逻辑，极大减低阅读难度，200行代码实现reactive + effect，话不多说，我们直接开始！ 简易版vue3仓库地址，还请大家不要吝啬star，留个标记，下次迷路~ 逻">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://www.vkcyan.top/FmPJt0I04Cs834SauJHg3WgJgy5O.png">
+<meta property="article:published_time" content="2023-03-12T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-03-20T07:10:25.418Z">
+<meta property="article:author" content="bluedancers">
+<meta property="article:tag" content="Vue">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://www.vkcyan.top/FmPJt0I04Cs834SauJHg3WgJgy5O.png">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://bluedancers.github.io/2023/03/13/%E5%85%B3%E4%BA%8Evue3%E7%9A%84%E7%A0%94%E7%A9%B6/Vue3%E7%A1%AC%E6%A0%B8%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E7%B3%BB%E5%88%97%EF%BC%884%EF%BC%89%20200%E8%A1%8C%E4%BB%A3%E7%A0%81%20%E5%AE%9E%E7%8E%B0mini%E7%89%88reactive%20+%20effect/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="vkcya Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+
+<body class="main-center theme-black" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/bluedancers" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">bluedancers</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Web Developer &amp; Product Manager</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> HeFei, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-books">
+          <a href="/books">
+            
+            <i class="icon icon-book-fill"></i>
+            
+            <span class="menu-title">书单</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">友链</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/bluedancers" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://juejin.cn/user/3720403077840519" target="_blank" title="Juejin" data-toggle=tooltip data-placement=top><i class="icon icon-juejin"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>往者不可谏，来者犹可追</p><br/>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript/">JavaScript</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript-2021/">JavaScript-2021</a><span class="category-list-count">10</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript-2022/">JavaScript-2022</a><span class="category-list-count">15</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript-2023/">JavaScript-2023</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Javascript-2022/">Javascript-2022</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Javascript-2023/">Javascript-2023</a><span class="category-list-count">12</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%BA%A7%E5%93%81%E7%BB%8F%E7%90%86/">产品经理</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/">数据结构与算法</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%97%A5%E5%B8%B8/">日常</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%97%A5%E5%B8%B8%E5%BC%80%E5%8F%91/">日常开发</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%9D%82%E8%B0%88/">杂谈</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%8E%A9%E6%9C%BA%E6%8A%80%E5%B7%A7/">玩机技巧</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%A7%BB%E5%8A%A8%E7%AB%AF/">移动端</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%98%85%E8%AF%BB-2023/">阅读-2023</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%9A%8F%E6%83%B3%E9%9B%86/">随想集</a><span class="category-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/" rel="tag">Hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a><span class="tag-list-count">19</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NPDP/" rel="tag">NPDP</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Pinia/" rel="tag">Pinia</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue/" rel="tag">Vue</a><span class="tag-list-count">13</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue3/" rel="tag">Vue3</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/chatGPT/" rel="tag">chatGPT</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/h5%E8%A3%85%E4%BF%AE/" rel="tag">h5装修</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vue3/" rel="tag">vue3</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vw/" rel="tag">vw</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/webpack5/" rel="tag">webpack5</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/" rel="tag">个人博客</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%A7%E5%93%81%E5%88%86%E6%9E%90/" rel="tag">产品分析</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%A7%E5%93%81%E6%97%A5%E5%B8%B8/" rel="tag">产品日常</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BB%B7%E5%80%BC%E8%A7%82/" rel="tag">价值观</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BD%8E%E4%BB%A3%E7%A0%81/" rel="tag">低代码</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%85%B3%E4%BA%8EC%E7%AB%AF/" rel="tag">关于C端</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%85%B3%E4%BA%8Eproxy/" rel="tag">关于proxy</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%85%BC%E5%AE%B9%E6%80%A7/" rel="tag">兼容性</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%93%8D%E5%BA%94%E5%BC%8F/" rel="tag">响应式</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag">数据结构</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%97%A0%E9%9A%9C%E7%A2%8D/" rel="tag">无障碍</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%A7%BB%E5%8A%A8%E7%AB%AF/" rel="tag">移动端</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AB%A5%E5%B9%B4/" rel="tag">童年</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%B0%E5%BD%95/" rel="tag">记录</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%BE%93%E5%87%BA/" rel="tag">输出</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%98%85%E8%AF%BB/" rel="tag">阅读</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9A%8F%E6%83%B3/" rel="tag">随想</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9A%8F%E9%80%89%E6%9C%97%E8%AF%BB/" rel="tag">随选朗读</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/Hexo/" style="font-size: 13px;">Hexo</a> <a href="/tags/JavaScript/" style="font-size: 14px;">JavaScript</a> <a href="/tags/NPDP/" style="font-size: 13.6px;">NPDP</a> <a href="/tags/Pinia/" style="font-size: 13.4px;">Pinia</a> <a href="/tags/Vue/" style="font-size: 13.8px;">Vue</a> <a href="/tags/Vue3/" style="font-size: 13px;">Vue3</a> <a href="/tags/chatGPT/" style="font-size: 13px;">chatGPT</a> <a href="/tags/h5%E8%A3%85%E4%BF%AE/" style="font-size: 13px;">h5装修</a> <a href="/tags/vue3/" style="font-size: 13px;">vue3</a> <a href="/tags/vw/" style="font-size: 13px;">vw</a> <a href="/tags/webpack5/" style="font-size: 13px;">webpack5</a> <a href="/tags/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/" style="font-size: 13px;">个人博客</a> <a href="/tags/%E4%BA%A7%E5%93%81%E5%88%86%E6%9E%90/" style="font-size: 13px;">产品分析</a> <a href="/tags/%E4%BA%A7%E5%93%81%E6%97%A5%E5%B8%B8/" style="font-size: 13px;">产品日常</a> <a href="/tags/%E4%BB%B7%E5%80%BC%E8%A7%82/" style="font-size: 13px;">价值观</a> <a href="/tags/%E4%BD%8E%E4%BB%A3%E7%A0%81/" style="font-size: 13px;">低代码</a> <a href="/tags/%E5%85%B3%E4%BA%8EC%E7%AB%AF/" style="font-size: 13px;">关于C端</a> <a href="/tags/%E5%85%B3%E4%BA%8Eproxy/" style="font-size: 13px;">关于proxy</a> <a href="/tags/%E5%85%BC%E5%AE%B9%E6%80%A7/" style="font-size: 13px;">兼容性</a> <a href="/tags/%E5%93%8D%E5%BA%94%E5%BC%8F/" style="font-size: 13px;">响应式</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="font-size: 13.6px;">数据结构</a> <a href="/tags/%E6%97%A0%E9%9A%9C%E7%A2%8D/" style="font-size: 13px;">无障碍</a> <a href="/tags/%E7%A7%BB%E5%8A%A8%E7%AB%AF/" style="font-size: 13px;">移动端</a> <a href="/tags/%E7%AB%A5%E5%B9%B4/" style="font-size: 13px;">童年</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 13.2px;">算法</a> <a href="/tags/%E8%AE%B0%E5%BD%95/" style="font-size: 13.2px;">记录</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 13px;">设计模式</a> <a href="/tags/%E8%BE%93%E5%87%BA/" style="font-size: 13px;">输出</a> <a href="/tags/%E9%98%85%E8%AF%BB/" style="font-size: 13px;">阅读</a> <a href="/tags/%E9%9A%8F%E6%83%B3/" style="font-size: 13px;">随想</a> <a href="/tags/%E9%9A%8F%E9%80%89%E6%9C%97%E8%AF%BB/" style="font-size: 13px;">随选朗读</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/03/">三月 2023</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/02/">二月 2023</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/01/">一月 2023</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/09/">九月 2022</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/08/">八月 2022</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/07/">七月 2022</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/06/">六月 2022</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/05/">五月 2022</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/03/">三月 2022</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/12/">十二月 2021</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/10/">十月 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/09/">九月 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/06/">六月 2021</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/03/">三月 2021</a><span class="archive-list-count">9</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/Javascript-2023/">Javascript-2023</a>
+              </p>
+              <p class="item-title">
+                <a href="/2023/03/21/%E5%85%B3%E4%BA%8Evue3%E7%9A%84%E7%A0%94%E7%A9%B6/Vue3%E7%A1%AC%E6%A0%B8%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E7%B3%BB%E5%88%97%EF%BC%886%EF%BC%89%20100%E8%A1%8C%E4%BB%A3%E7%A0%81%20%E5%AE%9E%E7%8E%B0mini%E7%89%88ref/" class="title">Vue3硬核源码解析系列（6） 100行代码 实现mini版ref</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-03-20T16:00:00.000Z" itemprop="datePublished">2023-03-21</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E6%97%A5%E5%B8%B8/">日常</a>
+              </p>
+              <p class="item-title">
+                <a href="/2023/03/21/%E6%97%A5%E5%B8%B8/chatGPT%E4%B8%80%E4%BA%9B%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/" class="title">chatGPT一些学习记录</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-03-20T16:00:00.000Z" itemprop="datePublished">2023-03-21</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/Javascript-2023/">Javascript-2023</a>
+              </p>
+              <p class="item-title">
+                <a href="/2023/03/13/%E5%85%B3%E4%BA%8Evue3%E7%9A%84%E7%A0%94%E7%A9%B6/Vue3%E7%A1%AC%E6%A0%B8%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E7%B3%BB%E5%88%97%EF%BC%884%EF%BC%89%20200%E8%A1%8C%E4%BB%A3%E7%A0%81%20%E5%AE%9E%E7%8E%B0mini%E7%89%88reactive%20+%20effect/" class="title">（3.1）vue3 手摸手实现mini版reactive.md</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-03-12T16:00:00.000Z" itemprop="datePublished">2023-03-13</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2023/02/20/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/Vue3%E7%89%88%E5%90%8E%E5%8F%B0%E9%89%B4%E6%9D%83%E4%B9%8B%E5%8A%A8%E6%80%81%E8%B7%AF%E7%94%B1%E6%96%B9%E6%A1%88%E6%9D%A5%E4%BA%86%EF%BC%81/" class="title">(no title)</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-02-20T03:50:52.159Z" itemprop="datePublished">2023-02-20</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/Javascript-2023/">Javascript-2023</a>
+              </p>
+              <p class="item-title">
+                <a href="/2023/02/18/%E5%85%B3%E4%BA%8Evue3%E7%9A%84%E7%A0%94%E7%A9%B6/%EF%BC%887%EF%BC%89vue3%20runtime-dom%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/" class="title">（7）vue3 runtime-dom源码解析</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-02-17T16:00:00.000Z" itemprop="datePublished">2023-02-18</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<aside
+  class="sidebar sidebar-toc collapse  in "
+  id="collapseToc"
+  itemscope
+  itemtype="http://schema.org/WPSideBar"
+>
+  <div class="slimContent">
+    <nav id="toc" class="article-toc">
+      <h3 class="toc-title">文章目录</h3>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%93%E6%A0%8F%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">专栏前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%80%BB%E8%BE%91%E5%9B%BE"><span class="toc-number">2.</span> <span class="toc-text">逻辑图</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%80%BB%E8%BE%91%E6%B5%81%E7%A8%8B"><span class="toc-number">3.</span> <span class="toc-text">逻辑流程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#reative%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="toc-number">3.1.</span> <span class="toc-text">reative初始化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#effect%E5%88%9D%E5%A7%8B%E5%8C%96%EF%BC%88%E4%BE%9D%E8%B5%96%E6%94%B6%E9%9B%86%EF%BC%89"><span class="toc-number">3.2.</span> <span class="toc-text">effect初始化（依赖收集）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#reactive%E6%94%B9%E5%8F%98%EF%BC%88%E4%BE%9D%E8%B5%96%E8%A7%A6%E5%8F%91%EF%BC%89"><span class="toc-number">3.3.</span> <span class="toc-text">reactive改变（依赖触发）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E9%80%BB%E8%BE%91"><span class="toc-number">4.</span> <span class="toc-text">具体逻辑</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#proxy%E5%A4%84%E7%90%86"><span class="toc-number">4.1.</span> <span class="toc-text">proxy处理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#get-set%E5%87%BD%E6%95%B0%E7%BC%96%E5%86%99"><span class="toc-number">4.2.</span> <span class="toc-text">get set函数编写</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#effect%E5%AE%9E%E7%8E%B0"><span class="toc-number">4.3.</span> <span class="toc-text">effect实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BE%9D%E8%B5%96%E6%94%B6%E9%9B%86%EF%BC%88track%EF%BC%89"><span class="toc-number">4.4.</span> <span class="toc-text">依赖收集（track）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BE%9D%E8%B5%96%E8%A7%A6%E5%8F%91%EF%BC%88trigger%EF%BC%89"><span class="toc-number">4.5.</span> <span class="toc-text">依赖触发（trigger）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%80%E5%90%8E"><span class="toc-number">5.</span> <span class="toc-text">最后</span></a></li></ol>
+    </nav>
+  </div>
+</aside>
+
+<script>
+  // 移动端不显示菜单
+  if (
+    navigator.userAgent.match(
+      /(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i
+    )
+  ) {
+    let self = document.querySelector(".sidebar-toc");
+    var parent = self.parentElement;
+    parent.removeChild(self);
+  } else {
+  }
+</script>
+
+
+
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-关于vue3的研究/Vue3硬核源码解析系列（4） 200行代码 实现mini版reactive + effect" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      （3.1）vue3 手摸手实现mini版reactive.md
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2023/03/13/%E5%85%B3%E4%BA%8Evue3%E7%9A%84%E7%A0%94%E7%A9%B6/Vue3%E7%A1%AC%E6%A0%B8%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E7%B3%BB%E5%88%97%EF%BC%884%EF%BC%89%20200%E8%A1%8C%E4%BB%A3%E7%A0%81%20%E5%AE%9E%E7%8E%B0mini%E7%89%88reactive%20+%20effect/" class="article-date">
+	  <time datetime="2023-03-12T16:00:00.000Z" itemprop="datePublished">2023-03-13</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/Javascript-2023/">Javascript-2023</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/Vue/" rel="tag">Vue</a>
+  </span>
+
+
+        
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2023/03/13/%E5%85%B3%E4%BA%8Evue3%E7%9A%84%E7%A0%94%E7%A9%B6/Vue3%E7%A1%AC%E6%A0%B8%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E7%B3%BB%E5%88%97%EF%BC%884%EF%BC%89%20200%E8%A1%8C%E4%BB%A3%E7%A0%81%20%E5%AE%9E%E7%8E%B0mini%E7%89%88reactive%20+%20effect/#comments" class="article-comment-link">评论</a></span>
+        
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <h2 id="专栏前言"><a href="#专栏前言" class="headerlink" title="专栏前言"></a>专栏前言</h2><p>​	在上一节，我们完成了<strong>vue3</strong>的<strong>reactive</strong>的核心源码解读，总的来说还是非常复杂，文章的表现能力有限，我想可能有很多同学无法完全理解其精髓，所以在本节，我将带领大家完成mini版本源码的输出。</p>
+<p>​	<strong>仅保留最核心逻辑，极大减低阅读难度，200行代码实现reactive + effect</strong>，话不多说，我们直接开始！</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/BlueDancers/vue3-mini/tree/reactive">简易版vue3仓库地址</a>，<strong>还请大家不要吝啬star，留个标记，下次迷路~</strong></p>
+<h2 id="逻辑图"><a href="#逻辑图" class="headerlink" title="逻辑图"></a>逻辑图</h2><p><img src="https://www.vkcyan.top/FmPJt0I04Cs834SauJHg3WgJgy5O.png"></p>
+<h2 id="逻辑流程"><a href="#逻辑流程" class="headerlink" title="逻辑流程"></a>逻辑流程</h2><h3 id="reative初始化"><a href="#reative初始化" class="headerlink" title="reative初始化"></a>reative初始化</h3><p>​	将<strong>reactive</strong>处理为<strong>proxy</strong>，同时预先声明<strong>set</strong> <strong>get</strong>方法，赋值、取值均通过<strong>Reflect</strong>完成，<strong>get</strong>中存在<strong>track</strong>（依赖收集），<strong>set</strong>中存在<strong>trigger</strong>（依赖触发），完成<strong>reactive</strong>的初始化。</p>
+<h3 id="effect初始化（依赖收集）"><a href="#effect初始化（依赖收集）" class="headerlink" title="effect初始化（依赖收集）"></a>effect初始化（依赖收集）</h3><blockquote>
+<p>cb  &#x3D; callback &#x3D; 回调函数 effect(() &#x3D;&gt; {})   &#x2F;&#x2F; () &#x3D;&gt; {} 就是cb</p>
+</blockquote>
+<p>​	初始化<strong>effect</strong>函数，通过一个类<strong>ReactiveEffect</strong>运行其<strong>cb</strong>，同时将当前<strong>cb</strong>存储到公共变量，<strong>cb</strong>中读取了<strong>reactive</strong>的属性，进而触发<strong>proxy</strong>的<strong>get</strong>，同时完成<strong>track</strong>（依赖收集），让<strong>reative</strong>收集到存储在公共变量中的<strong>effect</strong>的<strong>cb</strong>，至此完成依赖收集。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">重点：reactive - key - effect // 依赖收集完成后，将会形成这样的从上到下的可追溯关系</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="reactive改变（依赖触发）"><a href="#reactive改变（依赖触发）" class="headerlink" title="reactive改变（依赖触发）"></a>reactive改变（依赖触发）</h3><p>​	若干时间后，<strong>reactive</strong>属性发生变化，触发<strong>reactive</strong>属性的赋值操作，进而触发<strong>proxy</strong>的<strong>set</strong>事件，同时完成trigger（依赖触发），根据指定的<strong>reative + key</strong>，找到特定<strong>effect</strong>运行，完成依赖触发，形成响应式。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">重点：reactive + key 找到指定effect，进而完成触发</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="具体逻辑"><a href="#具体逻辑" class="headerlink" title="具体逻辑"></a>具体逻辑</h2><h3 id="proxy处理"><a href="#proxy处理" class="headerlink" title="proxy处理"></a>proxy处理</h3><p>​	经过真实的源码分析之后，我们都知道<strong>reactive</strong>实际上就是<strong>proxy</strong>，我们仿照源码的格式，将<strong>reactive</strong>经过<strong>proxy</strong>处理后返回就好了。</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 缓存proxy</span></span><br><span class="line"><span class="keyword">const</span> reactiveMap = <span class="keyword">new</span> <span class="title class_">WeakMap</span>&lt;<span class="built_in">object</span>, <span class="built_in">any</span>&gt;()</span><br><span class="line"></span><br><span class="line"><span class="comment">// 入口函数</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">reactive</span>(<span class="params">target: <span class="built_in">object</span></span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="title function_">createReactiveObject</span>(target, mutableHandlers, reactiveMap)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 处理被代理对象</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">createReactiveObject</span>(<span class="params"></span></span><br><span class="line"><span class="params">  target: <span class="built_in">object</span>,</span></span><br><span class="line"><span class="params">  baseHandlers: ProxyHandler&lt;<span class="built_in">object</span>&gt;,</span></span><br><span class="line"><span class="params">  proxyMap: <span class="built_in">WeakMap</span>&lt;<span class="built_in">object</span>, <span class="built_in">any</span>&gt;</span></span><br><span class="line"><span class="params"></span>) &#123;</span><br><span class="line">  <span class="comment">// 如果已经被代理过,这直接返回结果</span></span><br><span class="line">  <span class="keyword">const</span> existingProxy = proxyMap.<span class="title function_">get</span>(target)</span><br><span class="line">  <span class="keyword">if</span> (existingProxy) &#123;</span><br><span class="line">    <span class="keyword">return</span> existingProxy</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">const</span> proxy = <span class="keyword">new</span> <span class="title class_">Proxy</span>(target, baseHandlers)</span><br><span class="line">  proxyMap.<span class="title function_">set</span>(target, proxy)</span><br><span class="line">  <span class="keyword">return</span> proxy</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="get-set函数编写"><a href="#get-set函数编写" class="headerlink" title="get set函数编写"></a>get set函数编写</h3><p>​	以上代码我们完成了变量的<strong>proxy</strong>处理，为了完成后续的响应式，我们需要预先声明好<strong>get set</strong>函数，我们依旧仿照源码格式，并只保留核心逻辑，<strong>get</strong>阶段返回结果，并触发<strong>（依赖收集）track</strong>，<strong>set</strong>阶段通过<strong>Reflect</strong>完成赋值，并触发<strong>（依赖触发）trigger</strong></p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> <span class="attr">mutableHandlers</span>: <span class="title class_">ProxyHandler</span>&lt;<span class="built_in">object</span>&gt; = &#123;</span><br><span class="line">  get,</span><br><span class="line">  set,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> get = <span class="title function_">createGetter</span>()</span><br><span class="line"><span class="keyword">const</span> set = <span class="title function_">createSetter</span>()</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">createGetter</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">function</span> <span class="title function_">get</span>(<span class="params">target: <span class="built_in">object</span>, key: <span class="built_in">string</span>, receiver: <span class="built_in">object</span></span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> res = <span class="title class_">Reflect</span>.<span class="title function_">get</span>(target, key, receiver)</span><br><span class="line">    <span class="comment">// 核心逻辑: 依赖收集</span></span><br><span class="line">    <span class="title function_">track</span>(target, key)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (<span class="title function_">isObject</span>(res)) &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="title function_">reactive</span>(res)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> res</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">createSetter</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">function</span> <span class="title function_">set</span>(<span class="params">target: <span class="built_in">object</span>, key: <span class="built_in">string</span>, newValue: <span class="built_in">unknown</span>, receiver: <span class="built_in">object</span></span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> res = <span class="title class_">Reflect</span>.<span class="title function_">set</span>(target, key, newValue, receiver)</span><br><span class="line">    <span class="comment">// 核心逻辑: 依赖触发</span></span><br><span class="line">    <span class="title function_">trigger</span>(target, key, newValue)</span><br><span class="line">    <span class="keyword">return</span> res</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="effect实现"><a href="#effect实现" class="headerlink" title="effect实现"></a>effect实现</h3><p><strong>effect</strong>的核心的实现，就是在运行<strong>effect</strong>的时候<strong>保存当前的this</strong>，以便于后续流程中的<strong>依赖收集</strong>，所以其核心代码非常简单，保证一下2点即可。</p>
+<ul>
+<li>运行effect本身</li>
+<li>保存effect的fn到activeEffect即可</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> effect&lt;T = any&gt;(<span class="attr">fn</span>: <span class="function">() =&gt;</span> T) &#123;</span><br><span class="line">  <span class="keyword">const</span> _effect = <span class="keyword">new</span> <span class="title class_">ReactiveEffect</span>(fn)</span><br><span class="line">  _effect.<span class="title function_">run</span>()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">let</span> <span class="attr">activeEffect</span>: <span class="title class_">ReactiveEffect</span> | <span class="literal">undefined</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">class</span> <span class="title class_">ReactiveEffect</span>&lt;T = any&gt; &#123;</span><br><span class="line">  <span class="title function_">constructor</span>(<span class="params">public fn: () =&gt; T</span>) &#123;&#125;</span><br><span class="line">  <span class="title function_">run</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      activeEffect = <span class="variable language_">this</span></span><br><span class="line">      <span class="keyword">return</span> <span class="variable language_">this</span>.<span class="title function_">fn</span>()</span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">      activeEffect = <span class="literal">undefined</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="依赖收集（track）"><a href="#依赖收集（track）" class="headerlink" title="依赖收集（track）"></a>依赖收集（track）</h3><p>按照时序，<strong>effect</strong>函数初始化阶段会执行，<strong>effect</strong>函数本身也会被保存到<strong>activeEffect</strong>中，同时触发<strong>effect</strong>中的<strong>reactive</strong>中的<strong>get</strong>事件，进而触发<strong>track</strong>，我们在<strong>track</strong>中完成 <strong>reactive- key - effect之间关系的构建</strong>，确保以后可以在<strong>set</strong>阶段找到<strong>指定的effet的fn</strong>即可。</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">track</span>(<span class="params">target: <span class="built_in">object</span>, key: <span class="built_in">string</span></span>) &#123;</span><br><span class="line">  <span class="keyword">if</span> (!activeEffect) &#123;</span><br><span class="line">    <span class="keyword">return</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">let</span> depsMap = targetMap.<span class="title function_">get</span>(target)</span><br><span class="line">  <span class="keyword">if</span> (!depsMap) &#123;</span><br><span class="line">    depsMap = <span class="keyword">new</span> <span class="title class_">Map</span>()</span><br><span class="line">    targetMap.<span class="title function_">set</span>(target, depsMap)</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">let</span> dep = depsMap.<span class="title function_">get</span>(key)</span><br><span class="line">  <span class="keyword">if</span> (!dep) &#123;</span><br><span class="line">    dep = <span class="title function_">createDep</span>()</span><br><span class="line">    depsMap.<span class="title function_">set</span>(key, dep)</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="title function_">trackEffects</span>(dep)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">trackEffects</span>(<span class="params">dep: Dep</span>) &#123;</span><br><span class="line">  dep.<span class="title function_">add</span>(activeEffect!)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="依赖触发（trigger）"><a href="#依赖触发（trigger）" class="headerlink" title="依赖触发（trigger）"></a>依赖触发（trigger）</h3><p>若干时间后，<strong>reative</strong>中的某个属性发生了变化，也就会发生<strong>set</strong>事件，这时候其实就很简单了，我们只需要通过<strong>reactive - key</strong>找到对应的<strong>effect的fn</strong>，然后执行即可。</p>
+<p><strong>这就形成了我们看到的“响应式”</strong>。</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">trigger</span>(<span class="params">target: <span class="built_in">object</span>, key: <span class="built_in">string</span>, newValue: <span class="built_in">unknown</span></span>) &#123;</span><br><span class="line">  <span class="keyword">let</span> depsMap = targetMap.<span class="title function_">get</span>(target)</span><br><span class="line">  <span class="keyword">if</span> (!depsMap) &#123;</span><br><span class="line">    <span class="keyword">return</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">const</span> <span class="attr">dep</span>: <span class="title class_">Dep</span> | <span class="literal">undefined</span> = depsMap.<span class="title function_">get</span>(key)</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (!dep) &#123;</span><br><span class="line">    <span class="keyword">return</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="title function_">triggerEffects</span>(dep)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">triggerEffects</span>(<span class="params">dep: Dep</span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> effects = [...dep]</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">const</span> effect <span class="keyword">of</span> effects) &#123;</span><br><span class="line">    <span class="title function_">triggerEffect</span>(effect)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">triggerEffect</span>(<span class="params">effect: ReactiveEffect</span>) &#123;</span><br><span class="line">  effect.<span class="title function_">fn</span>()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>​	到此为止，我们简易版的<strong>reactive + effect</strong>的全部源码就完成了，虽然<strong>vue3</strong>的源码很复杂，但是我们抽丝剥茧，仅保留核心逻辑，大幅降低<strong>vue3</strong>源码阅读的难度，让绝大多数的前端开发者都可以读懂核心实现~</p>
+<p>​	最后，建议大家<a target="_blank" rel="noopener" href="https://github.com/BlueDancers/vue3-mini/tree/reactive">clone</a>源码到本地实际运行一下，静下心来一步一步调试，将简易版逻辑弄明白，有兴趣的可以在看看正式的vue3源码，然后在简历上留下浓墨重彩的一笔~</p>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://bluedancers.github.io/2023/03/13/%E5%85%B3%E4%BA%8Evue3%E7%9A%84%E7%A0%94%E7%A9%B6/Vue3%E7%A1%AC%E6%A0%B8%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E7%B3%BB%E5%88%97%EF%BC%884%EF%BC%89%20200%E8%A1%8C%E4%BB%A3%E7%A0%81%20%E5%AE%9E%E7%8E%B0mini%E7%89%88reactive%20+%20effect/" title="（3.1）vue3 手摸手实现mini版reactive.md" target="_blank" rel="external">https://bluedancers.github.io/2023/03/13/关于vue3的研究/Vue3硬核源码解析系列（4） 200行代码 实现mini版reactive + effect/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/bluedancers" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/bluedancers" target="_blank"><span class="text-dark">bluedancers</span><small class="ml-1x">Web Developer &amp; Product Manager</small></a></h3>
+        <div>一切都是为了实现技术的价值</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2023/03/21/%E6%97%A5%E5%B8%B8/chatGPT%E4%B8%80%E4%BA%9B%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/" title="chatGPT一些学习记录"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2023/02/20/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/Vue3%E7%89%88%E5%90%8E%E5%8F%B0%E9%89%B4%E6%9D%83%E4%B9%8B%E5%8A%A8%E6%80%81%E8%B7%AF%E7%94%B1%E6%96%B9%E6%A1%88%E6%9D%A5%E4%BA%86%EF%BC%81/" title="(no title)"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+    <li class="toggle-toc">
+      <a class="toggle-btn " data-toggle="collapse" href="#collapseToc" aria-expanded="false" title="文章目录" role="button">    <span>[&nbsp;</span><span>文章目录</span>
+        <i class="text-collapsed icon icon-anchor"></i>
+        <i class="text-in icon icon-close"></i>
+        <span>]</span>
+      </a>
+    </li>
+    
+  </ul>
+  
+  
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-fancy btn-donate pop-onhover bg-gradient-warning" data-toggle="modal" data-target="#donateModal"><span>赏</span></button>
+  <!-- <div class="wave-icon wave-icon-danger btn-donate" data-toggle="modal" data-target="#donateModal">
+    <div class="wave-circle"><span class="icon"><i class="icon icon-bill"></i></span></div>
+  </div> -->
+  
+  
+  <div class="bar-right">
+    
+  </div>
+  </div>
+</nav>
+  
+<!-- Modal -->
+<div class="modal modal-center modal-small modal-xs-full fade" id="donateModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content donate">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <div class="modal-body">
+        <div class="donate-box">
+          <div class="donate-head">
+            <p>感谢您的支持，我会继续努力的!</p>
+          </div>
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade active in" id="alipay">
+              <div class="donate-payimg">
+                <img src="/images/donate/alipayimg.jpg" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开支付宝扫一扫，即可进行扫码打赏哦</p>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="wechatpay">
+              <div class="donate-payimg">
+                <img src="/images/donate/wechatpayimg.jpg" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开微信扫一扫，即可进行扫码打赏哦</p>
+            </div>
+          </div>
+          <div class="donate-footer">
+            <ul class="nav nav-tabs nav-justified" role="tablist">
+              <li role="presentation" class="active">
+                <a href="#alipay" id="alipay-tab" role="tab" data-toggle="tab" aria-controls="alipay" aria-expanded="true"><i class="icon icon-alipay"></i> 支付宝</a>
+              </li>
+              <li role="presentation" class="">
+                <a href="#wechatpay" role="tab" id="wechatpay-tab" data-toggle="tab" aria-controls="wechatpay" aria-expanded="false"><i class="icon icon-wepay"></i> 微信支付</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/bluedancers" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://juejin.cn/user/3720403077840519" target="_blank" title="Juejin" data-toggle=tooltip data-placement=top><i class="icon icon-juejin"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="https://cdn.staticfile.org/jquery/1.12.4/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+   
+
+
+
+
+    <script defer type="text/javascript">
+(function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'G-H48QGKLW34', 'auto');
+ga('send', 'pageview');
+
+</script>
+
+
+
+</body>
+</html>
