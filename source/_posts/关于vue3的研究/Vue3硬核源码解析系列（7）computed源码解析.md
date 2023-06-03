@@ -1,5 +1,5 @@
 ---
-title: （5）vue3 reactivity-computed源码解析
+title: Vue3硬核源码解析系列（7）有点难的computed源码解析
 categories:
   - Javascript-2023
 tags:
@@ -12,15 +12,19 @@ date: 2023-02-03
 
 ## 前言
 
-熟悉**computed**的同学都知道，**computed**会在依赖属性发生变化的时候自动更新结果。
+写过vue的同学，写过**computed**的都知道，**computed**会在依赖属性发生变化的时候自动更新结果。
 
 他有一个重要的特点：**计算值是可缓存的，只有依赖项发生变化的时候，才会重新计算**
 
-​	通过之前的文章，我们已经了解了**reactive**，**ref**的实现原理，已经对**vue**响应式机制有所了解，今天我们就来了解一下**computed**是如何实现的。
+而通过之前的文章，我们已经了解了**reactive**，**ref**的实现原理，相信大家已经对**vue3**响应式机制有所了解，今天我们就来了解一下**computed**是如何实现的。
 
-## 正文
+>注：computed的源码难度相当大，我会尽力描述清楚其实现原理，如有不足之处，还请见谅
 
-### 测试代码
+
+
+
+
+## 案例
 
 ```ts
 const obj = reactive({
@@ -45,21 +49,27 @@ setTimeout(() => {
 - 页面显示：**我叫张三**
 - 2s后，页面显示**我叫李四**
 
-先让我们看看**computed**内部都做了些什么吧
+按照我们之前源码分析的思路，我们依旧从以下三个角度入口
 
-### computed初始化
+- **初始化**
+- **读取（依赖收集）**
+- **赋值（依赖触发）**
+
+接下来就让我们走进computed的源码世界吧~
+
+
+
+## computed初始化
 
 ```ts
 // 入口函数
-export function computed<T>(
-  getterOrOptions: ComputedGetter<T> | WritableComputedOptions<T>) {
-  let getter: ComputedGetter<T>
-  let setter: ComputedSetter<T>
+export function computed<T>(getterOrOptions) {
+  let getter;
+  let setter;
   // 传入的是否是一个方法
   const onlyGetter = isFunction(getterOrOptions)
   if (onlyGetter) {
-    // 如果是方法, 则直接赋值到getter
-    // 同时屏蔽setter行为
+    // 如果是方法, 则直接赋值到getter, 同时屏蔽setter行为
     getter = getterOrOptions
     // dev环境下 set函数给予提示
     setter = __DEV__
@@ -77,9 +87,9 @@ export function computed<T>(
 }
 ```
 
-​	入口函数的逻辑还是非常简单的，如果传入的是一个匿名函数，这处理为**getter**，如果传入的是对象，这赋值**getter** **setter**，这部分逻辑符合Vue官方文档的描述。
+​	入口函数的逻辑还是非常简单的，如果传入的是一个匿名函数，这处理为**getter**，如果传入的是对象，这赋值**getter** **setter**，这部分逻辑符合我们对这个API的使用习惯，也解释了computed为何是这样的传参方式。
 
-​	抹平两种传参方式的差异后，**new ComputedRefImpl**，并返回，看来核心实现都在**ComputedRefImpl**中了，我们接下来就进入该类中看看吧。
+​	抹平两种传参方式的差异后，**new ComputedRefImpl**，并返回，所以**computed = new ComputedRefImpl** ，我们接下来就进入该**Class**中看看吧。
 
 ```ts
 // 计算属性的响应式也是通过class get set去实现的
@@ -115,15 +125,15 @@ export class ComputedRefImpl<T> {
 }
 ```
 
-​	在**ComputedRefImpl**初始化阶段，我们看到了非常熟悉的api，**ReactiveEffect**，在我们的effect源码分析中，我们使用这个api来完成关键步骤**依赖收集**，但是这里却又有点不同，完成声明却没有执行，并且还传入了第二个参数，一个匿名函数，现在还无法发挥它的作用，我们需要后面再说。
+​	在**ComputedRefImpl**初始化阶段，我们看到了非常熟悉的api，**ReactiveEffect**，在我们的前面的reactive，ref源码分析中，我们使用这个api来完成关键步骤**依赖收集**，不过这里有些区别，传入了第二个参数，一个匿名函数，目前还无法体现其作用，我们后面再说
 
-​	总的来说，初始化的时候，生成了一个**ReactiveEffect**并保存到当前类的**effect**变量中，忘记**ReactiveEffect**记得去**reactive**章节看看其作用哦。
+​	总的来说，**ComputedRefImpl**初始化阶段，生成了一个**ReactiveEffect**并保存到当前类的**effect**变量中。
 
 
 
-### computed的get行为
+## 依赖收集
 
-当我们的实例中的api，**effect**初次执行的时候，我们会触发`showName.value`的**get**，也就是说，会触发**ComputedRefImpl**的**get**。
+按照我们实例代码，首次访问**effect**初次执行的时候，我们会触发`showName.value`的**get**，也就是说，会触发**ComputedRefImpl**的**get**。
 
 ```ts
 // 被读取的时候触发
@@ -152,21 +162,29 @@ export function trackEffects(dep: Dep) {
 }
 ```
 
-​	当我们触发**computed**的**get**的时候，首先会触发**trackRefValue**，将当前**activeEffect**收集到类中的**dep**中，这正是依赖收集，这里effect被收集到了computed的dep中，**建立起了computed与其被依赖项的联系**。
+​	当我们触发**computed**的**get**的时候，首先会触发**trackRefValue**，将当前**activeEffect**收集到ComputedRefImpl的**dep**中，这正是依赖收集，这里effect被收集到了computed的dep中，**建立起了computed与其被依赖项（effect）的联系**。
 
-​	然后判断**_dirty**是否为**true**，默认是**true**，所以进入判断中，首先将**_dirty**改为**false**，下一次则不会进入判断，直接返回**computed**之前的结果，之后执行初始化阶段声明的ReactiveEffect，也就是我们computed本身。
+​	然后判断**_dirty**是否为**true**，默认是**true**，所以进入判断中，首先将**_dirty**改为**false**，下一次则不会进入判断，直接返回**computed**之前的结果，之后再执行computed初始化阶段声明的ReactiveEffect，也就是我们computed本身的effect。
 
-​	**computed**的**effect.run**一旦触发，**activeEffect**将会被替换当前api **effect的fn** ，并且触发**computed**依赖项**obj.name**的**get**，再次触发proxy的依赖收集，于是**obj.name**成功收集到了**computed**内部的**effect**，**proxy与computed建立了联系**；同时返回了最新的computed结果。
+​	**computed**的**effect.run**一旦触发，全局**activeEffect**将会被替换为当前computed的 **effect的fn** ，并且触发**computed**依赖项**obj.name**的**get**，进而触发**proxy**的依赖收集，于是**obj.name**成功收集到了**computed**内部的**effect**，**proxy与computed建立了联系**，同时返回了最新的computed结果。
 
 ​	**computed的get行为触发的时候，我们发现computed收集了effect，reactive收集了computed，三者之间建立起了联系。**
 
-​	而且我们还发现了**_dirty**变量的含义，第一次**get**后，赋值为**false**，下一次就不需要再计算**computed**的结果，实现了数据缓存。
+
 
 <img src="http://www.vkcyan.top/FulT2b9ii1-iTvws8zj2z8vEn0Hn.png" style="zoom:33%;" />
 
 
 
-### obj.name触发set，计算属性触发
+### 关于_dirty
+
+​	现在我要个大家着重讲一下ComputedRefImpl中的这个参数，_dirty是实现计算属性缓存性的关键所在，
+
+我们假设一下，没有缓存性的computed，是什么样的运行逻辑
+
+计算属性依赖了变量abc，并返回abc的总和，每个获取计算属性的时候，我都需要计算一次abc的总和，即使abc这三个值没有发生任何变化，就是这样的
+
+### 依赖触发
 
 **2s**后，我们触发了**obj.name**的**set**，所以首先触发**obj.name**的依赖触发，此时我们将可以通过WeakMap会找到之前收集到**computed**，我们直接进入依赖触发的逻辑。
 
