@@ -1,9 +1,10 @@
 ---
 title: （3.1）vue3 手摸手实现mini版reactive.md
 categories:
-  - Javascript-2023
+  - JavaScript-2023
 tags:
   - Vue
+  - 源码解读
 toc: true
 date: 2023-03-13
 ---

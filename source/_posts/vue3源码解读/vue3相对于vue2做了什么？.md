@@ -1,9 +1,10 @@
 ---
 title: vue3相对于vue2做了什么？
 categories:
-  - Javascript-2022
+  - JavaScript-2022
 tags:
   - Vue
+  - 源码解读
 toc: true
 date: 2022-09-18
 ---

@@ -1,9 +1,10 @@
 ---
 title: （0）vue3源码解读前的准备工作
 categories:
-  - Javascript-2023
+  - JavaScript-2023
 tags:
   - Vue
+  - 源码解读
 toc: true
 date: 2023-01-26
 ---
