@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>从读《微信背后的产品观》到思考前端工程师的“35岁” | vkcyan Blog</title>
+  <meta name="description" content="​	我是一名前端开发者，同时兼任pm职责，近半年在公司负责升级一直在开发与运营的一个B端的Saas商城系统； ​	在对需求剖析、需求抽象、每个字段含义的推敲的时候，我越发对微信这样简洁、自然的产品产生兴趣与共鸣。 ​	也会情不自禁的赞叹微信清晰明了、谨慎内敛的结构化产品思路。 ​	虽然微信这么多年上线了如此多功能与特性，但是产品简洁而克制的灵魂从来没有改变，哪怕对于60岁的人来说，也几乎不存在用">
+<meta property="og:type" content="article">
+<meta property="og:title" content="从读《微信背后的产品观》到思考前端工程师的“35岁”">
+<meta property="og:url" content="https://bluedancers.github.io/2023/08/10/%E9%98%85%E8%AF%BB/%E4%BB%8E%E8%AF%BB%E3%80%8A%E5%BE%AE%E4%BF%A1%E8%83%8C%E5%90%8E%E7%9A%84%E4%BA%A7%E5%93%81%E8%A7%82%E3%80%8B%E5%88%B0%E6%80%9D%E8%80%83%E5%89%8D%E7%AB%AF%E5%B7%A5%E7%A8%8B%E5%B8%88%E7%9A%84%E2%80%9C35%E5%B2%81%E2%80%9D/index.html">
+<meta property="og:site_name" content="vkcya Blog">
+<meta property="og:description" content="​	我是一名前端开发者，同时兼任pm职责，近半年在公司负责升级一直在开发与运营的一个B端的Saas商城系统； ​	在对需求剖析、需求抽象、每个字段含义的推敲的时候，我越发对微信这样简洁、自然的产品产生兴趣与共鸣。 ​	也会情不自禁的赞叹微信清晰明了、谨慎内敛的结构化产品思路。 ​	虽然微信这么多年上线了如此多功能与特性，但是产品简洁而克制的灵魂从来没有改变，哪怕对于60岁的人来说，也几乎不存在用">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://qiliu.vkcyan.top/FkbBqDq59Gu7Pjwi9xwN4P1Dz7fM.png">
+<meta property="og:image" content="http://qiliu.vkcyan.top/Fj5ClfMkacFzfRYeT1ie06gkYNn8.png">
+<meta property="og:image" content="http://qiliu.vkcyan.top/Fh1A7U86ZW-_I64VW8gr-hmg2Zd8.png">
+<meta property="article:published_time" content="2023-08-09T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-11-27T02:43:09.900Z">
+<meta property="article:author" content="bluedancers">
+<meta property="article:tag" content="产品">
+<meta property="article:tag" content="张小龙">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://qiliu.vkcyan.top/FkbBqDq59Gu7Pjwi9xwN4P1Dz7fM.png">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://bluedancers.github.io/2023/08/10/%E9%98%85%E8%AF%BB/%E4%BB%8E%E8%AF%BB%E3%80%8A%E5%BE%AE%E4%BF%A1%E8%83%8C%E5%90%8E%E7%9A%84%E4%BA%A7%E5%93%81%E8%A7%82%E3%80%8B%E5%88%B0%E6%80%9D%E8%80%83%E5%89%8D%E7%AB%AF%E5%B7%A5%E7%A8%8B%E5%B8%88%E7%9A%84%E2%80%9C35%E5%B2%81%E2%80%9D/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="vkcya Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+
+<body class="main-center theme-black" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/bluedancers" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">bluedancers</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Web Developer &amp; Product Manager</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> HeFei, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-books">
+          <a href="/books">
+            
+            <i class="icon icon-book-fill"></i>
+            
+            <span class="menu-title">书单</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">友链</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/bluedancers" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://juejin.cn/user/3720403077840519" target="_blank" title="Juejin" data-toggle=tooltip data-placement=top><i class="icon icon-juejin"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>往者不可谏，来者犹可追</p><br/>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript/">JavaScript</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript-2021/">JavaScript-2021</a><span class="category-list-count">10</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript-2022/">JavaScript-2022</a><span class="category-list-count">16</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript-2023/">JavaScript-2023</a><span class="category-list-count">16</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%B9%A6%E6%91%98/">书摘</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%BA%A7%E5%93%81/">产品</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%BA%A7%E5%93%81%E7%BB%8F%E7%90%86/">产品经理</a><span class="category-list-count">8</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%85%B3%E4%BA%8E%E7%A8%8B%E5%BA%8F%E5%91%98/">关于程序员</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/">数据结构与算法</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%97%A5%E5%B8%B8/">日常</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%97%A5%E5%B8%B8%E5%BC%80%E5%8F%91/">日常开发</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%9D%82%E8%B0%88/">杂谈</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%8E%A9%E6%9C%BA%E6%8A%80%E5%B7%A7/">玩机技巧</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%A7%BB%E5%8A%A8%E7%AB%AF/">移动端</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%9A%8F%E6%83%B3%E9%9B%86/">随想集</a><span class="category-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/" rel="tag">Hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a><span class="tag-list-count">19</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NPDP/" rel="tag">NPDP</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Pinia/" rel="tag">Pinia</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue/" rel="tag">Vue</a><span class="tag-list-count">12</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue-%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/" rel="tag">Vue - 源码解读</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue3/" rel="tag">Vue3</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/chatGPT/" rel="tag">chatGPT</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/h5%E8%A3%85%E4%BF%AE/" rel="tag">h5装修</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sku/" rel="tag">sku</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vue3/" rel="tag">vue3</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vw/" rel="tag">vw</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/webpack5/" rel="tag">webpack5</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/" rel="tag">个人博客</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%A7%E5%93%81/" rel="tag">产品</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%A7%E5%93%81%E5%88%86%E6%9E%90/" rel="tag">产品分析</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%A7%E5%93%81%E6%97%A5%E5%B8%B8/" rel="tag">产品日常</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BB%B7%E5%80%BC%E8%A7%82/" rel="tag">价值观</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BC%98%E6%83%A0%E5%88%B8/" rel="tag">优惠券</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BD%8E%E4%BB%A3%E7%A0%81/" rel="tag">低代码</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%85%B3%E4%BA%8EC%E7%AB%AF/" rel="tag">关于C端</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%85%B3%E4%BA%8Eproxy/" rel="tag">关于proxy</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%85%BC%E5%AE%B9%E6%80%A7/" rel="tag">兼容性</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8A%A8%E6%80%81%E8%B7%AF%E7%94%B1-vue3/" rel="tag">动态路由 - vue3</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%93%8D%E5%BA%94%E5%BC%8F/" rel="tag">响应式</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BC%A0%E5%B0%8F%E9%BE%99/" rel="tag">张小龙</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag">数据结构</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%97%A0%E9%9A%9C%E7%A2%8D/" rel="tag">无障碍</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A2%81%E6%B0%B8%E5%AE%89/" rel="tag">梁永安</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/" rel="tag">源码解读</a><span class="tag-list-count">12</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%A7%92%E6%9D%80/" rel="tag">秒杀</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%A7%BB%E5%8A%A8%E7%AB%AF/" rel="tag">移动端</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AB%A5%E5%B9%B4/" rel="tag">童年</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%90%A5%E9%94%80%E5%B7%A5%E5%85%B7/" rel="tag">营销工具</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%B0%E5%BD%95/" rel="tag">记录</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%BE%93%E5%87%BA/" rel="tag">输出</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%98%85%E8%AF%BB%E3%80%81%E6%B8%B8%E5%8E%86%E5%92%8C%E7%88%B1%E6%83%85/" rel="tag">阅读、游历和爱情</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9A%8F%E6%83%B3/" rel="tag">随想</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9A%8F%E9%80%89%E6%9C%97%E8%AF%BB/" rel="tag">随选朗读</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/Hexo/" style="font-size: 13px;">Hexo</a> <a href="/tags/JavaScript/" style="font-size: 14px;">JavaScript</a> <a href="/tags/NPDP/" style="font-size: 13.5px;">NPDP</a> <a href="/tags/Pinia/" style="font-size: 13.5px;">Pinia</a> <a href="/tags/Vue/" style="font-size: 13.83px;">Vue</a> <a href="/tags/Vue-%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/" style="font-size: 13.17px;">Vue - 源码解读</a> <a href="/tags/Vue3/" style="font-size: 13px;">Vue3</a> <a href="/tags/chatGPT/" style="font-size: 13px;">chatGPT</a> <a href="/tags/h5%E8%A3%85%E4%BF%AE/" style="font-size: 13px;">h5装修</a> <a href="/tags/sku/" style="font-size: 13px;">sku</a> <a href="/tags/vue3/" style="font-size: 13.17px;">vue3</a> <a href="/tags/vw/" style="font-size: 13px;">vw</a> <a href="/tags/webpack5/" style="font-size: 13px;">webpack5</a> <a href="/tags/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/" style="font-size: 13px;">个人博客</a> <a href="/tags/%E4%BA%A7%E5%93%81/" style="font-size: 13px;">产品</a> <a href="/tags/%E4%BA%A7%E5%93%81%E5%88%86%E6%9E%90/" style="font-size: 13px;">产品分析</a> <a href="/tags/%E4%BA%A7%E5%93%81%E6%97%A5%E5%B8%B8/" style="font-size: 13px;">产品日常</a> <a href="/tags/%E4%BB%B7%E5%80%BC%E8%A7%82/" style="font-size: 13px;">价值观</a> <a href="/tags/%E4%BC%98%E6%83%A0%E5%88%B8/" style="font-size: 13.17px;">优惠券</a> <a href="/tags/%E4%BD%8E%E4%BB%A3%E7%A0%81/" style="font-size: 13px;">低代码</a> <a href="/tags/%E5%85%B3%E4%BA%8EC%E7%AB%AF/" style="font-size: 13px;">关于C端</a> <a href="/tags/%E5%85%B3%E4%BA%8Eproxy/" style="font-size: 13px;">关于proxy</a> <a href="/tags/%E5%85%BC%E5%AE%B9%E6%80%A7/" style="font-size: 13px;">兼容性</a> <a href="/tags/%E5%8A%A8%E6%80%81%E8%B7%AF%E7%94%B1-vue3/" style="font-size: 13px;">动态路由 - vue3</a> <a href="/tags/%E5%93%8D%E5%BA%94%E5%BC%8F/" style="font-size: 13px;">响应式</a> <a href="/tags/%E5%BC%A0%E5%B0%8F%E9%BE%99/" style="font-size: 13px;">张小龙</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="font-size: 13.67px;">数据结构</a> <a href="/tags/%E6%97%A0%E9%9A%9C%E7%A2%8D/" style="font-size: 13px;">无障碍</a> <a href="/tags/%E6%A2%81%E6%B0%B8%E5%AE%89/" style="font-size: 13px;">梁永安</a> <a href="/tags/%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/" style="font-size: 13.83px;">源码解读</a> <a href="/tags/%E7%A7%92%E6%9D%80/" style="font-size: 13px;">秒杀</a> <a href="/tags/%E7%A7%BB%E5%8A%A8%E7%AB%AF/" style="font-size: 13px;">移动端</a> <a href="/tags/%E7%AB%A5%E5%B9%B4/" style="font-size: 13px;">童年</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 13.17px;">算法</a> <a href="/tags/%E8%90%A5%E9%94%80%E5%B7%A5%E5%85%B7/" style="font-size: 13.33px;">营销工具</a> <a href="/tags/%E8%AE%B0%E5%BD%95/" style="font-size: 13.33px;">记录</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 13px;">设计模式</a> <a href="/tags/%E8%BE%93%E5%87%BA/" style="font-size: 13px;">输出</a> <a href="/tags/%E9%98%85%E8%AF%BB%E3%80%81%E6%B8%B8%E5%8E%86%E5%92%8C%E7%88%B1%E6%83%85/" style="font-size: 13px;">阅读、游历和爱情</a> <a href="/tags/%E9%9A%8F%E6%83%B3/" style="font-size: 13px;">随想</a> <a href="/tags/%E9%9A%8F%E9%80%89%E6%9C%97%E8%AF%BB/" style="font-size: 13px;">随选朗读</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/11/">十一月 2023</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/10/">十月 2023</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/09/">九月 2023</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/08/">八月 2023</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/06/">六月 2023</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/05/">五月 2023</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/03/">三月 2023</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/02/">二月 2023</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/01/">一月 2023</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/09/">九月 2022</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/07/">七月 2022</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/06/">六月 2022</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/05/">五月 2022</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/03/">三月 2022</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/12/">十二月 2021</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/10/">十月 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/09/">九月 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/06/">六月 2021</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/03/">三月 2021</a><span class="archive-list-count">9</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E5%85%B3%E4%BA%8E%E7%A8%8B%E5%BA%8F%E5%91%98/">关于程序员</a>
+              </p>
+              <p class="item-title">
+                <a href="/2023/11/25/%E5%85%B3%E4%BA%8E%E7%A8%8B%E5%BA%8F%E5%91%98/%E6%AD%A3%E7%A1%AE%E7%9A%84%E7%90%86%E8%A7%A3%E6%8A%80%E6%9C%AF%EF%BC%8C%E5%8F%AF%E4%BB%A5%E8%AE%A9%E6%88%91%E4%BB%AC%E8%B5%B0%E7%9A%84%E6%9B%B4%E8%BF%9C/" class="title">正确的理解技术，可以让我们走的更远</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-11-24T16:00:00.000Z" itemprop="datePublished">2023-11-25</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E4%BA%A7%E5%93%81/">产品</a>
+              </p>
+              <p class="item-title">
+                <a href="/2023/10/30/%E4%BA%A7%E5%93%81%E7%9B%B8%E5%85%B3%E6%96%87%E7%AB%A0/%E8%90%A5%E9%94%80%E5%B7%A5%E5%85%B7%EF%BC%883%EF%BC%89%20-%20%E4%BB%8E%E6%B8%B8%E6%88%8F%E5%90%8D%E8%AF%8D%E5%88%B0%E7%94%B5%E5%95%86%E8%90%A5%E9%94%80%EF%BC%8C%E6%88%91%E4%BB%AC%E4%B8%80%E8%B5%B7%E8%81%8A%E8%81%8A%E7%A7%92%E6%9D%80/" class="title">营销工具(3) - 从游戏名词到电商营销，我们一起来聊聊“秒杀”</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-10-29T16:00:00.000Z" itemprop="datePublished">2023-10-30</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E4%BA%A7%E5%93%81/">产品</a>
+              </p>
+              <p class="item-title">
+                <a href="/2023/10/20/%E4%BA%A7%E5%93%81%E7%9B%B8%E5%85%B3%E6%96%87%E7%AB%A0/%E8%90%A5%E9%94%80%E5%B7%A5%E5%85%B7%EF%BC%882%EF%BC%89%20-%20%E4%BC%98%E6%83%A0%E5%88%B8%E7%9A%84%E4%BA%A7%E5%93%81%E8%AE%BE%E8%AE%A1%E9%80%BB%E8%BE%91/" class="title">营销工具(2) - 细致解读,Saas商城必备的优惠券产品设计攻略</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-10-19T16:00:00.000Z" itemprop="datePublished">2023-10-20</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/JavaScript-2023/">JavaScript-2023</a>
+              </p>
+              <p class="item-title">
+                <a href="/2023/09/29/vue3%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/runtime%E7%9B%B8%E5%85%B3/" class="title">runtime运行时</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-09-28T16:00:00.000Z" itemprop="datePublished">2023-09-29</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E4%BA%A7%E5%93%81/">产品</a>
+              </p>
+              <p class="item-title">
+                <a href="/2023/09/29/%E4%BA%A7%E5%93%81%E7%9B%B8%E5%85%B3%E6%96%87%E7%AB%A0/%E8%90%A5%E9%94%80%E5%B7%A5%E5%85%B7%EF%BC%881%EF%BC%89%20-%20%E4%BA%BA%E4%BA%BA%E9%83%BD%E7%88%B1%E7%94%A8%E7%9A%84%E4%BC%98%E6%83%A0%E5%88%B8%EF%BC%8C%E8%83%8C%E5%90%8E%E9%80%BB%E8%BE%91%E7%AB%9F%E7%84%B6%E8%BF%99%E4%B9%88%E5%A4%8D%E6%9D%82%EF%BC%9F/" class="title">营销工具(1) - 人人都爱用的优惠券，背后逻辑竟然这么复杂？</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-09-28T16:00:00.000Z" itemprop="datePublished">2023-09-29</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<aside
+  class="sidebar sidebar-toc collapse  in "
+  id="collapseToc"
+  itemscope
+  itemtype="http://schema.org/WPSideBar"
+>
+  <div class="slimContent">
+    <nav id="toc" class="article-toc">
+      <h3 class="toc-title">文章目录</h3>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%9A%E5%8A%A1%E5%89%8D%E7%AB%AF%E5%BC%80%E5%8F%91%E8%80%85%E7%9A%84%E5%9B%B0%E5%A2%83"><span class="toc-number">1.</span> <span class="toc-text">业务前端开发者的困境</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AF%B4%E5%9B%9E%E4%BA%A7%E5%93%81"><span class="toc-number">2.</span> <span class="toc-text">说回产品</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B7%A8%E8%B6%8A%E2%80%9C%E6%8A%80%E6%9C%AF%E2%80%9D%E6%80%9D%E7%BB%B4"><span class="toc-number">3.</span> <span class="toc-text">跨越“技术”思维</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%80%E5%90%8E"><span class="toc-number">4.</span> <span class="toc-text">最后</span></a></li></ol>
+    </nav>
+  </div>
+</aside>
+
+<script>
+  // 移动端不显示菜单
+  if (
+    navigator.userAgent.match(
+      /(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i
+    )
+  ) {
+    let self = document.querySelector(".sidebar-toc");
+    var parent = self.parentElement;
+    parent.removeChild(self);
+  } else {
+  }
+</script>
+
+
+
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-阅读/从读《微信背后的产品观》到思考前端工程师的“35岁”" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      从读《微信背后的产品观》到思考前端工程师的“35岁”
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2023/08/10/%E9%98%85%E8%AF%BB/%E4%BB%8E%E8%AF%BB%E3%80%8A%E5%BE%AE%E4%BF%A1%E8%83%8C%E5%90%8E%E7%9A%84%E4%BA%A7%E5%93%81%E8%A7%82%E3%80%8B%E5%88%B0%E6%80%9D%E8%80%83%E5%89%8D%E7%AB%AF%E5%B7%A5%E7%A8%8B%E5%B8%88%E7%9A%84%E2%80%9C35%E5%B2%81%E2%80%9D/" class="article-date">
+	  <time datetime="2023-08-09T16:00:00.000Z" itemprop="datePublished">2023-08-10</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/%E4%B9%A6%E6%91%98/">书摘</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/%E4%BA%A7%E5%93%81/" rel="tag">产品</a>, <a class="article-tag-link-link" href="/tags/%E5%BC%A0%E5%B0%8F%E9%BE%99/" rel="tag">张小龙</a>
+  </span>
+
+
+        
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2023/08/10/%E9%98%85%E8%AF%BB/%E4%BB%8E%E8%AF%BB%E3%80%8A%E5%BE%AE%E4%BF%A1%E8%83%8C%E5%90%8E%E7%9A%84%E4%BA%A7%E5%93%81%E8%A7%82%E3%80%8B%E5%88%B0%E6%80%9D%E8%80%83%E5%89%8D%E7%AB%AF%E5%B7%A5%E7%A8%8B%E5%B8%88%E7%9A%84%E2%80%9C35%E5%B2%81%E2%80%9D/#comments" class="article-comment-link">评论</a></span>
+        
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <p><img src="http://qiliu.vkcyan.top/FkbBqDq59Gu7Pjwi9xwN4P1Dz7fM.png"></p>
+<p>​	我是一名前端开发者，同时兼任pm职责，近半年在公司负责升级一直在开发与运营的一个B端的Saas商城系统；</p>
+<p>​	在对需求剖析、需求抽象、每个字段含义的推敲的时候，我越发对微信这样简洁、自然的产品产生兴趣与共鸣。</p>
+<p>​	也会情不自禁的赞叹微信清晰明了、谨慎内敛的结构化产品思路。</p>
+<p>​	虽然微信这么多年上线了如此多功能与特性，但是产品简洁而克制的灵魂从来没有改变，哪怕对于60岁的人来说，也几乎不存在用不好微信的情况。</p>
+<p>​	而我做为微信的使用者，广义技术上的开发者，无论是产品还是技术维度，都让我越加佩服与引起共鸣(恶心的小程序开发除外)。</p>
+<p>​	昨天终于行动了起来，把这本知名的<strong>《微信背后的产品观》</strong>找出来并读了起来，与其叫一本书，不如说是一个演讲的记录，很短，大约2小时就读完了，主要内容是2012年微信4.0发布时候，张小龙长达8个多小时的公开演讲的内容；</p>
+<p>​	不同于其他产品经理的书籍，他们会告诉你各种方法论、科学分析方法，张小龙截然相反的采用了一种极其浪漫的方式去看待产品，去理解所谓的用户需求，我认为这种产品思路的领先是微信这么多年在社交领域立于不败之地的根本。</p>
+<p>​	虽然在最后，张小龙看似补刀似的说：<strong>我所说的，都是错的</strong>；但是这恰恰就是他的产品理念，所谓产品没有任何科学方法，完全来自于对人，对人类群体的理解，对自己的拷问与质疑。</p>
+<p>​	我也斗胆推荐大家看看这本书，很快就能看完，人类之所以存在信息差，就是因<strong>为不知道</strong>，或许看完这本书，你会打开新的思路，某些问题也能豁然开朗。</p>
+<p>​	借此机会，我也想与大家分享一下，这几年我<strong>作为一名前端开发者的迷茫与努力</strong>。</p>
+<h2 id="业务前端开发者的困境"><a href="#业务前端开发者的困境" class="headerlink" title="业务前端开发者的困境"></a>业务前端开发者的困境</h2><blockquote>
+<p>我只是一名普通学历，普通的业务前端开发者，所以以下仅是我的个人感觉，不代表所有前端开发者。</p>
+</blockquote>
+<p>​	目前在一个小型互联网公司的saas电商部门下，主要职责是前端开发组长，我们公司的主营业务不是saas电商，所以这几年算不上受到到很强的市场冲击，平时会管理几人的小团队，我18年毕业至今，一直在这家公司。</p>
+<p>​	而我大学毕业之后一直从事前端开发方向，在我工作1-3年的阶段，我都保持着对技术的热情，主要是因为尝到了学习技术的甜头，那时候我坚定的认为下一个阶段是<strong>全栈</strong>，在工作之余我花费了大量的精力学习技术；但是后面我就发现了一个很现实的问题，公司需要大家更好分工协作，所以高级别的项目后端是绝对轮不到一个前端去开发开发；并不是说能力不行，而是人的精力有限，前后端都干，还要管团队，是忙不过来的。</p>
+<p>​	在这样的环境下，关于全栈技术的学习，我也越发疑虑，逐渐走到了大多数业务前端开发者的临界点。</p>
+<ul>
+<li>业务前端的35岁危机在普通人身上是存在的，我们的年纪、精力、外部压力都不允许你永远征战一线，并始终保持高竞争力。</li>
+<li>业务前端的上限很低，大多数努力的前端开发者可以在3 - 5年内触摸到业务前端的上限，职位也就是前端组长。</li>
+<li>技术纵深是很好的选择，但是受限于综合实力（英语、计算机基础、天分），普通人可以达到的纵深远比想象的要浅。</li>
+<li>技术学会了，但是用不上，也会慢慢被遗忘；demo级别的应用无法让开发者对某一项技术有深刻理解。</li>
+<li>在业务开发场景下的前端，永远是<strong>没有灵魂的大头兵</strong>，上限低就意味着待遇相对较低、可替代性相对较强。</li>
+<li>代码写的越多，与人交流的机会越少，对于几十年的人生而言，这是一件很没安全的事情。</li>
+</ul>
+<p>​	总结一下，就是因为兴趣而走的前端技术路径开始越来越窄，前路开始越来越看不清，时间推着我向前，这不禁让我低头沉思，下一步究竟要怎么走？</p>
+<h2 id="说回产品"><a href="#说回产品" class="headerlink" title="说回产品"></a>说回产品</h2><blockquote>
+<p>到目前为止我也依旧不确定前路怎么走，接下来的一些结论，只是我的一些探索。</p>
+</blockquote>
+<p>​	在大学后期，我隐约感觉技术路线并非我所擅长的时候，我有目的的学习了微观经济学、企业管理、竞争战略相关的知识，从而间接接触到了互联网产品，也就是pm。</p>
+<p>​	我很快就感受到了pm的魅力：<strong>创造</strong>，我恰好是一个喜欢新鲜事物的人，在技术上总喜欢优化、迭代、升级，亲手构建出优美并且有价值的产品极具满足感，而前端开发者与用户的距离比任何一个岗位都要近，甚至可以说：前端开发者决定了用户体验。</p>
+<p>​	如果一个人同时具备前端开发 + 产品的能力是不是还不错？</p>
+<ul>
+<li>消除技术与产品的认知壁垒，后续我们做到了，在我们公司，产品和技术从来不吵架</li>
+<li>如果有能力决定产品走向，开发者就可以是一名有灵魂的大头兵，甚至晋升军衔。</li>
+</ul>
+<p>也就是说，我逐渐不再下探技术，而是<strong>走向用户</strong>。</p>
+<p>​	走向用户，并不意味着开发者要放弃对技术的学习，技术很重要，技术能力依旧是核心竞争力，而是随着我对技术的理解逐渐深入，开始越发清晰的了解到，究竟什么样的能力是前端开发者最需要的，什么样的能力边际收益是最高的。</p>
+<img src="http://qiliu.vkcyan.top/Fj5ClfMkacFzfRYeT1ie06gkYNn8.png" style="zoom:30%;" />
+
+
+
+<p>​	在我从事前端开发第2年至今，我一直都有在产品这方面作出努力与尝试。</p>
+<p>​	关于这几年产品的结果，大概可以用这句话来形容：</p>
+<p>​	100个想法中，80个想法死在在调研与分析阶段，15个想法死在在demo阶段，最后落地5个想法，其中4个反响平平，只有1个还算成功。</p>
+<p>​	虽然绝大部分都是失败，但是站在此刻回头来看，这几年的产品的学习将我的思维高度提升了很多，综合能力也提升了很多，因为很多想法初期是没有团队介入的，凡事都需要亲力亲为，需要思考需求、写最小demo、UI设计、沟通，而上线后，有需要又要为产品负责，就需要进行数据分析，线上数据的观察，等等….，这其实比写代码累多了。</p>
+<p>​	这些进步不像程序的学习有一个可量化的指标，这样的软实力很多的是一种感觉，虽然依旧是时而迷茫，但是也偶尔会有一些收获。	</p>
+<p>​	虽然我做的产品决策越来越多，公司与同事给予的信任也越来越多，所以在产品上的舞台也是越来越大，而看了《微信背后的产品观》，里面的想法非常符合我对产品的理解，当然我的理解是相对浅显与张小龙没法比的，不过张小龙对产品的理念，以及他对需求的理解，这样一套浪漫的方法论，真的非常有魅力，这也是为什么，我看完最后决定写这篇文章。</p>
+<h2 id="跨越“技术”思维"><a href="#跨越“技术”思维" class="headerlink" title="跨越“技术”思维"></a>跨越“技术”思维</h2><p>​	这几年，我的老板经常会找我聊天，因为我和他提过对产品很有兴趣，在前两年，他反复和我提一句话<strong>技术为业务服务</strong>，我当时觉得我理解这句话了。</p>
+<p>​	我想，这不是废话，写代码最终都是为了公司的项目，为了更好更快的完成公司需求，我要狠狠的学习技术。</p>
+<p>​	之后来随着我写的代码越来越多，我对这句话逐渐有了新的理解。</p>
+<p>​	之前过于执着于<strong>技术</strong>，总是站在写代码的角度去理解，而这句话的侧重点是<strong>业务</strong>，或者我们换个词<strong>交付</strong>。</p>
+<p>​	并不是技术推动交付，而是在推动交付的因素中，技术是其中之一，我们可以衍生出很多类似的话；设计为业务服务、产品为业务服务….</p>
+<p>​	所以<strong>技术的目的并非技术，而是交付价值。</strong></p>
+<p>​	<strong>人们总是不自知的放大自己在团队中的价值</strong>，这样只会蒙蔽大家的视野，走到更高处，对很多事物将会有不一样的理解。</p>
+<p><img src="http://qiliu.vkcyan.top/Fh1A7U86ZW-_I64VW8gr-hmg2Zd8.png"></p>
+<p>低纬度的技术思维，走向高纬度的业务（交付）思维。</p>
+<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>​	其实我本来只是觉得读了还不错的一本书，不复盘、不留下点什么反思会达不到学习的目的，写着写着就想到了自己的职业，想到了这几年的经历；</p>
+<p>​	总结性的话不说太多，希望可以帮助到屏幕前你，我们共同成长，共同进步。</p>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://bluedancers.github.io/2023/08/10/%E9%98%85%E8%AF%BB/%E4%BB%8E%E8%AF%BB%E3%80%8A%E5%BE%AE%E4%BF%A1%E8%83%8C%E5%90%8E%E7%9A%84%E4%BA%A7%E5%93%81%E8%A7%82%E3%80%8B%E5%88%B0%E6%80%9D%E8%80%83%E5%89%8D%E7%AB%AF%E5%B7%A5%E7%A8%8B%E5%B8%88%E7%9A%84%E2%80%9C35%E5%B2%81%E2%80%9D/" title="从读《微信背后的产品观》到思考前端工程师的“35岁”" target="_blank" rel="external">https://bluedancers.github.io/2023/08/10/阅读/从读《微信背后的产品观》到思考前端工程师的“35岁”/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/bluedancers" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/bluedancers" target="_blank"><span class="text-dark">bluedancers</span><small class="ml-1x">Web Developer &amp; Product Manager</small></a></h3>
+        <div>一切都是为了实现技术的价值</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2023/09/29/%E4%BA%A7%E5%93%81%E7%9B%B8%E5%85%B3%E6%96%87%E7%AB%A0/%E8%90%A5%E9%94%80%E5%B7%A5%E5%85%B7%EF%BC%881%EF%BC%89%20-%20%E4%BA%BA%E4%BA%BA%E9%83%BD%E7%88%B1%E7%94%A8%E7%9A%84%E4%BC%98%E6%83%A0%E5%88%B8%EF%BC%8C%E8%83%8C%E5%90%8E%E9%80%BB%E8%BE%91%E7%AB%9F%E7%84%B6%E8%BF%99%E4%B9%88%E5%A4%8D%E6%9D%82%EF%BC%9F/" title="营销工具(1) - 人人都爱用的优惠券，背后逻辑竟然这么复杂？"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2023/06/15/%E9%A1%B9%E7%9B%AE%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/%E8%BF%99%E6%98%AF%E6%88%91%E5%86%99%E8%BF%87%E7%9A%84%E6%9C%80%E7%AE%80%E5%8D%95%E7%9A%84Vue3%E4%B8%AD%E5%90%8E%E5%8F%B0%E5%8A%A8%E6%80%81%E8%B7%AF%E7%94%B1%20+%20%E4%BE%A7%E8%BE%B9%E6%A0%8F%E6%B8%B2%E6%9F%93%E6%96%B9%E6%A1%88/" title="这是我写过的最简单的Vue3中后台动态路由 + 侧边栏渲染方案"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+    <li class="toggle-toc">
+      <a class="toggle-btn " data-toggle="collapse" href="#collapseToc" aria-expanded="false" title="文章目录" role="button">    <span>[&nbsp;</span><span>文章目录</span>
+        <i class="text-collapsed icon icon-anchor"></i>
+        <i class="text-in icon icon-close"></i>
+        <span>]</span>
+      </a>
+    </li>
+    
+  </ul>
+  
+  
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-fancy btn-donate pop-onhover bg-gradient-warning" data-toggle="modal" data-target="#donateModal"><span>赏</span></button>
+  <!-- <div class="wave-icon wave-icon-danger btn-donate" data-toggle="modal" data-target="#donateModal">
+    <div class="wave-circle"><span class="icon"><i class="icon icon-bill"></i></span></div>
+  </div> -->
+  
+  
+  <div class="bar-right">
+    
+  </div>
+  </div>
+</nav>
+  
+<!-- Modal -->
+<div class="modal modal-center modal-small modal-xs-full fade" id="donateModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content donate">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <div class="modal-body">
+        <div class="donate-box">
+          <div class="donate-head">
+            <p>感谢您的支持，我会继续努力的!</p>
+          </div>
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade active in" id="alipay">
+              <div class="donate-payimg">
+                <img src="/images/donate/alipayimg.jpg" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开支付宝扫一扫，即可进行扫码打赏哦</p>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="wechatpay">
+              <div class="donate-payimg">
+                <img src="/images/donate/wechatpayimg.jpg" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开微信扫一扫，即可进行扫码打赏哦</p>
+            </div>
+          </div>
+          <div class="donate-footer">
+            <ul class="nav nav-tabs nav-justified" role="tablist">
+              <li role="presentation" class="active">
+                <a href="#alipay" id="alipay-tab" role="tab" data-toggle="tab" aria-controls="alipay" aria-expanded="true"><i class="icon icon-alipay"></i> 支付宝</a>
+              </li>
+              <li role="presentation" class="">
+                <a href="#wechatpay" role="tab" id="wechatpay-tab" data-toggle="tab" aria-controls="wechatpay" aria-expanded="false"><i class="icon icon-wepay"></i> 微信支付</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/bluedancers" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://juejin.cn/user/3720403077840519" target="_blank" title="Juejin" data-toggle=tooltip data-placement=top><i class="icon icon-juejin"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="https://cdn.staticfile.org/jquery/1.12.4/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+   
+
+
+
+
+    <script defer type="text/javascript">
+(function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'G-H48QGKLW34', 'auto');
+ga('send', 'pageview');
+
+</script>
+
+
+
+</body>
+</html>

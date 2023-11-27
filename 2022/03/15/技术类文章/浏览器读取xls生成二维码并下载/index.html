@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>浏览器读取xls并生成二维码下载到本地 | vkcyan Blog</title>
+  <meta name="description" content="需求一次普通的技术需求会议 ​	项目经理首先发言 我们技术这边需要将xls表格中的几千条数据变成二维码，并且中间镶嵌logo，图片底部放置编号，由于xls表格数据私密，不能通过第三方完成 ​	平常这个事情都是后端处理的，前端就是来摸鱼的，但是这次一反常态，后端脸黑了，带样式搞不来，脚一蹬，直接装死 ​	项目经理用期盼的眼神看着我，顿时我紧张了起来，眼神飘忽，我已经好多年没搞过node了啊！！会议室">
+<meta property="og:type" content="article">
+<meta property="og:title" content="浏览器读取xls并生成二维码下载到本地">
+<meta property="og:url" content="https://bluedancers.github.io/2022/03/15/%E6%8A%80%E6%9C%AF%E7%B1%BB%E6%96%87%E7%AB%A0/%E6%B5%8F%E8%A7%88%E5%99%A8%E8%AF%BB%E5%8F%96xls%E7%94%9F%E6%88%90%E4%BA%8C%E7%BB%B4%E7%A0%81%E5%B9%B6%E4%B8%8B%E8%BD%BD/index.html">
+<meta property="og:site_name" content="vkcya Blog">
+<meta property="og:description" content="需求一次普通的技术需求会议 ​	项目经理首先发言 我们技术这边需要将xls表格中的几千条数据变成二维码，并且中间镶嵌logo，图片底部放置编号，由于xls表格数据私密，不能通过第三方完成 ​	平常这个事情都是后端处理的，前端就是来摸鱼的，但是这次一反常态，后端脸黑了，带样式搞不来，脚一蹬，直接装死 ​	项目经理用期盼的眼神看着我，顿时我紧张了起来，眼神飘忽，我已经好多年没搞过node了啊！！会议室">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://www.vkcyan.top/image-20220424154056800.png">
+<meta property="og:image" content="http://www.vkcyan.top/8my3l-a8ef0.gif">
+<meta property="og:image" content="http://www.vkcyan.top/image-20220424160255476.png">
+<meta property="article:published_time" content="2022-03-14T16:00:00.000Z">
+<meta property="article:modified_time" content="2022-12-11T13:51:24.088Z">
+<meta property="article:author" content="bluedancers">
+<meta property="article:tag" content="JavaScript">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://www.vkcyan.top/image-20220424154056800.png">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://bluedancers.github.io/2022/03/15/%E6%8A%80%E6%9C%AF%E7%B1%BB%E6%96%87%E7%AB%A0/%E6%B5%8F%E8%A7%88%E5%99%A8%E8%AF%BB%E5%8F%96xls%E7%94%9F%E6%88%90%E4%BA%8C%E7%BB%B4%E7%A0%81%E5%B9%B6%E4%B8%8B%E8%BD%BD/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="vkcya Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+
+<body class="main-center theme-black" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/bluedancers" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">bluedancers</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Web Developer &amp; Product Manager</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> HeFei, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-books">
+          <a href="/books">
+            
+            <i class="icon icon-book-fill"></i>
+            
+            <span class="menu-title">书单</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">友链</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/bluedancers" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://juejin.cn/user/3720403077840519" target="_blank" title="Juejin" data-toggle=tooltip data-placement=top><i class="icon icon-juejin"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>往者不可谏，来者犹可追</p><br/>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript/">JavaScript</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript-2021/">JavaScript-2021</a><span class="category-list-count">10</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript-2022/">JavaScript-2022</a><span class="category-list-count">16</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript-2023/">JavaScript-2023</a><span class="category-list-count">16</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%B9%A6%E6%91%98/">书摘</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%BA%A7%E5%93%81/">产品</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%BA%A7%E5%93%81%E7%BB%8F%E7%90%86/">产品经理</a><span class="category-list-count">8</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%85%B3%E4%BA%8E%E7%A8%8B%E5%BA%8F%E5%91%98/">关于程序员</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/">数据结构与算法</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%97%A5%E5%B8%B8/">日常</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%97%A5%E5%B8%B8%E5%BC%80%E5%8F%91/">日常开发</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%9D%82%E8%B0%88/">杂谈</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%8E%A9%E6%9C%BA%E6%8A%80%E5%B7%A7/">玩机技巧</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%A7%BB%E5%8A%A8%E7%AB%AF/">移动端</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%9A%8F%E6%83%B3%E9%9B%86/">随想集</a><span class="category-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/" rel="tag">Hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a><span class="tag-list-count">19</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NPDP/" rel="tag">NPDP</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Pinia/" rel="tag">Pinia</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue/" rel="tag">Vue</a><span class="tag-list-count">12</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue-%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/" rel="tag">Vue - 源码解读</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue3/" rel="tag">Vue3</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/chatGPT/" rel="tag">chatGPT</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/h5%E8%A3%85%E4%BF%AE/" rel="tag">h5装修</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sku/" rel="tag">sku</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vue3/" rel="tag">vue3</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vw/" rel="tag">vw</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/webpack5/" rel="tag">webpack5</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/" rel="tag">个人博客</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%A7%E5%93%81/" rel="tag">产品</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%A7%E5%93%81%E5%88%86%E6%9E%90/" rel="tag">产品分析</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%A7%E5%93%81%E6%97%A5%E5%B8%B8/" rel="tag">产品日常</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BB%B7%E5%80%BC%E8%A7%82/" rel="tag">价值观</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BC%98%E6%83%A0%E5%88%B8/" rel="tag">优惠券</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BD%8E%E4%BB%A3%E7%A0%81/" rel="tag">低代码</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%85%B3%E4%BA%8EC%E7%AB%AF/" rel="tag">关于C端</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%85%B3%E4%BA%8Eproxy/" rel="tag">关于proxy</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%85%BC%E5%AE%B9%E6%80%A7/" rel="tag">兼容性</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8A%A8%E6%80%81%E8%B7%AF%E7%94%B1-vue3/" rel="tag">动态路由 - vue3</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%93%8D%E5%BA%94%E5%BC%8F/" rel="tag">响应式</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BC%A0%E5%B0%8F%E9%BE%99/" rel="tag">张小龙</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag">数据结构</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%97%A0%E9%9A%9C%E7%A2%8D/" rel="tag">无障碍</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A2%81%E6%B0%B8%E5%AE%89/" rel="tag">梁永安</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/" rel="tag">源码解读</a><span class="tag-list-count">12</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%A7%92%E6%9D%80/" rel="tag">秒杀</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%A7%BB%E5%8A%A8%E7%AB%AF/" rel="tag">移动端</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AB%A5%E5%B9%B4/" rel="tag">童年</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%90%A5%E9%94%80%E5%B7%A5%E5%85%B7/" rel="tag">营销工具</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%B0%E5%BD%95/" rel="tag">记录</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%BE%93%E5%87%BA/" rel="tag">输出</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%98%85%E8%AF%BB%E3%80%81%E6%B8%B8%E5%8E%86%E5%92%8C%E7%88%B1%E6%83%85/" rel="tag">阅读、游历和爱情</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9A%8F%E6%83%B3/" rel="tag">随想</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9A%8F%E9%80%89%E6%9C%97%E8%AF%BB/" rel="tag">随选朗读</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/Hexo/" style="font-size: 13px;">Hexo</a> <a href="/tags/JavaScript/" style="font-size: 14px;">JavaScript</a> <a href="/tags/NPDP/" style="font-size: 13.5px;">NPDP</a> <a href="/tags/Pinia/" style="font-size: 13.5px;">Pinia</a> <a href="/tags/Vue/" style="font-size: 13.83px;">Vue</a> <a href="/tags/Vue-%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/" style="font-size: 13.17px;">Vue - 源码解读</a> <a href="/tags/Vue3/" style="font-size: 13px;">Vue3</a> <a href="/tags/chatGPT/" style="font-size: 13px;">chatGPT</a> <a href="/tags/h5%E8%A3%85%E4%BF%AE/" style="font-size: 13px;">h5装修</a> <a href="/tags/sku/" style="font-size: 13px;">sku</a> <a href="/tags/vue3/" style="font-size: 13.17px;">vue3</a> <a href="/tags/vw/" style="font-size: 13px;">vw</a> <a href="/tags/webpack5/" style="font-size: 13px;">webpack5</a> <a href="/tags/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/" style="font-size: 13px;">个人博客</a> <a href="/tags/%E4%BA%A7%E5%93%81/" style="font-size: 13px;">产品</a> <a href="/tags/%E4%BA%A7%E5%93%81%E5%88%86%E6%9E%90/" style="font-size: 13px;">产品分析</a> <a href="/tags/%E4%BA%A7%E5%93%81%E6%97%A5%E5%B8%B8/" style="font-size: 13px;">产品日常</a> <a href="/tags/%E4%BB%B7%E5%80%BC%E8%A7%82/" style="font-size: 13px;">价值观</a> <a href="/tags/%E4%BC%98%E6%83%A0%E5%88%B8/" style="font-size: 13.17px;">优惠券</a> <a href="/tags/%E4%BD%8E%E4%BB%A3%E7%A0%81/" style="font-size: 13px;">低代码</a> <a href="/tags/%E5%85%B3%E4%BA%8EC%E7%AB%AF/" style="font-size: 13px;">关于C端</a> <a href="/tags/%E5%85%B3%E4%BA%8Eproxy/" style="font-size: 13px;">关于proxy</a> <a href="/tags/%E5%85%BC%E5%AE%B9%E6%80%A7/" style="font-size: 13px;">兼容性</a> <a href="/tags/%E5%8A%A8%E6%80%81%E8%B7%AF%E7%94%B1-vue3/" style="font-size: 13px;">动态路由 - vue3</a> <a href="/tags/%E5%93%8D%E5%BA%94%E5%BC%8F/" style="font-size: 13px;">响应式</a> <a href="/tags/%E5%BC%A0%E5%B0%8F%E9%BE%99/" style="font-size: 13px;">张小龙</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="font-size: 13.67px;">数据结构</a> <a href="/tags/%E6%97%A0%E9%9A%9C%E7%A2%8D/" style="font-size: 13px;">无障碍</a> <a href="/tags/%E6%A2%81%E6%B0%B8%E5%AE%89/" style="font-size: 13px;">梁永安</a> <a href="/tags/%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/" style="font-size: 13.83px;">源码解读</a> <a href="/tags/%E7%A7%92%E6%9D%80/" style="font-size: 13px;">秒杀</a> <a href="/tags/%E7%A7%BB%E5%8A%A8%E7%AB%AF/" style="font-size: 13px;">移动端</a> <a href="/tags/%E7%AB%A5%E5%B9%B4/" style="font-size: 13px;">童年</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 13.17px;">算法</a> <a href="/tags/%E8%90%A5%E9%94%80%E5%B7%A5%E5%85%B7/" style="font-size: 13.33px;">营销工具</a> <a href="/tags/%E8%AE%B0%E5%BD%95/" style="font-size: 13.33px;">记录</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 13px;">设计模式</a> <a href="/tags/%E8%BE%93%E5%87%BA/" style="font-size: 13px;">输出</a> <a href="/tags/%E9%98%85%E8%AF%BB%E3%80%81%E6%B8%B8%E5%8E%86%E5%92%8C%E7%88%B1%E6%83%85/" style="font-size: 13px;">阅读、游历和爱情</a> <a href="/tags/%E9%9A%8F%E6%83%B3/" style="font-size: 13px;">随想</a> <a href="/tags/%E9%9A%8F%E9%80%89%E6%9C%97%E8%AF%BB/" style="font-size: 13px;">随选朗读</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/11/">十一月 2023</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/10/">十月 2023</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/09/">九月 2023</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/08/">八月 2023</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/06/">六月 2023</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/05/">五月 2023</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/03/">三月 2023</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/02/">二月 2023</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/01/">一月 2023</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/09/">九月 2022</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/07/">七月 2022</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/06/">六月 2022</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/05/">五月 2022</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/03/">三月 2022</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/12/">十二月 2021</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/10/">十月 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/09/">九月 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/06/">六月 2021</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/03/">三月 2021</a><span class="archive-list-count">9</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E5%85%B3%E4%BA%8E%E7%A8%8B%E5%BA%8F%E5%91%98/">关于程序员</a>
+              </p>
+              <p class="item-title">
+                <a href="/2023/11/25/%E5%85%B3%E4%BA%8E%E7%A8%8B%E5%BA%8F%E5%91%98/%E6%AD%A3%E7%A1%AE%E7%9A%84%E7%90%86%E8%A7%A3%E6%8A%80%E6%9C%AF%EF%BC%8C%E5%8F%AF%E4%BB%A5%E8%AE%A9%E6%88%91%E4%BB%AC%E8%B5%B0%E7%9A%84%E6%9B%B4%E8%BF%9C/" class="title">正确的理解技术，可以让我们走的更远</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-11-24T16:00:00.000Z" itemprop="datePublished">2023-11-25</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E4%BA%A7%E5%93%81/">产品</a>
+              </p>
+              <p class="item-title">
+                <a href="/2023/10/30/%E4%BA%A7%E5%93%81%E7%9B%B8%E5%85%B3%E6%96%87%E7%AB%A0/%E8%90%A5%E9%94%80%E5%B7%A5%E5%85%B7%EF%BC%883%EF%BC%89%20-%20%E4%BB%8E%E6%B8%B8%E6%88%8F%E5%90%8D%E8%AF%8D%E5%88%B0%E7%94%B5%E5%95%86%E8%90%A5%E9%94%80%EF%BC%8C%E6%88%91%E4%BB%AC%E4%B8%80%E8%B5%B7%E8%81%8A%E8%81%8A%E7%A7%92%E6%9D%80/" class="title">营销工具(3) - 从游戏名词到电商营销，我们一起来聊聊“秒杀”</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-10-29T16:00:00.000Z" itemprop="datePublished">2023-10-30</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E4%BA%A7%E5%93%81/">产品</a>
+              </p>
+              <p class="item-title">
+                <a href="/2023/10/20/%E4%BA%A7%E5%93%81%E7%9B%B8%E5%85%B3%E6%96%87%E7%AB%A0/%E8%90%A5%E9%94%80%E5%B7%A5%E5%85%B7%EF%BC%882%EF%BC%89%20-%20%E4%BC%98%E6%83%A0%E5%88%B8%E7%9A%84%E4%BA%A7%E5%93%81%E8%AE%BE%E8%AE%A1%E9%80%BB%E8%BE%91/" class="title">营销工具(2) - 细致解读,Saas商城必备的优惠券产品设计攻略</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-10-19T16:00:00.000Z" itemprop="datePublished">2023-10-20</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/JavaScript-2023/">JavaScript-2023</a>
+              </p>
+              <p class="item-title">
+                <a href="/2023/09/29/vue3%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/runtime%E7%9B%B8%E5%85%B3/" class="title">runtime运行时</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-09-28T16:00:00.000Z" itemprop="datePublished">2023-09-29</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E4%BA%A7%E5%93%81/">产品</a>
+              </p>
+              <p class="item-title">
+                <a href="/2023/09/29/%E4%BA%A7%E5%93%81%E7%9B%B8%E5%85%B3%E6%96%87%E7%AB%A0/%E8%90%A5%E9%94%80%E5%B7%A5%E5%85%B7%EF%BC%881%EF%BC%89%20-%20%E4%BA%BA%E4%BA%BA%E9%83%BD%E7%88%B1%E7%94%A8%E7%9A%84%E4%BC%98%E6%83%A0%E5%88%B8%EF%BC%8C%E8%83%8C%E5%90%8E%E9%80%BB%E8%BE%91%E7%AB%9F%E7%84%B6%E8%BF%99%E4%B9%88%E5%A4%8D%E6%9D%82%EF%BC%9F/" class="title">营销工具(1) - 人人都爱用的优惠券，背后逻辑竟然这么复杂？</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-09-28T16:00:00.000Z" itemprop="datePublished">2023-09-29</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<aside
+  class="sidebar sidebar-toc collapse  in "
+  id="collapseToc"
+  itemscope
+  itemtype="http://schema.org/WPSideBar"
+>
+  <div class="slimContent">
+    <nav id="toc" class="article-toc">
+      <h3 class="toc-title">文章目录</h3>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9C%80%E6%B1%82"><span class="toc-number">1.</span> <span class="toc-text">需求</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9E%E7%8E%B0%E6%96%B9%E6%A1%88"><span class="toc-number">2.</span> <span class="toc-text">实现方案</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#puppeteer"><span class="toc-number">2.1.</span> <span class="toc-text">puppeteer</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#node-canvas"><span class="toc-number">2.2.</span> <span class="toc-text">node-canvas</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B5%8F%E8%A7%88%E5%99%A8"><span class="toc-number">2.3.</span> <span class="toc-text">浏览器</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%97%AE%E9%A2%98%E5%88%86%E8%A7%A3"><span class="toc-number">3.</span> <span class="toc-text">问题分解</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E5%AE%9E%E7%8E%B0"><span class="toc-number">4.</span> <span class="toc-text">具体实现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%AF%E5%8A%A8%E4%B8%80%E4%B8%AA%E6%9C%AC%E5%9C%B0%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="toc-number">4.1.</span> <span class="toc-text">启动一个本地服务器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BAhtml%EF%BC%8C%E5%BC%95%E5%85%A5%E8%B5%84%E6%BA%90%E5%BA%93"><span class="toc-number">4.2.</span> <span class="toc-text">创建html，引入资源库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A7%A3%E6%9E%90xls%E6%96%87%E4%BB%B6"><span class="toc-number">4.3.</span> <span class="toc-text">解析xls文件</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B0%86%E9%93%BE%E6%8E%A5%E7%94%9F%E6%88%90%E4%B8%BA%E4%BA%8C%E7%BB%B4%E7%A0%81"><span class="toc-number">4.3.1.</span> <span class="toc-text">将链接生成为二维码</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%86%99%E5%85%A5%E4%B8%AD%E9%97%B4logo"><span class="toc-number">4.4.</span> <span class="toc-text">写入中间logo</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%86%99%E5%85%A5%E5%BA%95%E9%83%A8%E6%96%87%E5%AD%97"><span class="toc-number">4.4.1.</span> <span class="toc-text">写入底部文字</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#canvas%E8%BD%AC%E5%8C%96%E4%B8%BA%E5%9B%BE%E7%89%87%EF%BC%8C%E5%B9%B6%E4%B8%8B%E8%BD%BD%E5%88%B0%E6%9C%AC%E5%9C%B0"><span class="toc-number">4.5.</span> <span class="toc-text">canvas转化为图片，并下载到本地</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%92%E5%BD%92%E8%B0%83%E7%94%A8"><span class="toc-number">4.6.</span> <span class="toc-text">递归调用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%80%E7%BB%88%E6%95%88%E6%9E%9C"><span class="toc-number">5.</span> <span class="toc-text">最终效果</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%80%E7%BB%88%E4%BB%A3%E7%A0%81%E5%9C%B0%E5%9D%80"><span class="toc-number">6.</span> <span class="toc-text">最终代码地址</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%93%E8%AF%AD"><span class="toc-number">7.</span> <span class="toc-text">结语</span></a></li></ol>
+    </nav>
+  </div>
+</aside>
+
+<script>
+  // 移动端不显示菜单
+  if (
+    navigator.userAgent.match(
+      /(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i
+    )
+  ) {
+    let self = document.querySelector(".sidebar-toc");
+    var parent = self.parentElement;
+    parent.removeChild(self);
+  } else {
+  }
+</script>
+
+
+
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-技术类文章/浏览器读取xls生成二维码并下载" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      浏览器读取xls并生成二维码下载到本地
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2022/03/15/%E6%8A%80%E6%9C%AF%E7%B1%BB%E6%96%87%E7%AB%A0/%E6%B5%8F%E8%A7%88%E5%99%A8%E8%AF%BB%E5%8F%96xls%E7%94%9F%E6%88%90%E4%BA%8C%E7%BB%B4%E7%A0%81%E5%B9%B6%E4%B8%8B%E8%BD%BD/" class="article-date">
+	  <time datetime="2022-03-14T16:00:00.000Z" itemprop="datePublished">2022-03-15</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/JavaScript-2022/">JavaScript-2022</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/JavaScript/" rel="tag">JavaScript</a>
+  </span>
+
+
+        
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/03/15/%E6%8A%80%E6%9C%AF%E7%B1%BB%E6%96%87%E7%AB%A0/%E6%B5%8F%E8%A7%88%E5%99%A8%E8%AF%BB%E5%8F%96xls%E7%94%9F%E6%88%90%E4%BA%8C%E7%BB%B4%E7%A0%81%E5%B9%B6%E4%B8%8B%E8%BD%BD/#comments" class="article-comment-link">评论</a></span>
+        
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <h2 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h2><p>一次普通的技术需求会议</p>
+<p>​	项目经理首先发言 我们技术这边需要将xls表格中的几千条数据变成二维码，并且中间镶嵌logo，图片底部放置编号，由于xls表格数据私密，不能通过第三方完成</p>
+<p>​	平常这个事情都是后端处理的，前端就是来摸鱼的，但是这次一反常态，后端脸黑了，带样式搞不来，脚一蹬，直接装死</p>
+<p>​	项目经理用期盼的眼神看着我，顿时我紧张了起来，眼神飘忽，我已经好多年没搞过node了啊！！会议室都沉默了，在项目经理不断精神攻击下，后端装死的情况下，看来注定要大前端来拯救世界了，毕竟JavaScript万能语言，俺来试试吧！</p>
+<h2 id="实现方案"><a href="#实现方案" class="headerlink" title="实现方案"></a>实现方案</h2><p>​	以上情节纯属虚构，但是需求确实是这样的，虽然好几年没碰过node，好歹年轻记性好，用过的基本都还记得，调研实现方案上没出现太多问题，有如下方案</p>
+<h3 id="puppeteer"><a href="#puppeteer" class="headerlink" title="puppeteer"></a>puppeteer</h3><p>地址：<a target="_blank" rel="noopener" href="https://github.com/puppeteer/puppeteer">https://github.com/puppeteer/puppeteer</a></p>
+<p>​	使用基于node环境的puppeteer，进行二维码绘制，图片绘制，是JavaScript开发者面对此类需求的主流选择</p>
+<h3 id="node-canvas"><a href="#node-canvas" class="headerlink" title="node-canvas"></a>node-canvas</h3><p>地址：<a target="_blank" rel="noopener" href="https://github.com/Automattic/node-canvas">https://github.com/Automattic/node-canvas</a></p>
+<p>​	同样是在服务端完成渲染，但是这个库依赖node-gyp，如果不安装python2，那安装过程懂得都懂，不过这也是很不错的方案</p>
+<h3 id="浏览器"><a href="#浏览器" class="headerlink" title="浏览器"></a>浏览器</h3><p>​	通过浏览器canvas绘制，然后下载下来，会有刷刷刷下载图片的炫酷效果</p>
+<p>很明显有刷刷刷下载图片炫酷效果的方案更好，所以就选择你了 <strong>浏览器</strong>方案！</p>
+<h2 id="问题分解"><a href="#问题分解" class="headerlink" title="问题分解"></a>问题分解</h2><p>确定了技术方案，就要考虑具体实现了</p>
+<ul>
+<li>JavaScript读取execl文件，并处理成理想格式</li>
+<li>将读取到的execl中的网址字段生成一张二维码</li>
+<li>将二维码写入canvas，在其中间加上logo，并在底部加一行文字</li>
+<li>将canva转化为DataURL，下载它</li>
+<li>不断递归生成，直到xls数据全部处理完毕</li>
+</ul>
+<p><strong>理论存在，实践开始</strong>！</p>
+<h2 id="具体实现"><a href="#具体实现" class="headerlink" title="具体实现"></a>具体实现</h2><h3 id="启动一个本地服务器"><a href="#启动一个本地服务器" class="headerlink" title="启动一个本地服务器"></a>启动一个本地服务器</h3><p>首先我们通过VScode <strong>Live Server</strong> 启动一个本地服务器</p>
+<p>这里有好奇宝宝要问了，为啥第一步是这？</p>
+<p>答：因为浏览器是访问不了电脑的文件系统的，所以只能通过启动一个本地服务器的方案，来读取我们的资源文件</p>
+<h3 id="创建html，引入资源库"><a href="#创建html，引入资源库" class="headerlink" title="创建html，引入资源库"></a>创建html，引入资源库</h3><p>分析需要用到的第三方开源库</p>
+<ul>
+<li>解析xls <a target="_blank" rel="noopener" href="https://github.com/sheetjs/sheetjs">https://github.com/sheetjs/sheetjs</a></li>
+<li>生成QRcode <a target="_blank" rel="noopener" href="https://github.com/soldair/node-qrcode">https://github.com/soldair/node-qrcode</a></li>
+</ul>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">&quot;en&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;UTF-8&quot;</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">&quot;X-UA-Compatible&quot;</span> <span class="attr">content</span>=<span class="string">&quot;IE=edge&quot;</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">&quot;viewport&quot;</span> <span class="attr">content</span>=<span class="string">&quot;width=device-width, initial-scale=1.0&quot;</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>生成二维码<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;./qrcode.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;./xlsx.full.min.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 用于生成载体 最终生成的图片大小，按自己的需求来 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">canvas</span> <span class="attr">width</span>=<span class="string">&quot;260&quot;</span> <span class="attr">height</span>=<span class="string">&quot;310&quot;</span> <span class="attr">id</span>=<span class="string">&quot;canvas&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">canvas</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">    <span class="keyword">const</span> ctx = <span class="title function_">initCanvas</span>(); <span class="comment">// 获取ctx实例</span></span></span><br><span class="line"><span class="language-javascript">    <span class="comment">// 初始化画布</span></span></span><br><span class="line"><span class="language-javascript">    <span class="keyword">function</span> <span class="title function_">initCanvas</span>(<span class="params"></span>) &#123;</span></span><br><span class="line"><span class="language-javascript">      <span class="keyword">const</span> canvas = <span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="string">&quot;canvas&quot;</span>);</span></span><br><span class="line"><span class="language-javascript">      <span class="keyword">const</span> ctx = canvas.<span class="title function_">getContext</span>(<span class="string">&quot;2d&quot;</span>);</span></span><br><span class="line"><span class="language-javascript">      ctx.<span class="property">fillStyle</span> = <span class="string">&quot;#fff&quot;</span>;</span></span><br><span class="line"><span class="language-javascript">      ctx.<span class="title function_">fillRect</span>(<span class="number">0</span>, <span class="number">0</span>, <span class="number">260</span>, <span class="number">310</span>);</span></span><br><span class="line"><span class="language-javascript">      <span class="keyword">return</span> ctx;</span></span><br><span class="line"><span class="language-javascript">    &#125;</span></span><br><span class="line"><span class="language-javascript">    </span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="解析xls文件"><a href="#解析xls文件" class="headerlink" title="解析xls文件"></a>解析xls文件</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">readWorkbookFromRemoteFile</span>().<span class="title function_">then</span>(<span class="function">(<span class="params">res</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">// res 为实际解析代码 [&#123;key:&#x27;xxxx&#x27;,value:&#x27;xxxx&#x27;&#125;,....]</span></span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 读取xls信息，并处理</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">readWorkbookFromRemoteFile</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">var</span> xhr = <span class="keyword">new</span> <span class="title class_">XMLHttpRequest</span>();</span><br><span class="line">        xhr.<span class="title function_">open</span>(<span class="string">&quot;get&quot;</span>, <span class="string">&quot;http://127.0.0.1:5500/xls.xls&quot;</span>, <span class="literal">true</span>);</span><br><span class="line">        xhr.<span class="property">responseType</span> = <span class="string">&quot;arraybuffer&quot;</span>;</span><br><span class="line">        xhr.<span class="property">onload</span> = <span class="function">(<span class="params">e</span>) =&gt;</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (xhr.<span class="property">status</span> == <span class="number">200</span>) &#123;</span><br><span class="line">                <span class="keyword">var</span> data = <span class="keyword">new</span> <span class="title class_">Uint8Array</span>(xhr.<span class="property">response</span>);</span><br><span class="line">                <span class="keyword">var</span> workbook = <span class="variable constant_">XLSX</span>.<span class="title function_">read</span>(data, &#123; <span class="attr">type</span>: <span class="string">&quot;array&quot;</span> &#125;);</span><br><span class="line"></span><br><span class="line">                <span class="comment">// 获取实际表格长度（去除表头）</span></span><br><span class="line">                <span class="keyword">let</span> carryLen = <span class="number">0</span>;</span><br><span class="line">                <span class="keyword">for</span> (<span class="keyword">const</span> key <span class="keyword">in</span> workbook.<span class="property">Sheets</span>[<span class="string">&quot;Sheet&quot;</span>]) &#123;</span><br><span class="line">                    <span class="keyword">const</span> ele = workbook.<span class="property">Sheets</span>[<span class="string">&quot;Sheet&quot;</span>][key];</span><br><span class="line">                    <span class="keyword">if</span> (key.<span class="title function_">includes</span>(<span class="string">&quot;A&quot;</span>)) &#123;</span><br><span class="line">                        carryLen++;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="comment">// 解析数据</span></span><br><span class="line">                <span class="keyword">let</span> xls = [];</span><br><span class="line">                <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">2</span>; i &lt;= carryLen; i++) &#123;</span><br><span class="line">                    <span class="keyword">let</span> data = workbook.<span class="property">Sheets</span>[<span class="string">&quot;Sheet&quot;</span>];</span><br><span class="line">                    xls.<span class="title function_">push</span>(&#123;</span><br><span class="line">                        <span class="attr">key</span>: data[<span class="string">&quot;A&quot;</span> + i].<span class="property">w</span>,</span><br><span class="line">                        <span class="attr">value</span>: data[<span class="string">&quot;B&quot;</span> + i].<span class="property">w</span>,</span><br><span class="line">                    &#125;);</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="title function_">resolve</span>(xls);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line">        xhr.<span class="title function_">send</span>();</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>看到这里肯定也有细心的好奇宝宝问，为啥循环体中的<code>i</code>为2呢?</p>
+<p>答案：因为表格中的A1，B1为表格的第一行，而第一行是表头，要去除</p>
+<h4 id="将链接生成为二维码"><a href="#将链接生成为二维码" class="headerlink" title="将链接生成为二维码"></a>将链接生成为二维码</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> <span class="title class_">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">// 生成二维码</span></span><br><span class="line">    <span class="title class_">QRCode</span>.<span class="title function_">toDataURL</span>(</span><br><span class="line">        <span class="string">&#x27;xxxxxxx&#x27;</span>,</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="attr">width</span>: <span class="number">260</span>,</span><br><span class="line">            <span class="attr">height</span>: <span class="number">260</span>,</span><br><span class="line">            <span class="attr">margin</span>: <span class="number">3</span>,</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="function">(<span class="params">error, url</span>) =&gt;</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (error) <span class="variable language_">console</span>.<span class="title function_">error</span>(error);</span><br><span class="line">            <span class="keyword">const</span> code = <span class="keyword">new</span> <span class="title class_">Image</span>();</span><br><span class="line">            code.<span class="property">src</span> = url;</span><br><span class="line">            code.<span class="property">onload</span> = <span class="function">() =&gt;</span> &#123;</span><br><span class="line">                ctx.<span class="title function_">drawImage</span>(code, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">                <span class="title function_">resolve</span>(code);</span><br><span class="line">            &#125;;</span><br><span class="line">        &#125;</span><br><span class="line">    );</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="写入中间logo"><a href="#写入中间logo" class="headerlink" title="写入中间logo"></a>写入中间logo</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> code = <span class="keyword">new</span> <span class="title class_">Image</span>();</span><br><span class="line">    code.<span class="property">src</span> = <span class="string">&quot;http://127.0.0.1:5500/logo.jpeg&quot;</span>;</span><br><span class="line">    code.<span class="property">onload</span> = <span class="function">() =&gt;</span> &#123;</span><br><span class="line">        ctx.<span class="title function_">drawImage</span>(code, <span class="number">260</span> / <span class="number">2</span> - <span class="number">20</span>, <span class="number">260</span> / <span class="number">2</span> - <span class="number">20</span>, <span class="number">40</span>, <span class="number">40</span>);</span><br><span class="line">        <span class="title function_">resolve</span>();</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="写入底部文字"><a href="#写入底部文字" class="headerlink" title="写入底部文字"></a>写入底部文字</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 写入编号</span></span><br><span class="line">ctx.<span class="property">font</span> = <span class="string">&quot;24px Arial&quot;</span>;</span><br><span class="line">ctx.<span class="property">fillStyle</span> = <span class="string">&quot;#000&quot;</span>;</span><br><span class="line">ctx.<span class="property">textAlign</span> = <span class="string">&quot;center&quot;</span>;</span><br><span class="line">ctx.<span class="property">textBaseline</span> = <span class="string">&quot;middle&quot;</span>;</span><br><span class="line">ctx.<span class="title function_">fillText</span>(xls[index].<span class="property">value</span>, <span class="number">130</span>, <span class="number">270</span>);</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="canvas转化为图片，并下载到本地"><a href="#canvas转化为图片，并下载到本地" class="headerlink" title="canvas转化为图片，并下载到本地"></a>canvas转化为图片，并下载到本地</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 用于预览</span></span><br><span class="line"><span class="keyword">let</span> url = <span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="string">&quot;canvas&quot;</span>).<span class="title function_">toDataURL</span>(<span class="string">&quot;image/png&quot;</span>);</span><br><span class="line"><span class="keyword">var</span> a = <span class="variable language_">document</span>.<span class="title function_">createElement</span>(<span class="string">&quot;a&quot;</span>); <span class="comment">// 生成一个a元素</span></span><br><span class="line"><span class="keyword">var</span> event = <span class="keyword">new</span> <span class="title class_">MouseEvent</span>(<span class="string">&quot;click&quot;</span>); <span class="comment">// 创建一个单击事件</span></span><br><span class="line">a.<span class="property">download</span> = xls[index].<span class="property">value</span>; <span class="comment">// 将a的download属性设置为我们想要下载的图片名称，若name不存在则使用‘下载图片名称’作为默认名称</span></span><br><span class="line">a.<span class="property">href</span> = url; <span class="comment">// 将生成的URL设置为a.href属性</span></span><br><span class="line">a.<span class="title function_">dispatchEvent</span>(event); <span class="comment">// 触发a的单击事件</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p>第一张图片，完成生成</p>
+<img src="http://www.vkcyan.top/image-20220424154056800.png" alt="image-20220424154056800" style="zoom: 67%;" />
+
+<h3 id="递归调用"><a href="#递归调用" class="headerlink" title="递归调用"></a>递归调用</h3><p>我们修改发起逻辑代码，逻辑尾部增加递归调用就好啦</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">readWorkbookFromRemoteFile</span>().<span class="title function_">then</span>(<span class="function">(<span class="params">res</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="title function_">createImg</span>(res, <span class="number">0</span>); <span class="comment">// 递归生成</span></span><br><span class="line">&#125;);</span><br><span class="line"><span class="comment">// ......</span></span><br><span class="line"><span class="comment">// 实际生成逻辑</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">createImg</span>(<span class="params">xls, index</span>) &#123;</span><br><span class="line">    <span class="keyword">new</span> <span class="title class_">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="comment">// 生成二维码</span></span><br><span class="line">    &#125;)</span><br><span class="line">        .<span class="title function_">then</span>(<span class="function">(<span class="params">res</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="comment">// 生成中间logo</span></span><br><span class="line">    &#125;)</span><br><span class="line">        .<span class="title function_">then</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">        <span class="comment">// 写入编号</span></span><br><span class="line">    &#125;)</span><br><span class="line">        .<span class="title function_">then</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">        <span class="comment">// 下载图片</span></span><br><span class="line">    &#125;)</span><br><span class="line">        .<span class="title function_">then</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">        <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (xls.<span class="property">length</span> &gt; index + <span class="number">1</span>) &#123;</span><br><span class="line">                ctx.<span class="property">fillStyle</span> = <span class="string">&quot;#fff&quot;</span>; </span><br><span class="line">                ctx.<span class="title function_">fillRect</span>(<span class="number">0</span>, <span class="number">0</span>, <span class="number">260</span>, <span class="number">310</span>); <span class="comment">// 初始化画布</span></span><br><span class="line">                <span class="title function_">createImg</span>(xls, index + <span class="number">1</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;, <span class="number">20</span>); <span class="comment">// 爱惜机器，加个延时，也可以去掉延时，体会机器的极致速度</span></span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="最终效果"><a href="#最终效果" class="headerlink" title="最终效果"></a>最终效果</h2><p><img src="http://www.vkcyan.top/8my3l-a8ef0.gif" alt="8my3l-a8ef0"></p>
+<p>至此，终于实现了刷刷刷下载图片炫酷效果，此时可以脑部一段很快的rap，如果华佗再世，崇洋可以医治，外邦来学汉字……………</p>
+<p>最终生成的文件</p>
+<img src="http://www.vkcyan.top/image-20220424160255476.png" alt="image-20220424160255476" style="zoom:67%;" />
+
+
+
+<h2 id="最终代码地址"><a href="#最终代码地址" class="headerlink" title="最终代码地址"></a>最终代码地址</h2><blockquote>
+<p>一定要针对该项目启动一个本地服务器，否则资源无法访问</p>
+</blockquote>
+<p><a target="_blank" rel="noopener" href="https://github.com/vkcyan/web-Output-QRcode">web-Output-QRcode</a></p>
+<h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><p>​	首先纠正一点，JavaScript开发者针对生成二维码类似的任务，首选肯定是<code>puppeteer</code>，使用浏览器绕个弯这种实现方案，多少带点科研味道，长期项目自然是不推荐的</p>
+<p>​	带着学习的态度去完成需求，并且不断优化代码、总结问题，将遇到的未知知识点学会，（比如创建a链接，自动触发点击事件），这才是本文的目的。</p>
+<p>​	感谢阅读，觉得还不错就点个赞吧~</p>
+<p>​	QQ交流群：530496237 大佬解答疑惑~（内有微信群二维码）</p>
+<p>​	</p>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://bluedancers.github.io/2022/03/15/%E6%8A%80%E6%9C%AF%E7%B1%BB%E6%96%87%E7%AB%A0/%E6%B5%8F%E8%A7%88%E5%99%A8%E8%AF%BB%E5%8F%96xls%E7%94%9F%E6%88%90%E4%BA%8C%E7%BB%B4%E7%A0%81%E5%B9%B6%E4%B8%8B%E8%BD%BD/" title="浏览器读取xls并生成二维码下载到本地" target="_blank" rel="external">https://bluedancers.github.io/2022/03/15/技术类文章/浏览器读取xls生成二维码并下载/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/bluedancers" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/bluedancers" target="_blank"><span class="text-dark">bluedancers</span><small class="ml-1x">Web Developer &amp; Product Manager</small></a></h3>
+        <div>一切都是为了实现技术的价值</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2022/03/15/%E6%8A%80%E6%9C%AF%E7%B1%BB%E6%96%87%E7%AB%A0/%E5%89%8D%E7%AB%AF%E5%B7%A5%E7%A8%8B%E5%B8%88%E7%9A%84nginx%E6%95%99%E7%A8%8B/" title="写给前端新人的nginx教程"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2022/03/15/%E6%8A%80%E6%9C%AF%E7%B1%BB%E6%96%87%E7%AB%A0/%E8%81%8A%E4%B8%80%E8%81%8A%E5%AE%8F%E4%BB%BB%E5%8A%A1%E4%B8%8E%E5%BE%AE%E4%BB%BB%E5%8A%A1%E4%BB%A5%E5%8F%8AEventLoop/" title="三个案例带你理解Event Loop流程"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+    <li class="toggle-toc">
+      <a class="toggle-btn " data-toggle="collapse" href="#collapseToc" aria-expanded="false" title="文章目录" role="button">    <span>[&nbsp;</span><span>文章目录</span>
+        <i class="text-collapsed icon icon-anchor"></i>
+        <i class="text-in icon icon-close"></i>
+        <span>]</span>
+      </a>
+    </li>
+    
+  </ul>
+  
+  
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-fancy btn-donate pop-onhover bg-gradient-warning" data-toggle="modal" data-target="#donateModal"><span>赏</span></button>
+  <!-- <div class="wave-icon wave-icon-danger btn-donate" data-toggle="modal" data-target="#donateModal">
+    <div class="wave-circle"><span class="icon"><i class="icon icon-bill"></i></span></div>
+  </div> -->
+  
+  
+  <div class="bar-right">
+    
+  </div>
+  </div>
+</nav>
+  
+<!-- Modal -->
+<div class="modal modal-center modal-small modal-xs-full fade" id="donateModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content donate">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <div class="modal-body">
+        <div class="donate-box">
+          <div class="donate-head">
+            <p>感谢您的支持，我会继续努力的!</p>
+          </div>
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade active in" id="alipay">
+              <div class="donate-payimg">
+                <img src="/images/donate/alipayimg.jpg" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开支付宝扫一扫，即可进行扫码打赏哦</p>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="wechatpay">
+              <div class="donate-payimg">
+                <img src="/images/donate/wechatpayimg.jpg" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开微信扫一扫，即可进行扫码打赏哦</p>
+            </div>
+          </div>
+          <div class="donate-footer">
+            <ul class="nav nav-tabs nav-justified" role="tablist">
+              <li role="presentation" class="active">
+                <a href="#alipay" id="alipay-tab" role="tab" data-toggle="tab" aria-controls="alipay" aria-expanded="true"><i class="icon icon-alipay"></i> 支付宝</a>
+              </li>
+              <li role="presentation" class="">
+                <a href="#wechatpay" role="tab" id="wechatpay-tab" data-toggle="tab" aria-controls="wechatpay" aria-expanded="false"><i class="icon icon-wepay"></i> 微信支付</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/bluedancers" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://juejin.cn/user/3720403077840519" target="_blank" title="Juejin" data-toggle=tooltip data-placement=top><i class="icon icon-juejin"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="https://cdn.staticfile.org/jquery/1.12.4/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+   
+
+
+
+
+    <script defer type="text/javascript">
+(function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'G-H48QGKLW34', 'auto');
+ga('send', 'pageview');
+
+</script>
+
+
+
+</body>
+</html>

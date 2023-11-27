@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>【5000字长文】（开源） 低代码H5可视化搭建系统 - 易动v3.0 | vkcyan Blog</title>
+  <meta name="description" content="前言​	作者在2020年的时候开源了易动第一个版本（开源）从0打造H5可视化搭建系统 - 易动（vue+ts+egg），这两年在公司针对装修技术方案做了大量的实践，使用过draggable方案 iframe装修方案 绝对定位方案，对其在技术，产品层面都存在更深入的理解，今天给大家带来新一代企业级H5装修方案易动v3.0  开源地址 拖拽生成h5页面，支持页面全局设置，组件，自定义URL，插件市场，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【5000字长文】（开源） 低代码H5可视化搭建系统 - 易动v3.0">
+<meta property="og:url" content="https://bluedancers.github.io/2022/05/25/%E6%8A%80%E6%9C%AF%E7%B1%BB%E6%96%87%E7%AB%A0/%E3%80%905000%E5%AD%97%E9%95%BF%E6%96%87%E3%80%91%EF%BC%88%E5%BC%80%E6%BA%90%EF%BC%89%20%E4%BD%8E%E4%BB%A3%E7%A0%81H5%E5%8F%AF%E8%A7%86%E5%8C%96%E6%90%AD%E5%BB%BA%E7%B3%BB%E7%BB%9F%20-%20%E6%98%93%E5%8A%A8v3.0/index.html">
+<meta property="og:site_name" content="vkcya Blog">
+<meta property="og:description" content="前言​	作者在2020年的时候开源了易动第一个版本（开源）从0打造H5可视化搭建系统 - 易动（vue+ts+egg），这两年在公司针对装修技术方案做了大量的实践，使用过draggable方案 iframe装修方案 绝对定位方案，对其在技术，产品层面都存在更深入的理解，今天给大家带来新一代企业级H5装修方案易动v3.0  开源地址 拖拽生成h5页面，支持页面全局设置，组件，自定义URL，插件市场，">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://www.vkcyan.top/image-20220525165904705.png">
+<meta property="og:image" content="https://www.vkcyan.top/image-20220519092211855.png">
+<meta property="og:image" content="https://www.vkcyan.top/image-20220519102613376.png">
+<meta property="og:image" content="https://www.vkcyan.top/image-20220519102817422.png">
+<meta property="og:image" content="https://www.vkcyan.top/image-20220519103955455.png">
+<meta property="og:image" content="https://www.vkcyan.top/image-20220520163303273.png">
+<meta property="og:image" content="https://www.vkcyan.top/image-20220525114422478.png">
+<meta property="og:image" content="https://www.vkcyan.top/image-20220525114934419.png">
+<meta property="og:image" content="https://www.vkcyan.top/image-20220525171846398.png">
+<meta property="og:image" content="https://www.vkcyan.top/d6dad8dd3c29960e6ed1e01d73eb1d8.jpg">
+<meta property="article:published_time" content="2022-05-24T16:00:00.000Z">
+<meta property="article:modified_time" content="2022-12-11T13:51:24.084Z">
+<meta property="article:author" content="bluedancers">
+<meta property="article:tag" content="JavaScript">
+<meta property="article:tag" content="低代码">
+<meta property="article:tag" content="h5装修">
+<meta property="article:tag" content="Vue3">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://www.vkcyan.top/image-20220525165904705.png">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://bluedancers.github.io/2022/05/25/%E6%8A%80%E6%9C%AF%E7%B1%BB%E6%96%87%E7%AB%A0/%E3%80%905000%E5%AD%97%E9%95%BF%E6%96%87%E3%80%91%EF%BC%88%E5%BC%80%E6%BA%90%EF%BC%89%20%E4%BD%8E%E4%BB%A3%E7%A0%81H5%E5%8F%AF%E8%A7%86%E5%8C%96%E6%90%AD%E5%BB%BA%E7%B3%BB%E7%BB%9F%20-%20%E6%98%93%E5%8A%A8v3.0/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="vkcya Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+
+<body class="main-center theme-black" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/bluedancers" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">bluedancers</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Web Developer &amp; Product Manager</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> HeFei, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-books">
+          <a href="/books">
+            
+            <i class="icon icon-book-fill"></i>
+            
+            <span class="menu-title">书单</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">友链</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/bluedancers" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://juejin.cn/user/3720403077840519" target="_blank" title="Juejin" data-toggle=tooltip data-placement=top><i class="icon icon-juejin"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>往者不可谏，来者犹可追</p><br/>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript/">JavaScript</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript-2021/">JavaScript-2021</a><span class="category-list-count">10</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript-2022/">JavaScript-2022</a><span class="category-list-count">16</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript-2023/">JavaScript-2023</a><span class="category-list-count">16</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%B9%A6%E6%91%98/">书摘</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%BA%A7%E5%93%81/">产品</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%BA%A7%E5%93%81%E7%BB%8F%E7%90%86/">产品经理</a><span class="category-list-count">8</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%85%B3%E4%BA%8E%E7%A8%8B%E5%BA%8F%E5%91%98/">关于程序员</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/">数据结构与算法</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%97%A5%E5%B8%B8/">日常</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%97%A5%E5%B8%B8%E5%BC%80%E5%8F%91/">日常开发</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%9D%82%E8%B0%88/">杂谈</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%8E%A9%E6%9C%BA%E6%8A%80%E5%B7%A7/">玩机技巧</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%A7%BB%E5%8A%A8%E7%AB%AF/">移动端</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%9A%8F%E6%83%B3%E9%9B%86/">随想集</a><span class="category-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/" rel="tag">Hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a><span class="tag-list-count">19</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NPDP/" rel="tag">NPDP</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Pinia/" rel="tag">Pinia</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue/" rel="tag">Vue</a><span class="tag-list-count">12</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue-%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/" rel="tag">Vue - 源码解读</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue3/" rel="tag">Vue3</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/chatGPT/" rel="tag">chatGPT</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/h5%E8%A3%85%E4%BF%AE/" rel="tag">h5装修</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sku/" rel="tag">sku</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vue3/" rel="tag">vue3</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vw/" rel="tag">vw</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/webpack5/" rel="tag">webpack5</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/" rel="tag">个人博客</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%A7%E5%93%81/" rel="tag">产品</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%A7%E5%93%81%E5%88%86%E6%9E%90/" rel="tag">产品分析</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%A7%E5%93%81%E6%97%A5%E5%B8%B8/" rel="tag">产品日常</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BB%B7%E5%80%BC%E8%A7%82/" rel="tag">价值观</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BC%98%E6%83%A0%E5%88%B8/" rel="tag">优惠券</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BD%8E%E4%BB%A3%E7%A0%81/" rel="tag">低代码</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%85%B3%E4%BA%8EC%E7%AB%AF/" rel="tag">关于C端</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%85%B3%E4%BA%8Eproxy/" rel="tag">关于proxy</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%85%BC%E5%AE%B9%E6%80%A7/" rel="tag">兼容性</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8A%A8%E6%80%81%E8%B7%AF%E7%94%B1-vue3/" rel="tag">动态路由 - vue3</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%93%8D%E5%BA%94%E5%BC%8F/" rel="tag">响应式</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BC%A0%E5%B0%8F%E9%BE%99/" rel="tag">张小龙</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag">数据结构</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%97%A0%E9%9A%9C%E7%A2%8D/" rel="tag">无障碍</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A2%81%E6%B0%B8%E5%AE%89/" rel="tag">梁永安</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/" rel="tag">源码解读</a><span class="tag-list-count">12</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%A7%92%E6%9D%80/" rel="tag">秒杀</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%A7%BB%E5%8A%A8%E7%AB%AF/" rel="tag">移动端</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AB%A5%E5%B9%B4/" rel="tag">童年</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%90%A5%E9%94%80%E5%B7%A5%E5%85%B7/" rel="tag">营销工具</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%B0%E5%BD%95/" rel="tag">记录</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%BE%93%E5%87%BA/" rel="tag">输出</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%98%85%E8%AF%BB%E3%80%81%E6%B8%B8%E5%8E%86%E5%92%8C%E7%88%B1%E6%83%85/" rel="tag">阅读、游历和爱情</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9A%8F%E6%83%B3/" rel="tag">随想</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9A%8F%E9%80%89%E6%9C%97%E8%AF%BB/" rel="tag">随选朗读</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/Hexo/" style="font-size: 13px;">Hexo</a> <a href="/tags/JavaScript/" style="font-size: 14px;">JavaScript</a> <a href="/tags/NPDP/" style="font-size: 13.5px;">NPDP</a> <a href="/tags/Pinia/" style="font-size: 13.5px;">Pinia</a> <a href="/tags/Vue/" style="font-size: 13.83px;">Vue</a> <a href="/tags/Vue-%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/" style="font-size: 13.17px;">Vue - 源码解读</a> <a href="/tags/Vue3/" style="font-size: 13px;">Vue3</a> <a href="/tags/chatGPT/" style="font-size: 13px;">chatGPT</a> <a href="/tags/h5%E8%A3%85%E4%BF%AE/" style="font-size: 13px;">h5装修</a> <a href="/tags/sku/" style="font-size: 13px;">sku</a> <a href="/tags/vue3/" style="font-size: 13.17px;">vue3</a> <a href="/tags/vw/" style="font-size: 13px;">vw</a> <a href="/tags/webpack5/" style="font-size: 13px;">webpack5</a> <a href="/tags/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/" style="font-size: 13px;">个人博客</a> <a href="/tags/%E4%BA%A7%E5%93%81/" style="font-size: 13px;">产品</a> <a href="/tags/%E4%BA%A7%E5%93%81%E5%88%86%E6%9E%90/" style="font-size: 13px;">产品分析</a> <a href="/tags/%E4%BA%A7%E5%93%81%E6%97%A5%E5%B8%B8/" style="font-size: 13px;">产品日常</a> <a href="/tags/%E4%BB%B7%E5%80%BC%E8%A7%82/" style="font-size: 13px;">价值观</a> <a href="/tags/%E4%BC%98%E6%83%A0%E5%88%B8/" style="font-size: 13.17px;">优惠券</a> <a href="/tags/%E4%BD%8E%E4%BB%A3%E7%A0%81/" style="font-size: 13px;">低代码</a> <a href="/tags/%E5%85%B3%E4%BA%8EC%E7%AB%AF/" style="font-size: 13px;">关于C端</a> <a href="/tags/%E5%85%B3%E4%BA%8Eproxy/" style="font-size: 13px;">关于proxy</a> <a href="/tags/%E5%85%BC%E5%AE%B9%E6%80%A7/" style="font-size: 13px;">兼容性</a> <a href="/tags/%E5%8A%A8%E6%80%81%E8%B7%AF%E7%94%B1-vue3/" style="font-size: 13px;">动态路由 - vue3</a> <a href="/tags/%E5%93%8D%E5%BA%94%E5%BC%8F/" style="font-size: 13px;">响应式</a> <a href="/tags/%E5%BC%A0%E5%B0%8F%E9%BE%99/" style="font-size: 13px;">张小龙</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="font-size: 13.67px;">数据结构</a> <a href="/tags/%E6%97%A0%E9%9A%9C%E7%A2%8D/" style="font-size: 13px;">无障碍</a> <a href="/tags/%E6%A2%81%E6%B0%B8%E5%AE%89/" style="font-size: 13px;">梁永安</a> <a href="/tags/%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/" style="font-size: 13.83px;">源码解读</a> <a href="/tags/%E7%A7%92%E6%9D%80/" style="font-size: 13px;">秒杀</a> <a href="/tags/%E7%A7%BB%E5%8A%A8%E7%AB%AF/" style="font-size: 13px;">移动端</a> <a href="/tags/%E7%AB%A5%E5%B9%B4/" style="font-size: 13px;">童年</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 13.17px;">算法</a> <a href="/tags/%E8%90%A5%E9%94%80%E5%B7%A5%E5%85%B7/" style="font-size: 13.33px;">营销工具</a> <a href="/tags/%E8%AE%B0%E5%BD%95/" style="font-size: 13.33px;">记录</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 13px;">设计模式</a> <a href="/tags/%E8%BE%93%E5%87%BA/" style="font-size: 13px;">输出</a> <a href="/tags/%E9%98%85%E8%AF%BB%E3%80%81%E6%B8%B8%E5%8E%86%E5%92%8C%E7%88%B1%E6%83%85/" style="font-size: 13px;">阅读、游历和爱情</a> <a href="/tags/%E9%9A%8F%E6%83%B3/" style="font-size: 13px;">随想</a> <a href="/tags/%E9%9A%8F%E9%80%89%E6%9C%97%E8%AF%BB/" style="font-size: 13px;">随选朗读</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/11/">十一月 2023</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/10/">十月 2023</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/09/">九月 2023</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/08/">八月 2023</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/06/">六月 2023</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/05/">五月 2023</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/03/">三月 2023</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/02/">二月 2023</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/01/">一月 2023</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/09/">九月 2022</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/07/">七月 2022</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/06/">六月 2022</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/05/">五月 2022</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/03/">三月 2022</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/12/">十二月 2021</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/10/">十月 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/09/">九月 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/06/">六月 2021</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/03/">三月 2021</a><span class="archive-list-count">9</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E5%85%B3%E4%BA%8E%E7%A8%8B%E5%BA%8F%E5%91%98/">关于程序员</a>
+              </p>
+              <p class="item-title">
+                <a href="/2023/11/25/%E5%85%B3%E4%BA%8E%E7%A8%8B%E5%BA%8F%E5%91%98/%E6%AD%A3%E7%A1%AE%E7%9A%84%E7%90%86%E8%A7%A3%E6%8A%80%E6%9C%AF%EF%BC%8C%E5%8F%AF%E4%BB%A5%E8%AE%A9%E6%88%91%E4%BB%AC%E8%B5%B0%E7%9A%84%E6%9B%B4%E8%BF%9C/" class="title">正确的理解技术，可以让我们走的更远</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-11-24T16:00:00.000Z" itemprop="datePublished">2023-11-25</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E4%BA%A7%E5%93%81/">产品</a>
+              </p>
+              <p class="item-title">
+                <a href="/2023/10/30/%E4%BA%A7%E5%93%81%E7%9B%B8%E5%85%B3%E6%96%87%E7%AB%A0/%E8%90%A5%E9%94%80%E5%B7%A5%E5%85%B7%EF%BC%883%EF%BC%89%20-%20%E4%BB%8E%E6%B8%B8%E6%88%8F%E5%90%8D%E8%AF%8D%E5%88%B0%E7%94%B5%E5%95%86%E8%90%A5%E9%94%80%EF%BC%8C%E6%88%91%E4%BB%AC%E4%B8%80%E8%B5%B7%E8%81%8A%E8%81%8A%E7%A7%92%E6%9D%80/" class="title">营销工具(3) - 从游戏名词到电商营销，我们一起来聊聊“秒杀”</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-10-29T16:00:00.000Z" itemprop="datePublished">2023-10-30</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E4%BA%A7%E5%93%81/">产品</a>
+              </p>
+              <p class="item-title">
+                <a href="/2023/10/20/%E4%BA%A7%E5%93%81%E7%9B%B8%E5%85%B3%E6%96%87%E7%AB%A0/%E8%90%A5%E9%94%80%E5%B7%A5%E5%85%B7%EF%BC%882%EF%BC%89%20-%20%E4%BC%98%E6%83%A0%E5%88%B8%E7%9A%84%E4%BA%A7%E5%93%81%E8%AE%BE%E8%AE%A1%E9%80%BB%E8%BE%91/" class="title">营销工具(2) - 细致解读,Saas商城必备的优惠券产品设计攻略</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-10-19T16:00:00.000Z" itemprop="datePublished">2023-10-20</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/JavaScript-2023/">JavaScript-2023</a>
+              </p>
+              <p class="item-title">
+                <a href="/2023/09/29/vue3%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/runtime%E7%9B%B8%E5%85%B3/" class="title">runtime运行时</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-09-28T16:00:00.000Z" itemprop="datePublished">2023-09-29</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E4%BA%A7%E5%93%81/">产品</a>
+              </p>
+              <p class="item-title">
+                <a href="/2023/09/29/%E4%BA%A7%E5%93%81%E7%9B%B8%E5%85%B3%E6%96%87%E7%AB%A0/%E8%90%A5%E9%94%80%E5%B7%A5%E5%85%B7%EF%BC%881%EF%BC%89%20-%20%E4%BA%BA%E4%BA%BA%E9%83%BD%E7%88%B1%E7%94%A8%E7%9A%84%E4%BC%98%E6%83%A0%E5%88%B8%EF%BC%8C%E8%83%8C%E5%90%8E%E9%80%BB%E8%BE%91%E7%AB%9F%E7%84%B6%E8%BF%99%E4%B9%88%E5%A4%8D%E6%9D%82%EF%BC%9F/" class="title">营销工具(1) - 人人都爱用的优惠券，背后逻辑竟然这么复杂？</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-09-28T16:00:00.000Z" itemprop="datePublished">2023-09-29</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<aside
+  class="sidebar sidebar-toc collapse  in "
+  id="collapseToc"
+  itemscope
+  itemtype="http://schema.org/WPSideBar"
+>
+  <div class="slimContent">
+    <nav id="toc" class="article-toc">
+      <h3 class="toc-title">文章目录</h3>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BC%80%E6%BA%90%E5%9C%B0%E5%9D%80"><span class="toc-number">2.</span> <span class="toc-text">开源地址</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8A%80%E6%9C%AF%E6%A0%88"><span class="toc-number">3.</span> <span class="toc-text">技术栈</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%A1%B9%E7%9B%AE%E6%9E%B6%E6%9E%84"><span class="toc-number">4.</span> <span class="toc-text">项目架构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E6%96%B9%E5%90%91"><span class="toc-number">5.</span> <span class="toc-text">使用方向</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#H5%E8%A3%85%E4%BF%AE%E5%B8%B8%E8%A7%81%E6%96%B9%E6%A1%88"><span class="toc-number">6.</span> <span class="toc-text">H5装修常见方案</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%9D%E5%AF%B9%E5%AE%9A%E4%BD%8D%E6%96%B9%E6%A1%88"><span class="toc-number">6.1.</span> <span class="toc-text">绝对定位方案</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B5%81%E5%BC%8F%E5%B8%83%E5%B1%80%E6%96%B9%E6%A1%88"><span class="toc-number">6.2.</span> <span class="toc-text">流式布局方案</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#iframe%E6%96%B9%E6%A1%88"><span class="toc-number">6.3.</span> <span class="toc-text">iframe方案</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B5%81%E5%BC%8F%E5%B8%83%E5%B1%80-%E7%BB%9D%E5%AF%B9%E5%AE%9A%E4%BD%8D%E6%96%B9%E6%A1%88"><span class="toc-number">6.4.</span> <span class="toc-text">流式布局 + 绝对定位方案</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">6.5.</span> <span class="toc-text"></span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%98%93%E5%8A%A83%E9%80%89%E6%8B%A9%E7%9A%84%E6%96%B9%E6%A1%88"><span class="toc-number">7.</span> <span class="toc-text">易动3选择的方案</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83%E5%AE%9E%E7%8E%B0%E6%80%9D%E8%B7%AF"><span class="toc-number">8.</span> <span class="toc-text">核心实现思路</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Schema%E7%9A%84%E7%BC%96%E5%86%99"><span class="toc-number">8.1.</span> <span class="toc-text">Schema的编写</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9E%E7%8E%B0%E6%8B%96%E6%8B%BD"><span class="toc-number">8.2.</span> <span class="toc-text">实现拖拽</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%83%E7%B4%A0%E4%BD%8D%E7%A7%BB"><span class="toc-number">8.2.1.</span> <span class="toc-text">元素位移</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%83%E7%B4%A0%E7%BC%A9%E6%94%BE"><span class="toc-number">8.2.2.</span> <span class="toc-text">元素缩放</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%83%E7%B4%A0%E5%A4%9A%E9%80%89"><span class="toc-number">8.3.</span> <span class="toc-text">元素多选</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BE%85%E5%8A%A9%E7%BA%BF"><span class="toc-number">8.4.</span> <span class="toc-text">辅助线</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BE%85%E5%8A%A9%E7%BA%BF%E5%90%B8%E9%99%84"><span class="toc-number">8.5.</span> <span class="toc-text">辅助线吸附</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%97%B6%E9%97%B4%E6%97%85%E8%A1%8C"><span class="toc-number">8.6.</span> <span class="toc-text">时间旅行</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#more"><span class="toc-number">8.7.</span> <span class="toc-text">more</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E7%A1%80%E7%BB%84%E4%BB%B6or%E4%B8%9A%E5%8A%A1%E7%BB%84%E4%BB%B6"><span class="toc-number">9.</span> <span class="toc-text">基础组件or业务组件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E4%BA%8E%E4%BD%8E%E4%BB%A3%E7%A0%81"><span class="toc-number">10.</span> <span class="toc-text">关于低代码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B6%E4%BB%96%E9%97%AE%E9%A2%98"><span class="toc-number">11.</span> <span class="toc-text">其他问题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E6%98%93%E5%8A%A8v3-0%E9%80%89%E6%8B%A9%E7%BB%9D%E5%AF%B9%E5%AE%9A%E4%BD%8D%E6%96%B9%E6%A1%88"><span class="toc-number">11.1.</span> <span class="toc-text">为什么易动v3.0选择绝对定位方案</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BD%BF%E7%94%A8serverless"><span class="toc-number">11.2.</span> <span class="toc-text">为什么使用serverless</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B3%E4%BA%8EPC%E7%AB%AF"><span class="toc-number">11.3.</span> <span class="toc-text">关于PC端</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%90%8E%E7%BB%AD%E8%BF%98%E4%BC%9A%E5%81%9A%E4%BB%80%E4%B9%88"><span class="toc-number">12.</span> <span class="toc-text">后续还会做什么</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%80%E5%90%8E"><span class="toc-number">13.</span> <span class="toc-text">最后</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%A8%E8%AE%BA%E7%BE%A4"><span class="toc-number">14.</span> <span class="toc-text">讨论群</span></a></li></ol>
+    </nav>
+  </div>
+</aside>
+
+<script>
+  // 移动端不显示菜单
+  if (
+    navigator.userAgent.match(
+      /(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i
+    )
+  ) {
+    let self = document.querySelector(".sidebar-toc");
+    var parent = self.parentElement;
+    parent.removeChild(self);
+  } else {
+  }
+</script>
+
+
+
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-技术类文章/【5000字长文】（开源） 低代码H5可视化搭建系统 - 易动v3.0" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      【5000字长文】（开源） 低代码H5可视化搭建系统 - 易动v3.0
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2022/05/25/%E6%8A%80%E6%9C%AF%E7%B1%BB%E6%96%87%E7%AB%A0/%E3%80%905000%E5%AD%97%E9%95%BF%E6%96%87%E3%80%91%EF%BC%88%E5%BC%80%E6%BA%90%EF%BC%89%20%E4%BD%8E%E4%BB%A3%E7%A0%81H5%E5%8F%AF%E8%A7%86%E5%8C%96%E6%90%AD%E5%BB%BA%E7%B3%BB%E7%BB%9F%20-%20%E6%98%93%E5%8A%A8v3.0/" class="article-date">
+	  <time datetime="2022-05-24T16:00:00.000Z" itemprop="datePublished">2022-05-25</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/JavaScript-2022/">JavaScript-2022</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/JavaScript/" rel="tag">JavaScript</a>, <a class="article-tag-link-link" href="/tags/Vue3/" rel="tag">Vue3</a>, <a class="article-tag-link-link" href="/tags/h5%E8%A3%85%E4%BF%AE/" rel="tag">h5装修</a>, <a class="article-tag-link-link" href="/tags/%E4%BD%8E%E4%BB%A3%E7%A0%81/" rel="tag">低代码</a>
+  </span>
+
+
+        
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/05/25/%E6%8A%80%E6%9C%AF%E7%B1%BB%E6%96%87%E7%AB%A0/%E3%80%905000%E5%AD%97%E9%95%BF%E6%96%87%E3%80%91%EF%BC%88%E5%BC%80%E6%BA%90%EF%BC%89%20%E4%BD%8E%E4%BB%A3%E7%A0%81H5%E5%8F%AF%E8%A7%86%E5%8C%96%E6%90%AD%E5%BB%BA%E7%B3%BB%E7%BB%9F%20-%20%E6%98%93%E5%8A%A8v3.0/#comments" class="article-comment-link">评论</a></span>
+        
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>​	作者在2020年的时候开源了易动第一个版本<a target="_blank" rel="noopener" href="https://juejin.cn/post/6844904095971540999">（开源）从0打造H5可视化搭建系统 - 易动（vue+ts+egg）</a>，这两年在公司针对装修技术方案做了大量的实践，使用过<strong>draggable方案</strong> <strong>iframe装修方案</strong> <strong>绝对定位方案</strong>，对其在技术，产品层面都存在更深入的理解，今天给大家带来新一代企业级H5装修方案<strong>易动v3.0</strong></p>
+<p><img src="https://www.vkcyan.top/image-20220525165904705.png" alt="image-20220525165904705"></p>
+<h2 id="开源地址"><a href="#开源地址" class="headerlink" title="开源地址"></a>开源地址</h2><blockquote>
+<p>拖拽生成h5页面，支持页面全局设置，组件，自定义URL，插件市场，公共npm组件库</p>
+<p>基于最新vue技术栈， <a target="_blank" rel="noopener" href="http://39.103.198.52:3005/">易动v3.0</a> 已上线，欢迎体验~~</p>
+</blockquote>
+<p><a target="_blank" rel="noopener" href="https://github.com/vkcyan/YD">YD 管理端</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/vkcyan/YD_Client">YD_Client 客户端</a></p>
+<p>开源不易，给个Star吧~</p>
+<h2 id="技术栈"><a href="#技术栈" class="headerlink" title="技术栈"></a>技术栈</h2><p>管理端：vue3 + vite + pinia + vueuse + TypeScript</p>
+<p>客户端：vue3 + vite + TypeScript</p>
+<p>集成组件库（ydh5-ui）：基于Vue3 + TypeScript进行开发</p>
+<p>服务端：serverLess</p>
+<h2 id="项目架构"><a href="#项目架构" class="headerlink" title="项目架构"></a>项目架构</h2><p>​	在正文开始之前先为大家介绍一下项目架构，我们从底层到上层依次介绍</p>
+<p>​	易动3使用腾讯云serverless作为后端服务，serverless在易动系统中提供组件schema的数据存储服务，为什么使用serverless下文在说明。</p>
+<p>​	易动3将客户端、管理端的公共装修组件进行了统一封装发布成为npm包，解决了以往存在的一个组件需要写、改两遍代码的核心问题。</p>
+<p>​	易动管理端是项目的最核心系统，除了核心的保存，修改之外，以及一系列提供装修效率的功能，例如组件市场、辅助线、复制、粘贴、撤销、放撤销，这个低代码装修系统的上限于下限皆由此项目决定。</p>
+<p>​	易动客户端功能比较单纯，主要是根据约定好的js Schema结合集成组件库进行数据渲染于逻辑触发。</p>
+<img src="https://www.vkcyan.top/image-20220519092211855.png" alt="image-20220519092211855" style="zoom:67%;" />
+
+
+
+<h2 id="使用方向"><a href="#使用方向" class="headerlink" title="使用方向"></a>使用方向</h2><p>​	这几年关于低代码领域开始不断有大厂入场，这也变相的说明了该领域巨大的提效需求，愿望是美好的，但是现实是骨感的，低代码无法做到全盘通吃，只能聚焦某个领域，<code>易动v3.0</code>也是这样的，他无法处理存在大量逻辑的页面，所以<code>易动v3.0</code>选择专注于<strong>营销单页</strong>，在营销单页领域他可以发挥自己的优势。</p>
+<p>​	除了基础的按钮、图片组件外，业务组件可以做很多场景化组件，例如banner，商品专区，甚至从接口获取数据的组件都可以通过<strong>js Schema</strong>的约定进行实现</p>
+<p>​	而营销单页的需求络绎不绝，这样的工作就像在工厂“打螺丝”，大部分前端开发者并不愿意做这件事情，并且工作流程比较繁琐，可能因为业务原因频繁改动，大致工作流程如下</p>
+<p>​	<img src="https://www.vkcyan.top/image-20220519102613376.png" alt="image-20220519102613376"></p>
+<p>​	一个再简单的单页都需要走一样的固定流程，并且一旦某个环节出现了问题就需要回滚好几步，在这儿个过程中开发者也需要跟着回滚，遍出现了频繁改样式，重复机械行为。</p>
+<p>​	如果有了低代码平台 流程可以变成这样</p>
+<p><img src="https://www.vkcyan.top/image-20220519102817422.png" alt="image-20220519102817422"></p>
+<p>​	这样的架构中权责变的更加清晰，开发者从“螺丝钉”变成了技术解决方案开发者</p>
+<p>​	而业务的决定权也掌握在专人手中；大家各司其职，技术根据实际需求不断优化技术解决方案，运营使用低代码平台的搭建能力 物料能力也能提高运营的效率。</p>
+<h2 id="H5装修常见方案"><a href="#H5装修常见方案" class="headerlink" title="H5装修常见方案"></a>H5装修常见方案</h2><p>​	据作者了解，目前市面上所有的低代码平台几乎都是基于Schema进行实现的，这种方案的核心原理比较简单</p>
+<img src="https://www.vkcyan.top/image-20220519103955455.png" alt="image-20220519103955455" style="zoom:67%;" />
+
+<p>​	基于这样的Schema结构，便衍生出来了多种实现方案，在这里简单描述一下我在实际工作中都使用过方案以及他们的优缺点；</p>
+<h3 id="绝对定位方案"><a href="#绝对定位方案" class="headerlink" title="绝对定位方案"></a>绝对定位方案</h3><p>​	简介：所有的装修组件都是再后台直接拖拽放置，没有组件群组的概念，可以任意放置你的组件到任何地方。</p>
+<p>​	优点：灵活</p>
+<p>​	缺点：无法流式布局，需要维护公共组件库，操作门槛较高，需要通过技术能力填补，例如吸附辅助线。</p>
+<h3 id="流式布局方案"><a href="#流式布局方案" class="headerlink" title="流式布局方案"></a>流式布局方案</h3><p>​	简介：装修组件遵循流式布局，从上到下从左到右进行排序，就像搭积木一件，这种方案仅限移动端</p>
+<p>​	优点：操作简单</p>
+<p>​	缺点：组件不够灵活，因为只能上下移动，想做到非常规布局比较麻烦，需要维护公共组件库</p>
+<h3 id="iframe方案"><a href="#iframe方案" class="headerlink" title="iframe方案"></a>iframe方案</h3><p>​	简介：将客户端通过iframe内嵌到装修管理端中，再通过postMessage进行项目间通信，客户端识别环境开启装修模式与后台进行实时通信</p>
+<p>​	优点：不需要维护公共组件库 ，只需要维护客户端代码</p>
+<p>​	缺点：客户端与管理端代码耦合严重 装修操作部分代码需要写在客户端中</p>
+<h3 id="流式布局-绝对定位方案"><a href="#流式布局-绝对定位方案" class="headerlink" title="流式布局 + 绝对定位方案"></a>流式布局 + 绝对定位方案</h3><p>​	简介：为绝对定位组件增加一个流式布局的父级容器，让装修数据具备二级结构，</p>
+<p>​	优点：灵活 具备可生成代码的规范结构 </p>
+<p>​	缺点：操作麻烦，存在一定学习成本 ，需要维护公共组件库，相对其他方案多了一层结构，难度相对更加大</p>
+<h3 id=""><a href="#" class="headerlink" title=""></a></h3><h2 id="易动3选择的方案"><a href="#易动3选择的方案" class="headerlink" title="易动3选择的方案"></a>易动3选择的方案</h2><p>​	在公司生产环境项目中，凭借<code>易动v1.0</code>的经验，我使用了流式布局方案，最初效果还是非常不错的，那时候没想到将公共组件发布到npm，两端项目公用组件的方案，后期组件改动频繁，出现了极大的维护问题，这迫使我寻找其他出路。</p>
+<p>​	为了解决流式布局中一套组件，两套代码问题，在生产环境项目中实验性的使用管理端 + 客户端耦合的iframe方案，满足了公司的需求只需要维护一套代码，并且可以将Schema抽象出来应用到单页中，实现活动页装修，iframe装修方案在公司也是沿用至今，帮助公司搭建了200+的页面。</p>
+<p>​	再后来，我准备重启易动项目，开发<code>易动v2.0</code>，我们在<code>易动v2.0</code>中实验性的尝试了<strong>流式布局 + 绝对定位方案</strong>，在开发之前普遍觉得这是一个天才的主意，同时具备流式布局与绝对定位方案的优点，而且<code>易动v2.0</code>开发技术中还存在类似易企秀的多页的需求，大概经过2个月的代码编写，最终发现还是我们的想法过于理想化，首先操作上就存在比较高的门槛，技术难度也很大，而且因为Schema结构复杂，后期代码难度也是几何级别的提升，最终我们PASS了这个方案。</p>
+<p>​	在后面一段时间我一直在思考一个问题，也就是低代码的边界性，他应该做什么，他可以做什么，我们如何通过低代码来创造产品价值，在不断的思考中我也逐渐明确了开发方向，不再去想他还能做什么，而是在开发之前就确定一个目标，<strong>易动3.0将会在营销领域发挥它的作用，所有的功能都围绕这个核心目标</strong></p>
+<p>​	基于这样的目标，<code>易动v3.0</code>再出发，依旧采用<strong>绝对定位方案</strong>，因为绝对定位方案符合需求，难度最小，具备拓展性，后期维护性更强。</p>
+<p>​	方案确定好了，接下来将会介绍一些核心的实现思路。</p>
+<h2 id="核心实现思路"><a href="#核心实现思路" class="headerlink" title="核心实现思路"></a>核心实现思路</h2><h3 id="Schema的编写"><a href="#Schema的编写" class="headerlink" title="Schema的编写"></a>Schema的编写</h3><p>​	schema的结构将会决定你的装修系统的上限，一个良好的设计结构将会为后面的开发降低很大的难度，我们需要定义好<strong>页面的结构</strong>与<strong>组件的结构</strong>。</p>
+<p><img src="https://www.vkcyan.top/image-20220520163303273.png" alt="image-20220520163303273"></p>
+<p>​	而在代码中增加组件，或者增加组件类的数据，例如在轮播图组件中增加一项轮播图，都需要通过函数return的方式进行对象创建，以免出现多个组件使用的数据为一个数据源。</p>
+<p>在项目中增加一个组件，只需要将组件Schema push到模板变量中即可</p>
+<blockquote>
+<p>代码位置：<a target="_blank" rel="noopener" href="https://github.com/vkcyan/YD/blob/main/src/modules/component/index.ts">https://github.com/vkcyan/YD/blob/main/src/modules/component/index.ts</a></p>
+</blockquote>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 组件信息列表</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> name 组件名称</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> tempLen 本次层级</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@returns</span></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">baseComList</span>(<span class="params">name: string, tempLen</span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> <span class="attr">list</span>: baseComponent[] = [</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="attr">id</span>: <span class="title function_">guid</span>(),</span><br><span class="line">      <span class="attr">name</span>: <span class="string">&#x27;y-img&#x27;</span>,</span><br><span class="line">      <span class="attr">showTitle</span>: <span class="string">`图片<span class="subst">$&#123;tempLen&#125;</span>`</span>, <span class="comment">// 显示组件名称</span></span><br><span class="line">      <span class="attr">show</span>: <span class="literal">true</span>,</span><br><span class="line">      <span class="attr">cssModule</span>: &#123;</span><br><span class="line">        ...<span class="title function_">absolute</span>(tempLen),</span><br><span class="line">        ...<span class="title function_">borderData</span>(),</span><br><span class="line">        ...<span class="title function_">compSize</span>(<span class="number">100</span>, <span class="number">60</span>),</span><br><span class="line">        <span class="string">&#x27;background-color&#x27;</span>: <span class="string">&#x27;#ffffff00&#x27;</span>,</span><br><span class="line">      &#125;, <span class="comment">// 样式</span></span><br><span class="line">      <span class="attr">staticData</span>: &#123;</span><br><span class="line">        <span class="attr">imglUrl</span>:<span class="string">&#x27;xxxx.png&#x27;</span>,</span><br><span class="line">        ...<span class="title function_">linkData</span>(),</span><br><span class="line">      &#125;, <span class="comment">// 行为</span></span><br><span class="line">      <span class="attr">function</span>: &#123;&#125;, <span class="comment">// 方法</span></span><br><span class="line">      <span class="attr">animation</span>: [], <span class="comment">// 动画</span></span><br><span class="line">    &#125;,</span><br><span class="line">	<span class="comment">// .....</span></span><br><span class="line">  ]</span><br><span class="line">  <span class="keyword">return</span> list.<span class="title function_">find</span>(<span class="function">(<span class="params">e</span>) =&gt;</span> e.<span class="property">name</span> == name)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>​	例如增加一个图片组件，我们只需要将参数’y-img’，传入函数，即可得到一个图片组件的Schema，这样我们便具备搭建页面Schema树的能力。</p>
+<h3 id="实现拖拽"><a href="#实现拖拽" class="headerlink" title="实现拖拽"></a>实现拖拽</h3><blockquote>
+<p>实现良好的拖拽是一件非常有难度的事情，它不仅仅是简单元素的移动，而是通过技术的手段降低装修的操作门槛。</p>
+</blockquote>
+<h4 id="元素位移"><a href="#元素位移" class="headerlink" title="元素位移"></a>元素位移</h4><p>​	在<code>易动v3.0</code>中，弃用了以往采用的监听鼠标单次移动距离实现方案，因为这会导致快速移动后出现坐标不准确的情况，改成获取相对父级绝对坐标。</p>
+<p>​	全局鼠标监听使用vueuse的<a target="_blank" rel="noopener" href="https://vueuse.org/core/usemouseinelement/">useMouseInElement</a>API，帮助我们获取每次的相对位置，鼠标按下同时保存元素下标，再通过watchEffect全局监听<code>useMouseInElement</code>的变化，拿着鼠标<strong>按下阶段</strong>保存的<strong>下标</strong>去寻找需要位移的元素，不断更新其Schema中的cssModule字段中的<strong>top</strong>与<strong>left</strong>值，进而实现元素移动。</p>
+<h4 id="元素缩放"><a href="#元素缩放" class="headerlink" title="元素缩放"></a>元素缩放</h4><img src="https://www.vkcyan.top/image-20220525114422478.png" alt="image-20220525114422478" style="zoom:67%;" />
+
+<p>​	我们为元素增加 <code>上</code> <code>下</code> <code>左</code> <code>右</code> <code>左上</code> <code>左下</code> <code>右上</code> <code>右下</code>，八个操作点，是元素支持任意缩放功能，再点击任意缩放点的时候，我们都会保存一个标识，来确定当前点击的点是什么，然后在 全局监听鼠标移动的watchEffect中执行对应缩放逻辑，来不断更新选中的元素的 <strong>top</strong> <strong>left</strong> <strong>width</strong> <strong>height</strong>的组合值，进而实现元素缩放功能。</p>
+<h3 id="元素多选"><a href="#元素多选" class="headerlink" title="元素多选"></a>元素多选</h3><img src="https://www.vkcyan.top/image-20220525114934419.png" alt="image-20220525114934419" style="zoom:50%;" />
+
+<p>​	支持元素<strong>位移</strong>与<strong>缩放</strong>其实已经完成了装修的最核心功能，已经可以完成简单的页面搭建了，但是仅凭位移与缩放操作起来不方便，这时候就需要开发多选功能，我们把之前保存的单个选中下标改成一个选中数组。</p>
+<p>​	这里说明一下为什么保存数组下标，而不是组件的唯一id，这是一个时间复杂度的问题，如果保存组件唯一id，更新组件数据就需要通过循环再找到下标，进而通过下标更新数据，这时候时间复杂度为<strong>On</strong>，而直接保存数组下标，在通过下标直接更新数据，时间复杂度为<strong>O1</strong>。</p>
+<p>​	回到正题，我们开发一个选中框组件，在拖动选中框的时候判断是否包含了组件，不断更新当前选中框多选的元素，进而实现多选删除，多选拖动，等等多选功能。</p>
+<p>​	目前多选框计算逻辑还比较单一，仅支持从左上向右下拖动，后续有时间会继续完善。</p>
+<h3 id="辅助线"><a href="#辅助线" class="headerlink" title="辅助线"></a>辅助线</h3><img src="https://www.vkcyan.top/image-20220525171846398.png" alt="image-20220525171846398" style="zoom:47%;" />
+
+<p>​	辅助线是低代码系统必备功能，这将会极大的降低使用门槛，实现辅助线相对来说也是非常复杂的，假如页面有4个组件，我们点击了任意一个的时候，就需要去保存其他3个组件的 <code>top</code> <code>top + height/2</code> <code>top + height</code> <code>left</code> <code>left + width/2</code> <code>left+width</code>，并且将其数组保存成为<strong>字典结构</strong>，也就是<strong>ES6</strong>的<strong>Set</strong>，相对数组实现可以将时间复杂度从On2降低到On，有效避免了卡顿的情况，在被选中元素不断拖动的时候，我们会不断对比当前变化坐标与之前保存的3个组件的坐标，一旦对比到了一致，就会将其值push到存储变量，并在页面上显示，表明已经对齐。</p>
+<h3 id="辅助线吸附"><a href="#辅助线吸附" class="headerlink" title="辅助线吸附"></a>辅助线吸附</h3><p>​	先声明一下，辅助线吸附作者的实现还存在瑕疵，目前还在寻找更好的方案，也希望有大佬可以指点一二，目前吸附还存在一点操作上的不流畅情况，所以这部分我便不多赘述。找到最佳解决方案再更新。</p>
+<h3 id="时间旅行"><a href="#时间旅行" class="headerlink" title="时间旅行"></a>时间旅行</h3><blockquote>
+<p>pinia的subscribes存在差异，并且events在生产环境无法获取，导致现在线上无法相关使用</p>
+</blockquote>
+<p>​	所谓时间旅行就是可以进行撤销 反撤销操作操作，，具体原理感兴趣可以看看vuex版本的实现，本质原理都是一样的，<a target="_blank" rel="noopener" href="https://juejin.cn/post/6844904056792547341">基于vuex实现 撤销 与 反撤销 的plugins</a>，采用数组 + 单指针进行实现。</p>
+<h3 id="more"><a href="#more" class="headerlink" title="more"></a>more</h3><p>​	移动端如何读取schema，使其还原装修效果；如何实现二次编辑组件的保存到创建市场；还有很多拖拽细节的实现；章节有限，这里不再一一赘述，有兴趣可以加入微信群在一起聊聊。</p>
+<h2 id="基础组件or业务组件"><a href="#基础组件or业务组件" class="headerlink" title="基础组件or业务组件"></a>基础组件or业务组件</h2><blockquote>
+<p>基础组件：按钮 图片 输入框 文字 模块（html自带的标签元素）</p>
+<p>业务组件：富文本 轮播图 若干营销组件（由开发人员定制化产出的标签元素）</p>
+</blockquote>
+<p>​	在早期开发低代码，无代码产品的时候，我将绝对定位方案与基础组件绑定，业务组件与流式布局绑定，随着对低代码的深入理解，我在这里必须纠正之前的偏见，正确的观点应该是：<strong>基础组件 + 绝对定位方案更加和谐</strong>、<strong>业务组件 + 流式布局方案更加和谐</strong>。</p>
+<p>​	随着将装修组件发布成为npm包，他们的隔阂已经几乎不存在，全部视为公共组件，公共npm组件包中将会抹平平台差异，任何可以描绘的组件可以看作为静态结构组件都可以被低&#x2F;无代码平台使用。</p>
+<h2 id="关于低代码"><a href="#关于低代码" class="headerlink" title="关于低代码"></a>关于低代码</h2><p>​	这几年关于低代码讨论也非常多，最近一直看到大厂开源的低代码工具，例如腾讯的<a target="_blank" rel="noopener" href="https://juejin.cn/post/7096660785077846046">tmagic-editor</a>，阿里的<a target="_blank" rel="noopener" href="https://juejin.cn/post/7088121411981541390">LowCodeEngine</a>，还有5月28号掘金直播低代码的探索与实践，其背后是前沿开发者们对效率的思考，是从局部效率转变到全局效率思想的转变。</p>
+<p>​	在技术条件有限的情况下，低代码产品的广度与深度只能选择其一，我们自然希望低代码可以做的事情越多越好，生成页面，生成代码，直接编写事件，支持单页，支持多页，支持无限嵌套dom，达到降低门槛，提效降成本的作用，甚至解放劳动力，创造更大的社会价值，但是如果没有足够的技术基础，做的功能越多，就死的越惨。所以如果你也发现存在类似需求，切勿在产品设计期间不断加功能，要专注细分领域，只有这样，低代码项目才有发光发热的机会，有了经验之后再决定做什么也不迟。</p>
+<p>​	<strong>从发现需求到明确定位有很长的路要走，低代码产品从可用到好用还有很长的路要走。</strong></p>
+<h2 id="其他问题"><a href="#其他问题" class="headerlink" title="其他问题"></a>其他问题</h2><h3 id="为什么易动v3-0选择绝对定位方案"><a href="#为什么易动v3-0选择绝对定位方案" class="headerlink" title="为什么易动v3.0选择绝对定位方案"></a>为什么易动v3.0选择绝对定位方案</h3><p>​	<code>易动v3.0</code>考虑到营销页面的多样化，他并不是理想化的流式布局，而是多样化的，甚至你意想不到的UI实现方式，这也是<code>易动v3.0</code>使用绝对定位方案实现的一个重要原因，后续作者也会不断加强可用性，进一步降低搭建门槛。贯彻技术为业务服务，而不是业务为技术服务的理念。</p>
+<h3 id="为什么使用serverless"><a href="#为什么使用serverless" class="headerlink" title="为什么使用serverless"></a>为什么使用serverless</h3><p>​	做出这个决定处于两点考虑</p>
+<ol>
+<li>大部分公司不会使用node作为服务端框架，接入会重写服务端。</li>
+<li>本人是前端工程师，node 以及服务端周边服务不算精通，低代码的项目核心也不在服务端，serverless满足了作者的需求，后续我会提供表结构，以及关联关系。</li>
+<li>因为腾讯云serverless已经开始收费了，后续可能会换成fastify进行服务端编写，主要看作者是否有时间，也非常欢迎有志之士为开源做出贡献。</li>
+</ol>
+<h3 id="关于PC端"><a href="#关于PC端" class="headerlink" title="关于PC端"></a>关于PC端</h3><p>​	易动3的实现方案是绝对定位方案，这让实现pc端装修的可能性，但是个人感觉这部分需求比较小，B端的客户都是ToC，所以并没有做相关功能开发，但是理论上可以实现的。</p>
+<h2 id="后续还会做什么"><a href="#后续还会做什么" class="headerlink" title="后续还会做什么"></a>后续还会做什么</h2><blockquote>
+<p>目前易动v3.0 并不是完整状态，因为作者比较忙碌，很多功能依旧在开发中，大家也可以提出需求，如果存在价值，作者会加入后面的工作计划。</p>
+</blockquote>
+<ul>
+<li>数据分析能力：页面的曝光情况是客户非常关心的指标，这也是易动v3.0非常关注的功能</li>
+<li>模板市场功能：物料市场也是低代码平台非常重要的功能，配合组件市场，实现团队资源最大化利用，降低搭建门槛</li>
+<li>丰富业务组件：根据客户需求开发其满足业务场景的组件，达到一次开发，多次使用的效果</li>
+<li>增强装修能力：组件旋转，多选组件辅助对齐，搭建页面快捷操作，进一步降低大家门槛</li>
+</ul>
+<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>​	这个开源项目将会一直做下去，未来可能也会尝试做收费版本，毕竟为爱发电还是过于理想化了，如果你也是同道中人或者有这样的潜在需求，可以加入微信群，一起交流学习，共同进步~</p>
+<h2 id="讨论群"><a href="#讨论群" class="headerlink" title="讨论群"></a>讨论群</h2><img src="https://www.vkcyan.top/d6dad8dd3c29960e6ed1e01d73eb1d8.jpg" alt="d6dad8dd3c29960e6ed1e01d73eb1d8" style="zoom:30%;" />
+
+
+
+
+
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://bluedancers.github.io/2022/05/25/%E6%8A%80%E6%9C%AF%E7%B1%BB%E6%96%87%E7%AB%A0/%E3%80%905000%E5%AD%97%E9%95%BF%E6%96%87%E3%80%91%EF%BC%88%E5%BC%80%E6%BA%90%EF%BC%89%20%E4%BD%8E%E4%BB%A3%E7%A0%81H5%E5%8F%AF%E8%A7%86%E5%8C%96%E6%90%AD%E5%BB%BA%E7%B3%BB%E7%BB%9F%20-%20%E6%98%93%E5%8A%A8v3.0/" title="【5000字长文】（开源） 低代码H5可视化搭建系统 - 易动v3.0" target="_blank" rel="external">https://bluedancers.github.io/2022/05/25/技术类文章/【5000字长文】（开源） 低代码H5可视化搭建系统 - 易动v3.0/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/bluedancers" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/bluedancers" target="_blank"><span class="text-dark">bluedancers</span><small class="ml-1x">Web Developer &amp; Product Manager</small></a></h3>
+        <div>一切都是为了实现技术的价值</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2022/06/10/%E9%9A%8F%E6%83%B3/%E4%B8%89%E8%BE%86%E8%87%AA%E8%A1%8C%E8%BD%A6/" title="三辆自行车"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2022/05/24/%E9%A1%B9%E7%9B%AE%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/%E9%92%88%E5%AF%B9%E5%85%8D%E7%99%BB%E5%BD%95%E7%9A%84%E4%B8%80%E4%BA%9B%E5%AE%9E%E8%B7%B5%E4%B8%8E%E6%80%9D%E8%80%83/" title="关于免登录的一些实践与思考"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+    <li class="toggle-toc">
+      <a class="toggle-btn " data-toggle="collapse" href="#collapseToc" aria-expanded="false" title="文章目录" role="button">    <span>[&nbsp;</span><span>文章目录</span>
+        <i class="text-collapsed icon icon-anchor"></i>
+        <i class="text-in icon icon-close"></i>
+        <span>]</span>
+      </a>
+    </li>
+    
+  </ul>
+  
+  
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-fancy btn-donate pop-onhover bg-gradient-warning" data-toggle="modal" data-target="#donateModal"><span>赏</span></button>
+  <!-- <div class="wave-icon wave-icon-danger btn-donate" data-toggle="modal" data-target="#donateModal">
+    <div class="wave-circle"><span class="icon"><i class="icon icon-bill"></i></span></div>
+  </div> -->
+  
+  
+  <div class="bar-right">
+    
+  </div>
+  </div>
+</nav>
+  
+<!-- Modal -->
+<div class="modal modal-center modal-small modal-xs-full fade" id="donateModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content donate">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <div class="modal-body">
+        <div class="donate-box">
+          <div class="donate-head">
+            <p>感谢您的支持，我会继续努力的!</p>
+          </div>
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade active in" id="alipay">
+              <div class="donate-payimg">
+                <img src="/images/donate/alipayimg.jpg" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开支付宝扫一扫，即可进行扫码打赏哦</p>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="wechatpay">
+              <div class="donate-payimg">
+                <img src="/images/donate/wechatpayimg.jpg" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开微信扫一扫，即可进行扫码打赏哦</p>
+            </div>
+          </div>
+          <div class="donate-footer">
+            <ul class="nav nav-tabs nav-justified" role="tablist">
+              <li role="presentation" class="active">
+                <a href="#alipay" id="alipay-tab" role="tab" data-toggle="tab" aria-controls="alipay" aria-expanded="true"><i class="icon icon-alipay"></i> 支付宝</a>
+              </li>
+              <li role="presentation" class="">
+                <a href="#wechatpay" role="tab" id="wechatpay-tab" data-toggle="tab" aria-controls="wechatpay" aria-expanded="false"><i class="icon icon-wepay"></i> 微信支付</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/bluedancers" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://juejin.cn/user/3720403077840519" target="_blank" title="Juejin" data-toggle=tooltip data-placement=top><i class="icon icon-juejin"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="https://cdn.staticfile.org/jquery/1.12.4/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+   
+
+
+
+
+    <script defer type="text/javascript">
+(function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'G-H48QGKLW34', 'auto');
+ga('send', 'pageview');
+
+</script>
+
+
+
+</body>
+</html>

@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>在Option API中使用 Custom hook | vkcyan Blog</title>
+  <meta name="description" content="适应人群：   项目的vue2.x的版本， 还没在正式环境使用过composition API 但是又想享受hook带来的优势   ​	注：本文提出的方法并非最佳实践，而是是vue2项目渐进式切换到vue3的方案，保留的大家熟悉的编写方式，也保留了hook的优势，如果开发团队条件允许的话，建议直接使用composition API语法来完成逻辑编写 什么是hook​	hook 翻译过来是钩子，在">
+<meta property="og:type" content="article">
+<meta property="og:title" content="在Option API中使用 Custom hook">
+<meta property="og:url" content="https://bluedancers.github.io/2021/06/15/%E6%8A%80%E6%9C%AF%E7%B1%BB%E6%96%87%E7%AB%A0/%E4%BD%BF%E7%94%A8reactivity%20%E5%9C%A8vue2%E4%B8%AD%E7%BC%96%E5%86%99hook%E5%87%BD%E6%95%B0/index.html">
+<meta property="og:site_name" content="vkcya Blog">
+<meta property="og:description" content="适应人群：   项目的vue2.x的版本， 还没在正式环境使用过composition API 但是又想享受hook带来的优势   ​	注：本文提出的方法并非最佳实践，而是是vue2项目渐进式切换到vue3的方案，保留的大家熟悉的编写方式，也保留了hook的优势，如果开发团队条件允许的话，建议直接使用composition API语法来完成逻辑编写 什么是hook​	hook 翻译过来是钩子，在">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://images.591wsh.com/2021/11/11/thumb_1636630123367.png">
+<meta property="og:image" content="https://images.591wsh.com/2021/11/15/thumb_1636941536140.png">
+<meta property="og:image" content="https://images.591wsh.com/2021/11/15/thumb_1636941536427.png">
+<meta property="article:published_time" content="2021-06-14T16:00:00.000Z">
+<meta property="article:modified_time" content="2022-12-11T13:51:24.088Z">
+<meta property="article:author" content="bluedancers">
+<meta property="article:tag" content="JavaScript">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://images.591wsh.com/2021/11/11/thumb_1636630123367.png">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://bluedancers.github.io/2021/06/15/%E6%8A%80%E6%9C%AF%E7%B1%BB%E6%96%87%E7%AB%A0/%E4%BD%BF%E7%94%A8reactivity%20%E5%9C%A8vue2%E4%B8%AD%E7%BC%96%E5%86%99hook%E5%87%BD%E6%95%B0/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="vkcya Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+
+<body class="main-center theme-black" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/bluedancers" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">bluedancers</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Web Developer &amp; Product Manager</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> HeFei, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-books">
+          <a href="/books">
+            
+            <i class="icon icon-book-fill"></i>
+            
+            <span class="menu-title">书单</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">友链</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/bluedancers" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://juejin.cn/user/3720403077840519" target="_blank" title="Juejin" data-toggle=tooltip data-placement=top><i class="icon icon-juejin"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>往者不可谏，来者犹可追</p><br/>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript/">JavaScript</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript-2021/">JavaScript-2021</a><span class="category-list-count">10</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript-2022/">JavaScript-2022</a><span class="category-list-count">16</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript-2023/">JavaScript-2023</a><span class="category-list-count">16</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%B9%A6%E6%91%98/">书摘</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%BA%A7%E5%93%81/">产品</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%BA%A7%E5%93%81%E7%BB%8F%E7%90%86/">产品经理</a><span class="category-list-count">8</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%85%B3%E4%BA%8E%E7%A8%8B%E5%BA%8F%E5%91%98/">关于程序员</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/">数据结构与算法</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%97%A5%E5%B8%B8/">日常</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%97%A5%E5%B8%B8%E5%BC%80%E5%8F%91/">日常开发</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%9D%82%E8%B0%88/">杂谈</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%8E%A9%E6%9C%BA%E6%8A%80%E5%B7%A7/">玩机技巧</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%A7%BB%E5%8A%A8%E7%AB%AF/">移动端</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%9A%8F%E6%83%B3%E9%9B%86/">随想集</a><span class="category-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/" rel="tag">Hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a><span class="tag-list-count">19</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NPDP/" rel="tag">NPDP</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Pinia/" rel="tag">Pinia</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue/" rel="tag">Vue</a><span class="tag-list-count">12</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue-%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/" rel="tag">Vue - 源码解读</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue3/" rel="tag">Vue3</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/chatGPT/" rel="tag">chatGPT</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/h5%E8%A3%85%E4%BF%AE/" rel="tag">h5装修</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sku/" rel="tag">sku</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vue3/" rel="tag">vue3</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vw/" rel="tag">vw</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/webpack5/" rel="tag">webpack5</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/" rel="tag">个人博客</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%A7%E5%93%81/" rel="tag">产品</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%A7%E5%93%81%E5%88%86%E6%9E%90/" rel="tag">产品分析</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%A7%E5%93%81%E6%97%A5%E5%B8%B8/" rel="tag">产品日常</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BB%B7%E5%80%BC%E8%A7%82/" rel="tag">价值观</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BC%98%E6%83%A0%E5%88%B8/" rel="tag">优惠券</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BD%8E%E4%BB%A3%E7%A0%81/" rel="tag">低代码</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%85%B3%E4%BA%8EC%E7%AB%AF/" rel="tag">关于C端</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%85%B3%E4%BA%8Eproxy/" rel="tag">关于proxy</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%85%BC%E5%AE%B9%E6%80%A7/" rel="tag">兼容性</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8A%A8%E6%80%81%E8%B7%AF%E7%94%B1-vue3/" rel="tag">动态路由 - vue3</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%93%8D%E5%BA%94%E5%BC%8F/" rel="tag">响应式</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BC%A0%E5%B0%8F%E9%BE%99/" rel="tag">张小龙</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag">数据结构</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%97%A0%E9%9A%9C%E7%A2%8D/" rel="tag">无障碍</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A2%81%E6%B0%B8%E5%AE%89/" rel="tag">梁永安</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/" rel="tag">源码解读</a><span class="tag-list-count">12</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%A7%92%E6%9D%80/" rel="tag">秒杀</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%A7%BB%E5%8A%A8%E7%AB%AF/" rel="tag">移动端</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AB%A5%E5%B9%B4/" rel="tag">童年</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%90%A5%E9%94%80%E5%B7%A5%E5%85%B7/" rel="tag">营销工具</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%B0%E5%BD%95/" rel="tag">记录</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%BE%93%E5%87%BA/" rel="tag">输出</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%98%85%E8%AF%BB%E3%80%81%E6%B8%B8%E5%8E%86%E5%92%8C%E7%88%B1%E6%83%85/" rel="tag">阅读、游历和爱情</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9A%8F%E6%83%B3/" rel="tag">随想</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9A%8F%E9%80%89%E6%9C%97%E8%AF%BB/" rel="tag">随选朗读</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/Hexo/" style="font-size: 13px;">Hexo</a> <a href="/tags/JavaScript/" style="font-size: 14px;">JavaScript</a> <a href="/tags/NPDP/" style="font-size: 13.5px;">NPDP</a> <a href="/tags/Pinia/" style="font-size: 13.5px;">Pinia</a> <a href="/tags/Vue/" style="font-size: 13.83px;">Vue</a> <a href="/tags/Vue-%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/" style="font-size: 13.17px;">Vue - 源码解读</a> <a href="/tags/Vue3/" style="font-size: 13px;">Vue3</a> <a href="/tags/chatGPT/" style="font-size: 13px;">chatGPT</a> <a href="/tags/h5%E8%A3%85%E4%BF%AE/" style="font-size: 13px;">h5装修</a> <a href="/tags/sku/" style="font-size: 13px;">sku</a> <a href="/tags/vue3/" style="font-size: 13.17px;">vue3</a> <a href="/tags/vw/" style="font-size: 13px;">vw</a> <a href="/tags/webpack5/" style="font-size: 13px;">webpack5</a> <a href="/tags/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/" style="font-size: 13px;">个人博客</a> <a href="/tags/%E4%BA%A7%E5%93%81/" style="font-size: 13px;">产品</a> <a href="/tags/%E4%BA%A7%E5%93%81%E5%88%86%E6%9E%90/" style="font-size: 13px;">产品分析</a> <a href="/tags/%E4%BA%A7%E5%93%81%E6%97%A5%E5%B8%B8/" style="font-size: 13px;">产品日常</a> <a href="/tags/%E4%BB%B7%E5%80%BC%E8%A7%82/" style="font-size: 13px;">价值观</a> <a href="/tags/%E4%BC%98%E6%83%A0%E5%88%B8/" style="font-size: 13.17px;">优惠券</a> <a href="/tags/%E4%BD%8E%E4%BB%A3%E7%A0%81/" style="font-size: 13px;">低代码</a> <a href="/tags/%E5%85%B3%E4%BA%8EC%E7%AB%AF/" style="font-size: 13px;">关于C端</a> <a href="/tags/%E5%85%B3%E4%BA%8Eproxy/" style="font-size: 13px;">关于proxy</a> <a href="/tags/%E5%85%BC%E5%AE%B9%E6%80%A7/" style="font-size: 13px;">兼容性</a> <a href="/tags/%E5%8A%A8%E6%80%81%E8%B7%AF%E7%94%B1-vue3/" style="font-size: 13px;">动态路由 - vue3</a> <a href="/tags/%E5%93%8D%E5%BA%94%E5%BC%8F/" style="font-size: 13px;">响应式</a> <a href="/tags/%E5%BC%A0%E5%B0%8F%E9%BE%99/" style="font-size: 13px;">张小龙</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="font-size: 13.67px;">数据结构</a> <a href="/tags/%E6%97%A0%E9%9A%9C%E7%A2%8D/" style="font-size: 13px;">无障碍</a> <a href="/tags/%E6%A2%81%E6%B0%B8%E5%AE%89/" style="font-size: 13px;">梁永安</a> <a href="/tags/%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/" style="font-size: 13.83px;">源码解读</a> <a href="/tags/%E7%A7%92%E6%9D%80/" style="font-size: 13px;">秒杀</a> <a href="/tags/%E7%A7%BB%E5%8A%A8%E7%AB%AF/" style="font-size: 13px;">移动端</a> <a href="/tags/%E7%AB%A5%E5%B9%B4/" style="font-size: 13px;">童年</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 13.17px;">算法</a> <a href="/tags/%E8%90%A5%E9%94%80%E5%B7%A5%E5%85%B7/" style="font-size: 13.33px;">营销工具</a> <a href="/tags/%E8%AE%B0%E5%BD%95/" style="font-size: 13.33px;">记录</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 13px;">设计模式</a> <a href="/tags/%E8%BE%93%E5%87%BA/" style="font-size: 13px;">输出</a> <a href="/tags/%E9%98%85%E8%AF%BB%E3%80%81%E6%B8%B8%E5%8E%86%E5%92%8C%E7%88%B1%E6%83%85/" style="font-size: 13px;">阅读、游历和爱情</a> <a href="/tags/%E9%9A%8F%E6%83%B3/" style="font-size: 13px;">随想</a> <a href="/tags/%E9%9A%8F%E9%80%89%E6%9C%97%E8%AF%BB/" style="font-size: 13px;">随选朗读</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/11/">十一月 2023</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/10/">十月 2023</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/09/">九月 2023</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/08/">八月 2023</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/06/">六月 2023</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/05/">五月 2023</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/03/">三月 2023</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/02/">二月 2023</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/01/">一月 2023</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/09/">九月 2022</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/07/">七月 2022</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/06/">六月 2022</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/05/">五月 2022</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/03/">三月 2022</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/12/">十二月 2021</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/10/">十月 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/09/">九月 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/06/">六月 2021</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/03/">三月 2021</a><span class="archive-list-count">9</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E5%85%B3%E4%BA%8E%E7%A8%8B%E5%BA%8F%E5%91%98/">关于程序员</a>
+              </p>
+              <p class="item-title">
+                <a href="/2023/11/25/%E5%85%B3%E4%BA%8E%E7%A8%8B%E5%BA%8F%E5%91%98/%E6%AD%A3%E7%A1%AE%E7%9A%84%E7%90%86%E8%A7%A3%E6%8A%80%E6%9C%AF%EF%BC%8C%E5%8F%AF%E4%BB%A5%E8%AE%A9%E6%88%91%E4%BB%AC%E8%B5%B0%E7%9A%84%E6%9B%B4%E8%BF%9C/" class="title">正确的理解技术，可以让我们走的更远</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-11-24T16:00:00.000Z" itemprop="datePublished">2023-11-25</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E4%BA%A7%E5%93%81/">产品</a>
+              </p>
+              <p class="item-title">
+                <a href="/2023/10/30/%E4%BA%A7%E5%93%81%E7%9B%B8%E5%85%B3%E6%96%87%E7%AB%A0/%E8%90%A5%E9%94%80%E5%B7%A5%E5%85%B7%EF%BC%883%EF%BC%89%20-%20%E4%BB%8E%E6%B8%B8%E6%88%8F%E5%90%8D%E8%AF%8D%E5%88%B0%E7%94%B5%E5%95%86%E8%90%A5%E9%94%80%EF%BC%8C%E6%88%91%E4%BB%AC%E4%B8%80%E8%B5%B7%E8%81%8A%E8%81%8A%E7%A7%92%E6%9D%80/" class="title">营销工具(3) - 从游戏名词到电商营销，我们一起来聊聊“秒杀”</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-10-29T16:00:00.000Z" itemprop="datePublished">2023-10-30</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E4%BA%A7%E5%93%81/">产品</a>
+              </p>
+              <p class="item-title">
+                <a href="/2023/10/20/%E4%BA%A7%E5%93%81%E7%9B%B8%E5%85%B3%E6%96%87%E7%AB%A0/%E8%90%A5%E9%94%80%E5%B7%A5%E5%85%B7%EF%BC%882%EF%BC%89%20-%20%E4%BC%98%E6%83%A0%E5%88%B8%E7%9A%84%E4%BA%A7%E5%93%81%E8%AE%BE%E8%AE%A1%E9%80%BB%E8%BE%91/" class="title">营销工具(2) - 细致解读,Saas商城必备的优惠券产品设计攻略</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-10-19T16:00:00.000Z" itemprop="datePublished">2023-10-20</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/JavaScript-2023/">JavaScript-2023</a>
+              </p>
+              <p class="item-title">
+                <a href="/2023/09/29/vue3%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/runtime%E7%9B%B8%E5%85%B3/" class="title">runtime运行时</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-09-28T16:00:00.000Z" itemprop="datePublished">2023-09-29</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E4%BA%A7%E5%93%81/">产品</a>
+              </p>
+              <p class="item-title">
+                <a href="/2023/09/29/%E4%BA%A7%E5%93%81%E7%9B%B8%E5%85%B3%E6%96%87%E7%AB%A0/%E8%90%A5%E9%94%80%E5%B7%A5%E5%85%B7%EF%BC%881%EF%BC%89%20-%20%E4%BA%BA%E4%BA%BA%E9%83%BD%E7%88%B1%E7%94%A8%E7%9A%84%E4%BC%98%E6%83%A0%E5%88%B8%EF%BC%8C%E8%83%8C%E5%90%8E%E9%80%BB%E8%BE%91%E7%AB%9F%E7%84%B6%E8%BF%99%E4%B9%88%E5%A4%8D%E6%9D%82%EF%BC%9F/" class="title">营销工具(1) - 人人都爱用的优惠券，背后逻辑竟然这么复杂？</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-09-28T16:00:00.000Z" itemprop="datePublished">2023-09-29</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<aside
+  class="sidebar sidebar-toc collapse  in "
+  id="collapseToc"
+  itemscope
+  itemtype="http://schema.org/WPSideBar"
+>
+  <div class="slimContent">
+    <nav id="toc" class="article-toc">
+      <h3 class="toc-title">文章目录</h3>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFhook"><span class="toc-number">1.</span> <span class="toc-text">什么是hook</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B2%A1%E6%9C%89hook%E4%B9%8B%E5%89%8D%EF%BC%8C%E6%88%91%E4%BB%AC%E5%A6%82%E4%BD%95%E5%AF%B9%E5%BE%85%E4%BB%A3%E7%A0%81%E5%A4%8D%E7%94%A8"><span class="toc-number">2.</span> <span class="toc-text">没有hook之前，我们如何对待代码复用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%80%9A%E8%BF%87hook%E6%9D%A5%E5%AE%8C%E6%88%90%E9%80%BB%E8%BE%91%E5%85%B1%E7%94%A8"><span class="toc-number">3.</span> <span class="toc-text">通过hook来完成逻辑共用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8F%90%E4%BE%9B-%E7%BB%84%E5%90%88%E5%BC%8F-API-%E7%9A%84-Vue-2-%E6%8F%92%E4%BB%B6"><span class="toc-number">4.</span> <span class="toc-text">提供 组合式 API 的 Vue 2 插件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9E%E6%88%98%EF%BC%88useReqList%EF%BC%89"><span class="toc-number">5.</span> <span class="toc-text">实战（useReqList）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%AA%E4%BD%BF%E7%94%A8useReqList"><span class="toc-number">5.1.</span> <span class="toc-text">未使用useReqList</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8useReqList"><span class="toc-number">5.2.</span> <span class="toc-text">使用useReqList</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#useReqList%E5%85%B7%E4%BD%93%E5%AE%9E%E7%8E%B0"><span class="toc-number">5.3.</span> <span class="toc-text">useReqList具体实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9B%B4%E5%A4%9A%E7%9A%84vue-hook%E5%87%BD%E6%95%B0"><span class="toc-number">5.4.</span> <span class="toc-text">更多的vue hook函数</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#vue%E9%A1%B9%E7%9B%AE%E5%BA%94%E5%BD%93%E5%9C%A8%E4%BB%80%E4%B9%88%E4%BD%BF%E7%94%A8%E4%B8%8B%E4%BD%BF%E7%94%A8hook"><span class="toc-number">6.</span> <span class="toc-text">vue项目应当在什么使用下使用hook</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B3%E4%BA%8EClass-API%E4%B8%8EComposition-API"><span class="toc-number">6.1.</span> <span class="toc-text">关于Class API与Composition API</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B3%E4%BA%8Ehook%E4%B8%8Evuex-observable"><span class="toc-number">6.2.</span> <span class="toc-text">关于hook与vuex | observable</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%93%E8%AF%AD"><span class="toc-number">7.</span> <span class="toc-text">结语</span></a></li></ol>
+    </nav>
+  </div>
+</aside>
+
+<script>
+  // 移动端不显示菜单
+  if (
+    navigator.userAgent.match(
+      /(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i
+    )
+  ) {
+    let self = document.querySelector(".sidebar-toc");
+    var parent = self.parentElement;
+    parent.removeChild(self);
+  } else {
+  }
+</script>
+
+
+
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-技术类文章/使用reactivity 在vue2中编写hook函数" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      在Option API中使用 Custom hook
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2021/06/15/%E6%8A%80%E6%9C%AF%E7%B1%BB%E6%96%87%E7%AB%A0/%E4%BD%BF%E7%94%A8reactivity%20%E5%9C%A8vue2%E4%B8%AD%E7%BC%96%E5%86%99hook%E5%87%BD%E6%95%B0/" class="article-date">
+	  <time datetime="2021-06-14T16:00:00.000Z" itemprop="datePublished">2021-06-15</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/JavaScript-2021/">JavaScript-2021</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/JavaScript/" rel="tag">JavaScript</a>
+  </span>
+
+
+        
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2021/06/15/%E6%8A%80%E6%9C%AF%E7%B1%BB%E6%96%87%E7%AB%A0/%E4%BD%BF%E7%94%A8reactivity%20%E5%9C%A8vue2%E4%B8%AD%E7%BC%96%E5%86%99hook%E5%87%BD%E6%95%B0/#comments" class="article-comment-link">评论</a></span>
+        
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <blockquote>
+<p>适应人群： </p>
+<ul>
+<li>项目的vue2.x的版本，</li>
+<li>还没在正式环境使用过composition API</li>
+<li>但是又想享受hook带来的优势</li>
+</ul>
+</blockquote>
+<p>​	注：本文提出的方法并非最佳实践，而是是vue2项目渐进式切换到vue3的方案，保留的大家熟悉的编写方式，也保留了hook的优势，如果开发团队条件允许的话，建议直接使用composition API语法来完成逻辑编写</p>
+<h2 id="什么是hook"><a href="#什么是hook" class="headerlink" title="什么是hook"></a>什么是hook</h2><p>​	hook 翻译过来是钩子，在程序上体现为<strong>在行为执行之前，先把行为勾住，不让其继续，优先执行你的hook函数</strong></p>
+<p>用一张图来表示即为</p>
+<blockquote>
+<p>左边为正常函数执行流程，右边为存在hook的执行流程</p>
+</blockquote>
+<img src="https://images.591wsh.com/2021/11/11/thumb_1636630123367.png" style="zoom:50%;" />
+
+<h2 id="没有hook之前，我们如何对待代码复用"><a href="#没有hook之前，我们如何对待代码复用" class="headerlink" title="没有hook之前，我们如何对待代码复用"></a>没有hook之前，我们如何对待代码复用</h2><p>​	我们假设一种场景，你正在开发一个后台管理系统，在这个后台管理系统中，大部分都是查询表单，他们虽然业务不同，但是逻辑上存在一定的共性</p>
+<p>共性元素：<strong>查询条件 列表数据 分页相关数据 加载状态</strong></p>
+<p>以上4个特征几乎每个表单都有，这就意味这你在写每一个表单的时候都需要重复对接相关的逻辑，这个问题在vue2中存在两种解决办法</p>
+<ul>
+<li>每次都复制逻辑相同的代码</li>
+<li>使用vue mixins完成逻辑公用</li>
+</ul>
+<p>然而这2种方式都存在问题</p>
+<ul>
+<li>复制代码低效率，虽然相对稳定，但是编码与测试工作量较大</li>
+<li><code>vue mixins</code>可以实现逻辑抽象，但是这种方案过于简单粗暴的方案，数据全局共享，过多使用<code>mixin</code>会导致项目走向失控，是一个比较危险的方案</li>
+</ul>
+<p>假设表单页面数据结构如下</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">data</span>: [], <span class="comment">// 列表数据</span></span><br><span class="line">  <span class="attr">currentPage</span>: <span class="number">1</span>, <span class="comment">// 当前页面</span></span><br><span class="line">  <span class="attr">pageSize</span>: <span class="number">0</span>, <span class="comment">// 每一个分页的数量</span></span><br><span class="line">  <span class="attr">thePageSize</span>: <span class="number">0</span>, <span class="comment">// 本页数量</span></span><br><span class="line">  <span class="attr">totalPages</span>: <span class="number">0</span>, <span class="comment">// 总页数</span></span><br><span class="line">  <span class="attr">totalSize</span>: <span class="number">0</span>, <span class="comment">// 总记录数</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>除了以上后端返回的数据，我们还需要在页面增加一些状态值,用于优化用户体验</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">status</span>: <span class="string">&#x27;idle&#x27;</span> | <span class="string">&#x27;loading&#x27;</span> | <span class="string">&#x27;error&#x27;</span> | <span class="string">&#x27;success&#x27;</span> | ... <span class="comment">// 当前列表请求的状态</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p>以上的数据 + 状态每一个后台表单页面都存在，这就意味着重复的声明，重复的对接，重复的测试</p>
+<p>​	复制代码的方式看似稳定，实则不稳定，因为每一次都要对重复逻辑进行测试，并且由于此类工作繁琐且重复劳动，开发人员一般比较抵触此类任务</p>
+<p>​	这个问题在vue2中并没有非常好的解决方案，针对这个问题隔壁react从mixin到HOC最后到现在hook，给出了还不错的解决方案。</p>
+<p>​	现在@vue&#x2F;composition-api提供了hook的能力，我们可以在vue中使用hook来优化提出的问题</p>
+<h2 id="通过hook来完成逻辑共用"><a href="#通过hook来完成逻辑共用" class="headerlink" title="通过hook来完成逻辑共用"></a>通过hook来完成逻辑共用</h2><p>​	接着上面的场景，我们现在假设我们有3个后台表单页面需要写</p>
+<p>​	传统编码方案（未使用hook）</p>
+<img src="https://images.591wsh.com/2021/11/15/thumb_1636941536140.png" alt="未使用hook" style="zoom:50%;" />
+
+<p>​	可以看到我们需要写的三个页面流程上存在很多相似的地方，对接数据环节，虽然是大部分代码相同，但是还是需要重复的编写测试，例如页码相关，状态相关逻辑</p>
+<p>​	使用hook完成重复逻辑抽象</p>
+<blockquote>
+<p>每次调用useHook都会生成一次独立的状态</p>
+<p>虽然状态与逻辑依赖与组件，但是useHook可以在组件外部进行定义，这一点是之前无法做到的</p>
+</blockquote>
+<img src="https://images.591wsh.com/2021/11/15/thumb_1636941536427.png" alt="使用hook" style="zoom:50%;" />
+
+
+
+<p>​	虽然不同页面的内部逻辑细节都是不一样，但是总体流程、数据结构都是一样的，基于这样的前提，我们就可以针对共性来进行抽象，之后不论多少个页面，我们都使用抽象逻辑，也只需要维护抽象逻辑</p>
+<h2 id="提供-组合式-API-的-Vue-2-插件"><a href="#提供-组合式-API-的-Vue-2-插件" class="headerlink" title="提供 组合式 API 的 Vue 2 插件"></a>提供 <strong>组合式 API</strong> 的 Vue 2 插件</h2><p>​	虽然hook是vue3版本才提出的，但是这并不代表hook与vue3是绑定关系，实际上在任何前端应用中都可以使用vue3中提供的hook功能</p>
+<p>文档地址：<a target="_blank" rel="noopener" href="https://github.com/vuejs/composition-api/blob/main/README.zh-CN.md">@vue&#x2F;composition-api</a></p>
+<p>所以不论是vue3还是vue2，还是react，甚至html都可以使用这个npm包</p>
+<p>关于vue3的响应式核心包 @vue&#x2F;reactivity的具体实现，可以看看之前的文章 <a target="_blank" rel="noopener" href="https://juejin.cn/post/6974193452300894216">简易版Reactivity源码解析</a>，读懂源码之后，自然解答了你对reactivity的全部疑问</p>
+<h2 id="实战（useReqList）"><a href="#实战（useReqList）" class="headerlink" title="实战（useReqList）"></a>实战（useReqList）</h2><blockquote>
+<p>为了方便理解，以下代码为vue2.x，使用js进行编写</p>
+</blockquote>
+<p>​	<strong>useReqList是一个自定义hook，作用是帮助我们抽象后台表单的公共逻辑，我们先看看未使用的情况，使用了之后，代码的变化，再看看如何实现</strong></p>
+<h3 id="未使用useReqList"><a href="#未使用useReqList" class="headerlink" title="未使用useReqList"></a>未使用useReqList</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ...</span></span><br><span class="line"><span class="title function_">data</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    <span class="attr">shopList</span>: [], <span class="comment">// 数据</span></span><br><span class="line">    <span class="attr">homePage</span>: <span class="number">0</span>, <span class="comment">// 本页有多少数据</span></span><br><span class="line">    <span class="attr">allPage</span>: <span class="number">0</span>, <span class="comment">// 总共多少页</span></span><br><span class="line">    <span class="attr">totalSize</span>: <span class="number">0</span>, <span class="comment">//总共多少条数据</span></span><br><span class="line">    <span class="attr">pageSize</span>: <span class="number">0</span>, <span class="comment">// 每页最多多少条数据</span></span><br><span class="line">    <span class="attr">currentPage</span>: <span class="number">1</span>, <span class="comment">// 当前页码</span></span><br><span class="line">  &#125;</span><br><span class="line"> &#125;,</span><br><span class="line"><span class="attr">methods</span>:&#123;</span><br><span class="line">    <span class="title function_">init</span>(<span class="params"></span>) &#123;</span><br><span class="line">      <span class="variable language_">this</span>.<span class="property">loading</span> = <span class="literal">true</span></span><br><span class="line">      <span class="keyword">const</span> data = &#123;</span><br><span class="line">        <span class="attr">currentPage</span>: <span class="variable language_">this</span>.<span class="property">currentPage</span>,</span><br><span class="line">        <span class="comment">//...</span></span><br><span class="line">      &#125;</span><br><span class="line">      <span class="title function_">request</span>(data) <span class="comment">// 请求</span></span><br><span class="line">        .<span class="title function_">then</span>(<span class="function">(<span class="params">res</span>) =&gt;</span> &#123;</span><br><span class="line">          <span class="variable language_">this</span>.<span class="property">shopList</span> = res.<span class="property">data</span>.<span class="property">data</span></span><br><span class="line">          <span class="variable language_">this</span>.<span class="property">currentPage</span> = res.<span class="property">data</span>.<span class="property">currentPage</span></span><br><span class="line">          <span class="variable language_">this</span>.<span class="property">pageSize</span> = res.<span class="property">data</span>.<span class="property">pageSize</span></span><br><span class="line">          <span class="variable language_">this</span>.<span class="property">totalSize</span> = <span class="title class_">Number</span>(res.<span class="property">data</span>.<span class="property">totalSize</span>)</span><br><span class="line">          <span class="variable language_">this</span>.<span class="property">homePage</span> = res.<span class="property">data</span>.<span class="property">thePageSize</span></span><br><span class="line">          <span class="variable language_">this</span>.<span class="property">allPage</span> = res.<span class="property">data</span>.<span class="property">totalPages</span></span><br><span class="line">        &#125;)</span><br><span class="line">        .<span class="title function_">finally</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">          <span class="variable language_">this</span>.<span class="property">loading</span> = <span class="literal">false</span></span><br><span class="line">        &#125;)</span><br><span class="line">    &#125;,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="使用useReqList"><a href="#使用useReqList" class="headerlink" title="使用useReqList"></a>使用useReqList</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; useReqList &#125; <span class="keyword">from</span> <span class="string">&#x27;@/utils/hook/useReqList&#x27;</span></span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line"><span class="title function_">data</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    <span class="attr">dataList</span>: <span class="title function_">useReqList</span>()</span><br><span class="line">  &#125;</span><br><span class="line">&#125;,</span><br><span class="line"><span class="attr">methods</span>:&#123;</span><br><span class="line">    <span class="title function_">init</span>(<span class="params"></span>) &#123;</span><br><span class="line">      <span class="keyword">const</span> data = &#123;</span><br><span class="line">        <span class="attr">currentPage</span>: <span class="variable language_">this</span>.<span class="property">listData</span>.<span class="property">currentPage</span> || <span class="number">1</span>,</span><br><span class="line">        <span class="comment">//...</span></span><br><span class="line">      &#125;</span><br><span class="line">      <span class="variable language_">this</span>.<span class="property">listData</span>.<span class="title function_">run</span>(<span class="title function_">request</span>(data)) <span class="comment">// 请求</span></span><br><span class="line">    &#125;,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// let &#123; data, currentPage, pageSize, thePageSize, totalPages, totalSize, status &#125; = this.listData</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p>通过上面的例子可以看到，使用了useReqList之后</p>
+<p>公共变量，公共逻辑部分被抽象出去，页面代码变得更加纯粹</p>
+<p>因为reactivity的特性，它们都是具备响应式</p>
+<p>避免重复编码，重复测试环节，节省开发时间</p>
+<p><strong>hook可以给n个接口使用，只要是请求表单接口，都不需要写重复部分的代码</strong>，避免调试，测试环节</p>
+<p>接下里我们可以看看这是如何实现上面使用的自定义（Custom） Hook <strong>useReqList</strong></p>
+<h3 id="useReqList具体实现"><a href="#useReqList具体实现" class="headerlink" title="useReqList具体实现"></a>useReqList具体实现</h3><blockquote>
+<p>​	内部实现就是对公共逻辑的封装，被读取的数据被reactive处理后具备了响应式，每次声明都会因为闭包的特性而开启一片独立的内存来供声明单位使用</p>
+</blockquote>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; reactive &#125; <span class="keyword">from</span> <span class="string">&#x27;@vue/reactivity&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 针对后台表单页面逻辑的抽象</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@returns</span></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">useReqList</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> defaultState = &#123;</span><br><span class="line">    <span class="attr">data</span>: [], <span class="comment">// 表格数据</span></span><br><span class="line">    <span class="attr">currentPage</span>: <span class="number">1</span>, <span class="comment">// 当前页面</span></span><br><span class="line">    <span class="attr">pageSize</span>: <span class="number">0</span>, <span class="comment">// 分页数量</span></span><br><span class="line">    <span class="attr">thePageSize</span>: <span class="number">0</span>, <span class="comment">// 当前页面数量</span></span><br><span class="line">    <span class="attr">totalPages</span>: <span class="number">0</span>, <span class="comment">// 总页数</span></span><br><span class="line">    <span class="attr">totalSize</span>: <span class="number">0</span>, <span class="comment">// 总数量</span></span><br><span class="line">    <span class="attr">error</span>: <span class="literal">null</span>, <span class="comment">// 错误原因</span></span><br><span class="line">    <span class="attr">status</span>: <span class="string">&#x27;idle&#x27;</span>, <span class="comment">// 当前状态 idle | loading | success | error</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">let</span> state = <span class="title function_">reactive</span>(&#123;</span><br><span class="line">    ...defaultState,</span><br><span class="line">  &#125;)</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * 请求成功</span></span><br><span class="line"><span class="comment">   * <span class="doctag">@param</span> <span class="variable">data</span></span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="keyword">const</span> <span class="title function_">setData</span> = (<span class="params">data</span>) =&gt; &#123;</span><br><span class="line">    state.<span class="property">currentPage</span> = data.<span class="property">currentPage</span></span><br><span class="line">    state.<span class="property">pageSize</span> = data.<span class="property">pageSize</span></span><br><span class="line">    state.<span class="property">thePageSize</span> = data.<span class="property">thePageSize</span></span><br><span class="line">    state.<span class="property">totalPages</span> = data.<span class="property">totalPages</span></span><br><span class="line">    state.<span class="property">totalSize</span> = <span class="title class_">Number</span>(data.<span class="property">totalSize</span>)</span><br><span class="line">    state.<span class="property">data</span> = data.<span class="property">data</span></span><br><span class="line">    state.<span class="property">status</span> = <span class="string">&#x27;success&#x27;</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * 请求失败</span></span><br><span class="line"><span class="comment">   * <span class="doctag">@param</span> <span class="variable">error</span></span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="keyword">const</span> <span class="title function_">setError</span> = (<span class="params">error</span>) =&gt; &#123;</span><br><span class="line">    state.<span class="property">data</span> = []</span><br><span class="line">    state.<span class="property">currentPage</span> = <span class="number">1</span></span><br><span class="line">    state.<span class="property">pageSize</span> = <span class="number">0</span></span><br><span class="line">    state.<span class="property">thePageSize</span> = <span class="number">0</span></span><br><span class="line">    state.<span class="property">totalPages</span> = <span class="number">0</span></span><br><span class="line">    state.<span class="property">totalSize</span> = <span class="number">0</span></span><br><span class="line">    state.<span class="property">error</span> = error</span><br><span class="line">    state.<span class="property">status</span> = <span class="string">&#x27;error&#x27;</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> <span class="title function_">setLoading</span> = (<span class="params"></span>) =&gt; (state.<span class="property">status</span> = <span class="string">&#x27;loading&#x27;</span>)</span><br><span class="line">  <span class="keyword">const</span> <span class="title function_">setPage</span> = (<span class="params">num</span>) =&gt; &#123;</span><br><span class="line">    state.<span class="property">currentPage</span> = num</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> <span class="title function_">setReset</span> = (<span class="params"></span>) =&gt; &#123;</span><br><span class="line">    state.<span class="property">data</span> = []</span><br><span class="line">    state.<span class="property">currentPage</span> = <span class="number">1</span></span><br><span class="line">    state.<span class="property">pageSize</span> = <span class="number">0</span></span><br><span class="line">    state.<span class="property">thePageSize</span> = <span class="number">0</span></span><br><span class="line">    state.<span class="property">totalPages</span> = <span class="number">0</span></span><br><span class="line">    state.<span class="property">totalSize</span> = <span class="number">0</span></span><br><span class="line">    state.<span class="property">error</span> = <span class="literal">null</span></span><br><span class="line">    state.<span class="property">status</span> = <span class="string">&#x27;idle&#x27;</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> <span class="title function_">run</span> = (<span class="params">promise</span>) =&gt; &#123;</span><br><span class="line">    <span class="keyword">if</span> (!promise || !promise.<span class="property">then</span>) &#123;</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">Error</span>(<span class="string">&#x27;请传入 promise 类型数据&#x27;</span>)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> ([<span class="string">&#x27;loading&#x27;</span>].<span class="title function_">includes</span>(state.<span class="property">status</span>)) &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="title class_">Promise</span>.<span class="title function_">reject</span>(<span class="string">&#x27;当前正在请求中&#x27;</span>)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="title function_">setLoading</span>()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> promise</span><br><span class="line">      .<span class="title function_">then</span>(<span class="function">(<span class="params">res</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="title function_">setData</span>(res.<span class="property">data</span>)</span><br><span class="line">      &#125;)</span><br><span class="line">      .<span class="title function_">catch</span>(<span class="function">(<span class="params">err</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(err)</span><br><span class="line">        <span class="title function_">setError</span>(err)</span><br><span class="line">      &#125;)</span><br><span class="line">      .<span class="title function_">finally</span>(<span class="function">() =&gt;</span> &#123;&#125;)</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    run,</span><br><span class="line">    setReset,</span><br><span class="line">    setData,</span><br><span class="line">    setPage,</span><br><span class="line">    setLoading,</span><br><span class="line">    setError,</span><br><span class="line">    state,</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>​	这样的封装体基本适配大部分vue2.x开发的后台管理系统的项目，如果想在项目中使用只需要修改一下<code>setData</code>部分适配一下后端数据即可</p>
+<h3 id="更多的vue-hook函数"><a href="#更多的vue-hook函数" class="headerlink" title="更多的vue hook函数"></a>更多的vue hook函数</h3><p>​	hook工具库，<a target="_blank" rel="noopener" href="https://vueuse.org/">VueUse</a>，库里面提供了大量的常用方法，掘金上面有该工具库的介绍文章，官网说明该库是兼容vue2文档了</p>
+<h2 id="vue项目应当在什么使用下使用hook"><a href="#vue项目应当在什么使用下使用hook" class="headerlink" title="vue项目应当在什么使用下使用hook"></a>vue项目应当在什么使用下使用hook</h2><h3 id="关于Class-API与Composition-API"><a href="#关于Class-API与Composition-API" class="headerlink" title="关于Class API与Composition API"></a>关于Class API与Composition API</h3><p>​	从<code>Class API</code>&#x2F;<code>Option API</code>转变向<a target="_blank" rel="noopener" href="https://v3.vuejs.org/guide/composition-api-introduction.html">Composition API</a>的过程中是阵痛的，这2种API在思维方式上存在很大差异</p>
+<p>​	对于长时间写Class、vue2.x的人来说，最初接触vue3几乎发现不了非常明显的优点，setup语法不熟练的情况下基本还是按照Class的思维进行编码，无法发挥Hook的优势，导致写一段时间Vue3后的结论是：在单文件中class的代码组织能力几乎完爆setup语法…</p>
+<p>​	后来组件有一些项目经验，重新学习了react hook，逐渐对hook有了一些理解；Hook主要完成逻辑与逻辑的分离，在react和vue中使用hook可以实现 <strong>视图与视图的分析，视图与逻辑的分离，逻辑与逻辑的分离</strong>，用这个的方式来实现单一职责，在此基础上完成逻辑与视图的低耦合高内聚代码</p>
+<p>​	对于vue2的开发者在而言，可以渐进式的从vue2到vue3，先熟悉hook，在熟悉Composition API</p>
+<h3 id="关于hook与vuex-observable"><a href="#关于hook与vuex-observable" class="headerlink" title="关于hook与vuex | observable"></a>关于hook与vuex | observable</h3><p>​	从普遍意义上来说hook是可以替代vuex的，react中的API useContext就提供了类似功能。</p>
+<pre><code> vuex是无法替代hook的，他并不具备闭包的特性，使用vuex的话，那仅仅是拆分逻辑，有多少页面还是要写多少重复逻辑只是重复代码转义到vuex中而已
+</code></pre>
+<p>​	但是刚接触hook不久的新手而言，很容易进入一个误区；将变量，逻辑封装在一个hook中的情况下，又在多个页面中使用，就会在内存中创建多个不共享的内容一致的空间，对于公共变量还是要使用全局状态管理库的。</p>
+<p>​	hook风格的全局状态管理库，建议可以试试<a target="_blank" rel="noopener" href="https://pinia.esm.dev/">Pinia</a></p>
+<h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><p>​	使用过了一段时间的setup语法之后，对其看法也是慢慢从谨慎疑惑转变成为拥抱hook，Composition API 在逻辑抽象、类型推导、多方面均占优，虽然目前还存在一些小问题，后面的迭代都会解决的，在未来几年Custom Hook将会越来越普及，拥抱Custom Hook,Vue3吧!</p>
+<p>如果使用中遇到了什么问题，请到QQ群 530496237，一起吹吹水</p>
+<p>也可以添加我的微信：carpediem-rollin，加入微信群</p>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://bluedancers.github.io/2021/06/15/%E6%8A%80%E6%9C%AF%E7%B1%BB%E6%96%87%E7%AB%A0/%E4%BD%BF%E7%94%A8reactivity%20%E5%9C%A8vue2%E4%B8%AD%E7%BC%96%E5%86%99hook%E5%87%BD%E6%95%B0/" title="在Option API中使用 Custom hook" target="_blank" rel="external">https://bluedancers.github.io/2021/06/15/技术类文章/使用reactivity 在vue2中编写hook函数/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/bluedancers" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/bluedancers" target="_blank"><span class="text-dark">bluedancers</span><small class="ml-1x">Web Developer &amp; Product Manager</small></a></h3>
+        <div>一切都是为了实现技术的价值</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2021/06/15/%E6%8A%80%E6%9C%AF%E7%B1%BB%E6%96%87%E7%AB%A0/JavaScript%20%E6%96%87%E4%BB%B6%E6%A0%BC%E5%BC%8F%E4%BA%92%E8%BD%AC/" title="JS文件格式相互转换"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2021/06/15/%E9%A1%B9%E7%9B%AE%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/%E4%BD%BF%E7%94%A8gitlabCICD%E5%AE%8C%E6%88%90%E5%89%8D%E7%AB%AF%E8%87%AA%E5%8A%A8%E5%8C%96%E9%83%A8%E7%BD%B2/" title="使用gitlabCI/CD完成前端自动化部署"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+    <li class="toggle-toc">
+      <a class="toggle-btn " data-toggle="collapse" href="#collapseToc" aria-expanded="false" title="文章目录" role="button">    <span>[&nbsp;</span><span>文章目录</span>
+        <i class="text-collapsed icon icon-anchor"></i>
+        <i class="text-in icon icon-close"></i>
+        <span>]</span>
+      </a>
+    </li>
+    
+  </ul>
+  
+  
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-fancy btn-donate pop-onhover bg-gradient-warning" data-toggle="modal" data-target="#donateModal"><span>赏</span></button>
+  <!-- <div class="wave-icon wave-icon-danger btn-donate" data-toggle="modal" data-target="#donateModal">
+    <div class="wave-circle"><span class="icon"><i class="icon icon-bill"></i></span></div>
+  </div> -->
+  
+  
+  <div class="bar-right">
+    
+  </div>
+  </div>
+</nav>
+  
+<!-- Modal -->
+<div class="modal modal-center modal-small modal-xs-full fade" id="donateModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content donate">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <div class="modal-body">
+        <div class="donate-box">
+          <div class="donate-head">
+            <p>感谢您的支持，我会继续努力的!</p>
+          </div>
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade active in" id="alipay">
+              <div class="donate-payimg">
+                <img src="/images/donate/alipayimg.jpg" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开支付宝扫一扫，即可进行扫码打赏哦</p>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="wechatpay">
+              <div class="donate-payimg">
+                <img src="/images/donate/wechatpayimg.jpg" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开微信扫一扫，即可进行扫码打赏哦</p>
+            </div>
+          </div>
+          <div class="donate-footer">
+            <ul class="nav nav-tabs nav-justified" role="tablist">
+              <li role="presentation" class="active">
+                <a href="#alipay" id="alipay-tab" role="tab" data-toggle="tab" aria-controls="alipay" aria-expanded="true"><i class="icon icon-alipay"></i> 支付宝</a>
+              </li>
+              <li role="presentation" class="">
+                <a href="#wechatpay" role="tab" id="wechatpay-tab" data-toggle="tab" aria-controls="wechatpay" aria-expanded="false"><i class="icon icon-wepay"></i> 微信支付</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/bluedancers" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://juejin.cn/user/3720403077840519" target="_blank" title="Juejin" data-toggle=tooltip data-placement=top><i class="icon icon-juejin"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="https://cdn.staticfile.org/jquery/1.12.4/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+   
+
+
+
+
+    <script defer type="text/javascript">
+(function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'G-H48QGKLW34', 'auto');
+ga('send', 'pageview');
+
+</script>
+
+
+
+</body>
+</html>

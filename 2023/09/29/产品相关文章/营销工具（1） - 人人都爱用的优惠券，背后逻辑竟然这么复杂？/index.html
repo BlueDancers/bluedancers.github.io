@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>营销工具(1) - 人人都爱用的优惠券，背后逻辑竟然这么复杂？ | vkcyan Blog</title>
+  <meta name="description" content="带着问题思考 为什么淘宝要把优惠券规则设计的那么复杂？ 为什么不直接降低价格，而是使用优惠券才可以优惠? 商家发放优惠券的目的究竟是什么？ 为什么公司就算被消费者唾弃，也要大数据杀熟。  看完这篇文章，你将理解以上这些令人费解的事情。 前言​	最近负责的Saas商城系统中的优惠券模块开始重构，借此机会作者也打算深入学习与理解优惠券，了解优惠券的前世今生，为后续的产品功能设计环节做好知识储备，避免浅">
+<meta property="og:type" content="article">
+<meta property="og:title" content="营销工具(1) - 人人都爱用的优惠券，背后逻辑竟然这么复杂？">
+<meta property="og:url" content="https://bluedancers.github.io/2023/09/29/%E4%BA%A7%E5%93%81%E7%9B%B8%E5%85%B3%E6%96%87%E7%AB%A0/%E8%90%A5%E9%94%80%E5%B7%A5%E5%85%B7%EF%BC%881%EF%BC%89%20-%20%E4%BA%BA%E4%BA%BA%E9%83%BD%E7%88%B1%E7%94%A8%E7%9A%84%E4%BC%98%E6%83%A0%E5%88%B8%EF%BC%8C%E8%83%8C%E5%90%8E%E9%80%BB%E8%BE%91%E7%AB%9F%E7%84%B6%E8%BF%99%E4%B9%88%E5%A4%8D%E6%9D%82%EF%BC%9F/index.html">
+<meta property="og:site_name" content="vkcya Blog">
+<meta property="og:description" content="带着问题思考 为什么淘宝要把优惠券规则设计的那么复杂？ 为什么不直接降低价格，而是使用优惠券才可以优惠? 商家发放优惠券的目的究竟是什么？ 为什么公司就算被消费者唾弃，也要大数据杀熟。  看完这篇文章，你将理解以上这些令人费解的事情。 前言​	最近负责的Saas商城系统中的优惠券模块开始重构，借此机会作者也打算深入学习与理解优惠券，了解优惠券的前世今生，为后续的产品功能设计环节做好知识储备，避免浅">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://qiliu.vkcyan.top/FutIDma1qVyyN0KukUeRmIJOv4AM.png">
+<meta property="og:image" content="http://qiliu.vkcyan.top/Fnsl689q92YLLHdYEENXToxFQlSP.png">
+<meta property="og:image" content="http://qiliu.vkcyan.top/FmmnhC5ER69UigqsnSeWXFyVSE92.png">
+<meta property="article:published_time" content="2023-09-28T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-11-27T03:03:54.999Z">
+<meta property="article:author" content="bluedancers">
+<meta property="article:tag" content="营销工具">
+<meta property="article:tag" content="优惠券">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://qiliu.vkcyan.top/FutIDma1qVyyN0KukUeRmIJOv4AM.png">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://bluedancers.github.io/2023/09/29/%E4%BA%A7%E5%93%81%E7%9B%B8%E5%85%B3%E6%96%87%E7%AB%A0/%E8%90%A5%E9%94%80%E5%B7%A5%E5%85%B7%EF%BC%881%EF%BC%89%20-%20%E4%BA%BA%E4%BA%BA%E9%83%BD%E7%88%B1%E7%94%A8%E7%9A%84%E4%BC%98%E6%83%A0%E5%88%B8%EF%BC%8C%E8%83%8C%E5%90%8E%E9%80%BB%E8%BE%91%E7%AB%9F%E7%84%B6%E8%BF%99%E4%B9%88%E5%A4%8D%E6%9D%82%EF%BC%9F/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="vkcya Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+
+<body class="main-center theme-black" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/bluedancers" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">bluedancers</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Web Developer &amp; Product Manager</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> HeFei, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-books">
+          <a href="/books">
+            
+            <i class="icon icon-book-fill"></i>
+            
+            <span class="menu-title">书单</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">友链</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/bluedancers" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://juejin.cn/user/3720403077840519" target="_blank" title="Juejin" data-toggle=tooltip data-placement=top><i class="icon icon-juejin"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>往者不可谏，来者犹可追</p><br/>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript/">JavaScript</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript-2021/">JavaScript-2021</a><span class="category-list-count">10</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript-2022/">JavaScript-2022</a><span class="category-list-count">16</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript-2023/">JavaScript-2023</a><span class="category-list-count">16</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%B9%A6%E6%91%98/">书摘</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%BA%A7%E5%93%81/">产品</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%BA%A7%E5%93%81%E7%BB%8F%E7%90%86/">产品经理</a><span class="category-list-count">8</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%85%B3%E4%BA%8E%E7%A8%8B%E5%BA%8F%E5%91%98/">关于程序员</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/">数据结构与算法</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%97%A5%E5%B8%B8/">日常</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%97%A5%E5%B8%B8%E5%BC%80%E5%8F%91/">日常开发</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%9D%82%E8%B0%88/">杂谈</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%8E%A9%E6%9C%BA%E6%8A%80%E5%B7%A7/">玩机技巧</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%A7%BB%E5%8A%A8%E7%AB%AF/">移动端</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%9A%8F%E6%83%B3%E9%9B%86/">随想集</a><span class="category-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/" rel="tag">Hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a><span class="tag-list-count">19</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NPDP/" rel="tag">NPDP</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Pinia/" rel="tag">Pinia</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue/" rel="tag">Vue</a><span class="tag-list-count">12</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue-%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/" rel="tag">Vue - 源码解读</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue3/" rel="tag">Vue3</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/chatGPT/" rel="tag">chatGPT</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/h5%E8%A3%85%E4%BF%AE/" rel="tag">h5装修</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sku/" rel="tag">sku</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vue3/" rel="tag">vue3</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vw/" rel="tag">vw</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/webpack5/" rel="tag">webpack5</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/" rel="tag">个人博客</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%A7%E5%93%81/" rel="tag">产品</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%A7%E5%93%81%E5%88%86%E6%9E%90/" rel="tag">产品分析</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%A7%E5%93%81%E6%97%A5%E5%B8%B8/" rel="tag">产品日常</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BB%B7%E5%80%BC%E8%A7%82/" rel="tag">价值观</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BC%98%E6%83%A0%E5%88%B8/" rel="tag">优惠券</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BD%8E%E4%BB%A3%E7%A0%81/" rel="tag">低代码</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%85%B3%E4%BA%8EC%E7%AB%AF/" rel="tag">关于C端</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%85%B3%E4%BA%8Eproxy/" rel="tag">关于proxy</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%85%BC%E5%AE%B9%E6%80%A7/" rel="tag">兼容性</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8A%A8%E6%80%81%E8%B7%AF%E7%94%B1-vue3/" rel="tag">动态路由 - vue3</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%93%8D%E5%BA%94%E5%BC%8F/" rel="tag">响应式</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BC%A0%E5%B0%8F%E9%BE%99/" rel="tag">张小龙</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag">数据结构</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%97%A0%E9%9A%9C%E7%A2%8D/" rel="tag">无障碍</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A2%81%E6%B0%B8%E5%AE%89/" rel="tag">梁永安</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/" rel="tag">源码解读</a><span class="tag-list-count">12</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%A7%92%E6%9D%80/" rel="tag">秒杀</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%A7%BB%E5%8A%A8%E7%AB%AF/" rel="tag">移动端</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AB%A5%E5%B9%B4/" rel="tag">童年</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%90%A5%E9%94%80%E5%B7%A5%E5%85%B7/" rel="tag">营销工具</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%B0%E5%BD%95/" rel="tag">记录</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%BE%93%E5%87%BA/" rel="tag">输出</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%98%85%E8%AF%BB%E3%80%81%E6%B8%B8%E5%8E%86%E5%92%8C%E7%88%B1%E6%83%85/" rel="tag">阅读、游历和爱情</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9A%8F%E6%83%B3/" rel="tag">随想</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9A%8F%E9%80%89%E6%9C%97%E8%AF%BB/" rel="tag">随选朗读</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/Hexo/" style="font-size: 13px;">Hexo</a> <a href="/tags/JavaScript/" style="font-size: 14px;">JavaScript</a> <a href="/tags/NPDP/" style="font-size: 13.5px;">NPDP</a> <a href="/tags/Pinia/" style="font-size: 13.5px;">Pinia</a> <a href="/tags/Vue/" style="font-size: 13.83px;">Vue</a> <a href="/tags/Vue-%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/" style="font-size: 13.17px;">Vue - 源码解读</a> <a href="/tags/Vue3/" style="font-size: 13px;">Vue3</a> <a href="/tags/chatGPT/" style="font-size: 13px;">chatGPT</a> <a href="/tags/h5%E8%A3%85%E4%BF%AE/" style="font-size: 13px;">h5装修</a> <a href="/tags/sku/" style="font-size: 13px;">sku</a> <a href="/tags/vue3/" style="font-size: 13.17px;">vue3</a> <a href="/tags/vw/" style="font-size: 13px;">vw</a> <a href="/tags/webpack5/" style="font-size: 13px;">webpack5</a> <a href="/tags/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/" style="font-size: 13px;">个人博客</a> <a href="/tags/%E4%BA%A7%E5%93%81/" style="font-size: 13px;">产品</a> <a href="/tags/%E4%BA%A7%E5%93%81%E5%88%86%E6%9E%90/" style="font-size: 13px;">产品分析</a> <a href="/tags/%E4%BA%A7%E5%93%81%E6%97%A5%E5%B8%B8/" style="font-size: 13px;">产品日常</a> <a href="/tags/%E4%BB%B7%E5%80%BC%E8%A7%82/" style="font-size: 13px;">价值观</a> <a href="/tags/%E4%BC%98%E6%83%A0%E5%88%B8/" style="font-size: 13.17px;">优惠券</a> <a href="/tags/%E4%BD%8E%E4%BB%A3%E7%A0%81/" style="font-size: 13px;">低代码</a> <a href="/tags/%E5%85%B3%E4%BA%8EC%E7%AB%AF/" style="font-size: 13px;">关于C端</a> <a href="/tags/%E5%85%B3%E4%BA%8Eproxy/" style="font-size: 13px;">关于proxy</a> <a href="/tags/%E5%85%BC%E5%AE%B9%E6%80%A7/" style="font-size: 13px;">兼容性</a> <a href="/tags/%E5%8A%A8%E6%80%81%E8%B7%AF%E7%94%B1-vue3/" style="font-size: 13px;">动态路由 - vue3</a> <a href="/tags/%E5%93%8D%E5%BA%94%E5%BC%8F/" style="font-size: 13px;">响应式</a> <a href="/tags/%E5%BC%A0%E5%B0%8F%E9%BE%99/" style="font-size: 13px;">张小龙</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="font-size: 13.67px;">数据结构</a> <a href="/tags/%E6%97%A0%E9%9A%9C%E7%A2%8D/" style="font-size: 13px;">无障碍</a> <a href="/tags/%E6%A2%81%E6%B0%B8%E5%AE%89/" style="font-size: 13px;">梁永安</a> <a href="/tags/%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/" style="font-size: 13.83px;">源码解读</a> <a href="/tags/%E7%A7%92%E6%9D%80/" style="font-size: 13px;">秒杀</a> <a href="/tags/%E7%A7%BB%E5%8A%A8%E7%AB%AF/" style="font-size: 13px;">移动端</a> <a href="/tags/%E7%AB%A5%E5%B9%B4/" style="font-size: 13px;">童年</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 13.17px;">算法</a> <a href="/tags/%E8%90%A5%E9%94%80%E5%B7%A5%E5%85%B7/" style="font-size: 13.33px;">营销工具</a> <a href="/tags/%E8%AE%B0%E5%BD%95/" style="font-size: 13.33px;">记录</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 13px;">设计模式</a> <a href="/tags/%E8%BE%93%E5%87%BA/" style="font-size: 13px;">输出</a> <a href="/tags/%E9%98%85%E8%AF%BB%E3%80%81%E6%B8%B8%E5%8E%86%E5%92%8C%E7%88%B1%E6%83%85/" style="font-size: 13px;">阅读、游历和爱情</a> <a href="/tags/%E9%9A%8F%E6%83%B3/" style="font-size: 13px;">随想</a> <a href="/tags/%E9%9A%8F%E9%80%89%E6%9C%97%E8%AF%BB/" style="font-size: 13px;">随选朗读</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/11/">十一月 2023</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/10/">十月 2023</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/09/">九月 2023</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/08/">八月 2023</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/06/">六月 2023</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/05/">五月 2023</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/03/">三月 2023</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/02/">二月 2023</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/01/">一月 2023</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/09/">九月 2022</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/07/">七月 2022</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/06/">六月 2022</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/05/">五月 2022</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/03/">三月 2022</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/12/">十二月 2021</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/10/">十月 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/09/">九月 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/06/">六月 2021</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/03/">三月 2021</a><span class="archive-list-count">9</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E5%85%B3%E4%BA%8E%E7%A8%8B%E5%BA%8F%E5%91%98/">关于程序员</a>
+              </p>
+              <p class="item-title">
+                <a href="/2023/11/25/%E5%85%B3%E4%BA%8E%E7%A8%8B%E5%BA%8F%E5%91%98/%E6%AD%A3%E7%A1%AE%E7%9A%84%E7%90%86%E8%A7%A3%E6%8A%80%E6%9C%AF%EF%BC%8C%E5%8F%AF%E4%BB%A5%E8%AE%A9%E6%88%91%E4%BB%AC%E8%B5%B0%E7%9A%84%E6%9B%B4%E8%BF%9C/" class="title">正确的理解技术，可以让我们走的更远</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-11-24T16:00:00.000Z" itemprop="datePublished">2023-11-25</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E4%BA%A7%E5%93%81/">产品</a>
+              </p>
+              <p class="item-title">
+                <a href="/2023/10/30/%E4%BA%A7%E5%93%81%E7%9B%B8%E5%85%B3%E6%96%87%E7%AB%A0/%E8%90%A5%E9%94%80%E5%B7%A5%E5%85%B7%EF%BC%883%EF%BC%89%20-%20%E4%BB%8E%E6%B8%B8%E6%88%8F%E5%90%8D%E8%AF%8D%E5%88%B0%E7%94%B5%E5%95%86%E8%90%A5%E9%94%80%EF%BC%8C%E6%88%91%E4%BB%AC%E4%B8%80%E8%B5%B7%E8%81%8A%E8%81%8A%E7%A7%92%E6%9D%80/" class="title">营销工具(3) - 从游戏名词到电商营销，我们一起来聊聊“秒杀”</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-10-29T16:00:00.000Z" itemprop="datePublished">2023-10-30</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E4%BA%A7%E5%93%81/">产品</a>
+              </p>
+              <p class="item-title">
+                <a href="/2023/10/20/%E4%BA%A7%E5%93%81%E7%9B%B8%E5%85%B3%E6%96%87%E7%AB%A0/%E8%90%A5%E9%94%80%E5%B7%A5%E5%85%B7%EF%BC%882%EF%BC%89%20-%20%E4%BC%98%E6%83%A0%E5%88%B8%E7%9A%84%E4%BA%A7%E5%93%81%E8%AE%BE%E8%AE%A1%E9%80%BB%E8%BE%91/" class="title">营销工具(2) - 细致解读,Saas商城必备的优惠券产品设计攻略</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-10-19T16:00:00.000Z" itemprop="datePublished">2023-10-20</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/JavaScript-2023/">JavaScript-2023</a>
+              </p>
+              <p class="item-title">
+                <a href="/2023/09/29/vue3%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/runtime%E7%9B%B8%E5%85%B3/" class="title">runtime运行时</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-09-28T16:00:00.000Z" itemprop="datePublished">2023-09-29</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E4%BA%A7%E5%93%81/">产品</a>
+              </p>
+              <p class="item-title">
+                <a href="/2023/09/29/%E4%BA%A7%E5%93%81%E7%9B%B8%E5%85%B3%E6%96%87%E7%AB%A0/%E8%90%A5%E9%94%80%E5%B7%A5%E5%85%B7%EF%BC%881%EF%BC%89%20-%20%E4%BA%BA%E4%BA%BA%E9%83%BD%E7%88%B1%E7%94%A8%E7%9A%84%E4%BC%98%E6%83%A0%E5%88%B8%EF%BC%8C%E8%83%8C%E5%90%8E%E9%80%BB%E8%BE%91%E7%AB%9F%E7%84%B6%E8%BF%99%E4%B9%88%E5%A4%8D%E6%9D%82%EF%BC%9F/" class="title">营销工具(1) - 人人都爱用的优惠券，背后逻辑竟然这么复杂？</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-09-28T16:00:00.000Z" itemprop="datePublished">2023-09-29</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<aside
+  class="sidebar sidebar-toc collapse  in "
+  id="collapseToc"
+  itemscope
+  itemtype="http://schema.org/WPSideBar"
+>
+  <div class="slimContent">
+    <nav id="toc" class="article-toc">
+      <h3 class="toc-title">文章目录</h3>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%A6%E7%9D%80%E9%97%AE%E9%A2%98%E6%80%9D%E8%80%83"><span class="toc-number">1.</span> <span class="toc-text">带着问题思考</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">2.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%97%B6%E9%97%B4%E7%9A%84%E9%BD%BF%E8%BD%AE%E5%BC%80%E5%A7%8B%E8%BD%AC%E5%8A%A8"><span class="toc-number">3.</span> <span class="toc-text">时间的齿轮开始转动</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9C%A8%E4%BA%92%E8%81%94%E7%BD%91%E6%97%B6%E4%BB%A3%E4%BC%98%E6%83%A0%E5%88%B8%E5%8F%91%E7%94%9F%E5%8F%98%E5%8C%96%E4%BA%86%E5%90%97%EF%BC%9F"><span class="toc-number">4.</span> <span class="toc-text">在互联网时代优惠券发生变化了吗？</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9C%80%E8%A6%81%E6%8F%90%E5%89%8D%E4%BA%86%E8%A7%A3%E7%9A%84%E7%BB%8F%E6%B5%8E%E5%AD%A6%E6%A6%82%E5%BF%B5"><span class="toc-number">4.1.</span> <span class="toc-text">需要提前了解的经济学概念</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B7%AE%E5%88%AB%E5%AE%9A%E4%BB%B7"><span class="toc-number">4.1.1.</span> <span class="toc-text">差别定价</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B6%88%E8%B4%B9%E8%80%85%E5%89%A9%E4%BD%99"><span class="toc-number">4.1.2.</span> <span class="toc-text">消费者剩余</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%A9%E6%B6%A6%E6%9C%80%E5%A4%A7%E5%8C%96"><span class="toc-number">4.1.3.</span> <span class="toc-text">利润最大化</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BA%BF%E4%B8%8B%E4%BC%98%E6%83%A0%E5%88%B8%E7%9A%84%E5%B1%80%E9%99%90%E6%80%A7"><span class="toc-number">4.2.</span> <span class="toc-text">线下优惠券的局限性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BA%BF%E4%B8%8A%E4%BC%98%E6%83%A0%E5%88%B8%E7%9A%84%E5%87%BA%E7%8E%B0"><span class="toc-number">4.3.</span> <span class="toc-text">线上优惠券的出现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E6%83%A0%E5%88%B8%E7%9C%9F%E7%9A%84%E6%98%AF%E4%B8%BA%E4%BA%86%E7%BB%99%E5%A4%A7%E5%AE%B6%E7%9C%81%E9%92%B1%E5%90%97%EF%BC%9F"><span class="toc-number">4.4.</span> <span class="toc-text">优惠券真的是为了给大家省钱吗？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%A0%E7%BB%9F%E4%BC%98%E6%83%A0%E5%88%B8%E4%B8%8E%E7%8E%B0%E4%BB%A3%E4%BC%98%E6%83%A0%E5%88%B8"><span class="toc-number">4.5.</span> <span class="toc-text">传统优惠券与现代优惠券</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%80%E5%90%8E"><span class="toc-number">5.</span> <span class="toc-text">最后</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="toc-number">6.</span> <span class="toc-text">参考资料</span></a></li></ol>
+    </nav>
+  </div>
+</aside>
+
+<script>
+  // 移动端不显示菜单
+  if (
+    navigator.userAgent.match(
+      /(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i
+    )
+  ) {
+    let self = document.querySelector(".sidebar-toc");
+    var parent = self.parentElement;
+    parent.removeChild(self);
+  } else {
+  }
+</script>
+
+
+
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-产品相关文章/营销工具（1） - 人人都爱用的优惠券，背后逻辑竟然这么复杂？" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      营销工具(1) - 人人都爱用的优惠券，背后逻辑竟然这么复杂？
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2023/09/29/%E4%BA%A7%E5%93%81%E7%9B%B8%E5%85%B3%E6%96%87%E7%AB%A0/%E8%90%A5%E9%94%80%E5%B7%A5%E5%85%B7%EF%BC%881%EF%BC%89%20-%20%E4%BA%BA%E4%BA%BA%E9%83%BD%E7%88%B1%E7%94%A8%E7%9A%84%E4%BC%98%E6%83%A0%E5%88%B8%EF%BC%8C%E8%83%8C%E5%90%8E%E9%80%BB%E8%BE%91%E7%AB%9F%E7%84%B6%E8%BF%99%E4%B9%88%E5%A4%8D%E6%9D%82%EF%BC%9F/" class="article-date">
+	  <time datetime="2023-09-28T16:00:00.000Z" itemprop="datePublished">2023-09-29</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/%E4%BA%A7%E5%93%81/">产品</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/%E4%BC%98%E6%83%A0%E5%88%B8/" rel="tag">优惠券</a>, <a class="article-tag-link-link" href="/tags/%E8%90%A5%E9%94%80%E5%B7%A5%E5%85%B7/" rel="tag">营销工具</a>
+  </span>
+
+
+        
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2023/09/29/%E4%BA%A7%E5%93%81%E7%9B%B8%E5%85%B3%E6%96%87%E7%AB%A0/%E8%90%A5%E9%94%80%E5%B7%A5%E5%85%B7%EF%BC%881%EF%BC%89%20-%20%E4%BA%BA%E4%BA%BA%E9%83%BD%E7%88%B1%E7%94%A8%E7%9A%84%E4%BC%98%E6%83%A0%E5%88%B8%EF%BC%8C%E8%83%8C%E5%90%8E%E9%80%BB%E8%BE%91%E7%AB%9F%E7%84%B6%E8%BF%99%E4%B9%88%E5%A4%8D%E6%9D%82%EF%BC%9F/#comments" class="article-comment-link">评论</a></span>
+        
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <h2 id="带着问题思考"><a href="#带着问题思考" class="headerlink" title="带着问题思考"></a>带着问题思考</h2><ol>
+<li>为什么淘宝要把优惠券规则设计的那么复杂？</li>
+<li>为什么不直接降低价格，而是使用优惠券才可以优惠?</li>
+<li>商家发放优惠券的目的究竟是什么？</li>
+<li>为什么公司就算被消费者唾弃，也要大数据杀熟。</li>
+</ol>
+<p><strong>看完这篇文章，你将理解以上这些令人费解的事情。</strong></p>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>​	最近负责的Saas商城系统中的优惠券模块开始重构，借此机会作者也打算深入学习与理解优惠券，了解优惠券的前世今生，为后续的产品功能设计环节做好知识储备，避免浅尝辄止的借鉴竞品。</p>
+<p>​	让我们搭乘时光机，先回到工业革命时代，看看优惠券是如何“诞生”与“破圈”的，成为人们生活中的一部分。</p>
+<h2 id="时间的齿轮开始转动"><a href="#时间的齿轮开始转动" class="headerlink" title="时间的齿轮开始转动"></a>时间的齿轮开始转动</h2><blockquote>
+<p>​	根据广告学中目前公认的说法，全世界首张优惠券是美国著名广告文案撰写人<strong>克劳德.霍普金斯</strong>发明的，他为一款炼乳产品在报纸上设计了一张优惠券，消费者撕下报纸的优惠券，再凭借优惠券去购物便可以享受到优惠。</p>
+</blockquote>
+<p>​	19世纪中后期，美国工业革命走向巅峰，随着工业化的兴起与城市化的快速发展，商店、百货公司的数量开始高速增加，购物流程上已经开始现代化，从早期的顾客将想要的商品告知店员，店员将商品从货架拿到顾客手中，演变成了<strong>自助选购模式</strong>。</p>
+<p>​	商店数量的增加以及早期供应链的完善，产品与服务开始同质化，竞争也随之变得越发激烈，百货公司与百货公司、品牌与品牌之间逐渐开始相互内卷；</p>
+<p>​	在19世纪后期，广告成本非常低廉，主要有以下原因</p>
+<ol>
+<li>由于科技水平的限制，广告多为报纸、海报，广告覆盖与传播的范围有限</li>
+<li>19世纪后期并不是信息过载的时代，竞争不算激烈，消费者对广告的接受度较高。</li>
+<li>电子印刷术进入普及阶段，同时简单的文字与配图被被用户广泛接受，制作成本低。</li>
+<li>没有广告法的限制，进一步降低广告的制作成本</li>
+</ol>
+<p>​	而一部分人已经看到了营销对产品的巨大影响，大批企业开始肆无忌惮的投放广告，巨幅墙体海报、有轨电车海报、报纸、促销宣传单，广告开始越来越多的，以各种各样的形式出现在大家的生活中，还有公开分发优惠券以及在用户消费后赠送固定折扣券的行为；</p>
+<p>​	不过19世纪末期，整个市场仍处于增量阶段，所以那时宣传依旧具有良好的效果，优惠券这样的营销方式还没有引起大家足够的注意。</p>
+<p>​	到这里，我们没法不谈谈这个世界上最伟大的公司之一Coca Cola，根据互联网现存资料的主流声音，优惠券模式通过可口可乐完成被更多人所了解。</p>
+<p>​	同样在19世纪末期，可口可乐的营销负责人非常相信广告曝光的巨大价值，他采用各种平面海报、免费饮品券的方式，来开展可口可乐的营销工作，后续靠产品的上瘾性形成复购（上瘾是因为那时候的可口可乐里面含有可卡因）。</p>
+<p>​	<strong>当时谁也没想到，那时候不受待见的免费饮品券综合下来竟然是效果最好的</strong>，因为早期彭伯顿（coca cola创始人）认为免费券不挣钱了，因为可口可乐的上瘾性，用户侧反映出极高复购率，<strong>让彭伯顿不禁相信，专业的事情还是应该专业的人来做</strong>。</p>
+<p>​	<strong>于是免费饮品券开始被大力使用，甚至通过邮寄的方式直接送到你家门口</strong>，优惠券玩法第一次出圈，当然可口可乐的成功是非常复杂的，优惠券仅仅是一段小小的佳话。</p>
+<p>​	非常幸运的是，这样的一张优惠券，目前在互联网上依旧可以找到</p>
+<img src="http://qiliu.vkcyan.top/FutIDma1qVyyN0KukUeRmIJOv4AM.png" style="zoom:90%;" />
+
+<p>this card entitles you to one glass of free coca cola at the fountain of any dispense of genuine coca cola</p>
+<p>图片的中文是：<strong>这张卡可以让您在任何出售真正可口可乐的饮料机处免费领取一杯可口可乐。</strong>	</p>
+<p>我们来简单分析一下，coca cola免费饮品券发挥的作用是什么，或者说传统优惠券有何作用？</p>
+<ol>
+<li>极大降低用户的首次消费门槛，用户面对折扣与免费的优惠，倾向于立即行动，可快速刺激销量。</li>
+<li>创新与新颖性，免费优惠券是新颖的概念，用户收到免费优惠券后，会存在兴趣与好奇心。</li>
+</ol>
+<p>其实除此之外，传统优惠券还有以下作用</p>
+<ol>
+<li>增加品牌忠诚度，用户通过优惠券获取额外的价值的时候，会对品牌产生积极的情感。</li>
+<li>清除库存与滞销商品，通过该优惠券的方式来达到快速周转的目的。</li>
+</ol>
+<p>​	<strong>总的来说，传统优惠券就一个点：无套路！真的优惠了！</strong></p>
+<p>​	虽然初代优惠券的方式很原始，但是<strong>已经符合大部分人对优惠券的认知了</strong>，而在美国19世纪前中期的大萧条阶段，消费者为了省钱，经常会收集各种优惠券，优惠券进一步受到用户的青睐。</p>
+<p>​	在后来的几十年中，互联网时代来临之前，优惠券早已被大众广泛接受，不过其核心玩法和概念没有变化，只不过是表现形式上会变的更加新颖，<strong>产品描述、售价</strong>依旧是重点、如果是免费的会写一个大大的<strong>FREE</strong>。</p>
+<h2 id="在互联网时代优惠券发生变化了吗？"><a href="#在互联网时代优惠券发生变化了吗？" class="headerlink" title="在互联网时代优惠券发生变化了吗？"></a>在互联网时代优惠券发生变化了吗？</h2><p>​	当我们了解了优惠券的历史后，现在让我们搭乘时光机器回到互联网时代，看看100多年后的出现的电子优惠券有何变化。</p>
+<p>​	<strong>先说结论：互联网的电子优惠券玩法相对传统优惠券是颠覆式的改变</strong></p>
+<p>​	到底改变了什么？我先卖个关子，这100年间发生了太多改变人类事情，所以在讲电子优惠券之前，我们首先了解一些极其重要又简单的经济学概念。</p>
+<h3 id="需要提前了解的经济学概念"><a href="#需要提前了解的经济学概念" class="headerlink" title="需要提前了解的经济学概念"></a>需要提前了解的经济学概念</h3><h4 id="差别定价"><a href="#差别定价" class="headerlink" title="差别定价"></a>差别定价</h4><p>​	差别定价又被称为价格歧视，<strong>表示生产者针对相同生产成本的产品，以不同的价格售予不同的买家</strong>，这并非是一个贬义词，只是商家为了利益最大化的一种方式。</p>
+<p>  简单来说就是有钱多花点，没钱少花钱。</p>
+<h4 id="消费者剩余"><a href="#消费者剩余" class="headerlink" title="消费者剩余"></a>消费者剩余</h4><p><strong>消费者剩余  &#x3D; 用户可接受最高价 - 实际售卖价</strong></p>
+<p>比如一个手机，张三本来打算5000块钱买，但是这时候突然拿到了一个500块优惠券，张三最终以4500块就买下了的手机。</p>
+<p>此时，<strong>消费者剩余就是5000 - 4500 &#x3D; 500</strong>，而商家的成本是3500，<strong>生产者剩余为4500 - 3500 &#x3D; 1000</strong>，虽然商家挣了1000块，但是他原本是可以挣消费者1500块，所以消费者剩余越大，商家越不赚钱。</p>
+<img src="http://qiliu.vkcyan.top/Fnsl689q92YLLHdYEENXToxFQlSP.png" style="zoom:33%;" />
+
+<h4 id="利润最大化"><a href="#利润最大化" class="headerlink" title="利润最大化"></a>利润最大化</h4><p>​	我们还是看上面的案例，张三可接受的最高价是5000元，实际消费了4500元，消费者剩余是500元，理想情况下，商家希望用户都通过<strong>可接受最高价进行购买</strong>，这样的情况下商家利润最大，消费者也依旧愿意购买。</p>
+<p>​	而针对这个5000的手机，张三消费能力强，5000块愿意购买，李四消费能力弱，最多愿意4500元购买，王五是个学生，最多愿意4000元购买，那么最理想的情况则是，大家分别按照自己的能接受的最高价进行购买。</p>
+<p>​	张三消费5000、李四消费4500、王五消费4000，张三、李四、王五的消费者剩余均为0，这样的情况下，<strong>商家看起似乎打折少挣钱了，实际上却是最挣钱的状态，也就是利润最大化。</strong></p>
+<h3 id="线下优惠券的局限性"><a href="#线下优惠券的局限性" class="headerlink" title="线下优惠券的局限性"></a>线下优惠券的局限性</h3><p>​	在互联网到来的前夕，企业就已经在讨论如何利用优惠券实现收益最大化。大家都发现了一个非常难以解决的问题，<strong>精准投放无法实现</strong>。</p>
+<p>​	比如同样在纽约的张三与李四，张三相对富裕，而李四是一个穷苦大学生，他们都喜欢吃肯德基的单人套餐。</p>
+<p>​	假设肯德基的单人套餐原价是30元，张三没有觉得原价贵，无论是否有券，他都会直接买，而李四不是，只有在打折到8折及以下的时候，他才会有消费动机。</p>
+<p>​	最后让我们假设，肯德基的单人套餐综合成本是15元</p>
+<p>​	<strong>在不发券的情况下</strong>，张三30元购买，消费者剩余是0，商家实现了收益最大化，但是李四不会买，没有收益；</p>
+<p>​	<strong>在发券的情况下</strong>，张三与李四都会获取优惠券，假设是8折券，此时张三和李四都会去消费了，张三平时30元也会买，但是现在他只需要花24元，而李四呢，8折优惠券达到了他可下单的最高价，他使用8折券进行下单了；</p>
+<p>​	现在在让我们看一下发券场景下，张三与李四的消费者剩余</p>
+<p>​	张三可接受最高价30，实际消费 24，商品成本价15，消费者剩余6元，没有实现收益最大化</p>
+<p>​	李四可接受最高价24，实际消费 24，商品成本价15，消费者剩余0元，实现了收益最大化</p>
+<p>​	虽然少挣了张三的钱，但是多获得了李四的钱，似乎比不发券的效果好；但是这依旧不是理想的效果，因为张三还存在消费者剩余。</p>
+<p>​	但是券也不能一直发，长时间这样会降低品牌形象，影响消费者对品牌的信心，并提升用户对价格的敏感度，造成不可逆的严重影响，到那时候再想提价就极其困难了。</p>
+<p>​	<strong>最理想的结果应该是让大家都按照自己可接受最高价购买，用户愿意购买，商家收益最大化</strong></p>
+<p>​	张三消费能力强，不应该给他发券，他使用原价30元进行消费，消费者剩余为0</p>
+<p>​	李四消费能力弱，从高折扣券陆续发到低折扣券，不断试探用户可接受的最高价，直到消费者剩余为0</p>
+<p>​	只有这样，商家才能实现收益最大化。</p>
+<p>​	但是线下优惠券由于投放不精准问题，是无法达到理想效果的，所以商家极难实现收益最大化。但是互联网的出现改变了这一切。</p>
+<h3 id="线上优惠券的出现"><a href="#线上优惠券的出现" class="headerlink" title="线上优惠券的出现"></a>线上优惠券的出现</h3><p>​	我们的主角终于要登场了，时间来到了21世纪初期，并将视野聚焦到我们身边的国家，日本。</p>
+<p>​	日本的移动互联网的发展在当时是全球领先的，2010年3G网络几乎就达到了100%的覆盖率，在这样的背景下，<strong>日本麦当劳找到了优惠券投放不精准的解法</strong>。</p>
+<p>​	日本麦当劳此前一直想尽量收集消费者信息，比如用户的性别、年龄，来为用户提供更加精准的优惠券，具体做法就是需要用户自行填写个人信息，但是收效甚微。</p>
+<p>​	但是如果大家都通过线上进行消费呢？通过交易系统的将可以准确的采集到每个人的消费信息，并记录在数据库。</p>
+<p>​	<strong>基于用户数据 + 用户信息挖掘系统，分析用户的消费频次、消费门店、消费金额、购买品种，便可以猜测出用户的消费水平与消费习惯，进而通过电子优惠券的方式实现精准营销</strong></p>
+<ul>
+<li>对于经常购买汉堡的用户，发放小食优惠券，增加用户消费上限</li>
+<li>对于一段时间未关顾的用户发放以前经常购买产品的优惠券</li>
+<li>对于价格敏感型用户，这发放更加大幅的优惠券刺激用户的消费</li>
+</ul>
+<p>​	<strong>线上优惠券的出现完全改写了传统优惠券的定义，从商家决定优惠券是什么，变成由用户自己的消费习惯决定优惠券是什么</strong>，完全脱离了以前的单纯的打折促销的作用。</p>
+<p>​	而是经过数据分析、精准营销，再通过电子优惠券的方式，实现了不同用户的相同产品的差别定价，更大限度的实现消费者满意，商家利润最大化的理想状态。</p>
+<p>​	电子优惠券带着他无法取代的优势开始被大众所熟知，用户分群、基于用户的消费习惯动态给予优惠券的精准营销逻辑开始进入大家的生活，优惠券进入了全新的时代；</p>
+<p>​	那么问题来了，新时代的优惠券还可以为大家省钱吗？</p>
+<p>​	</p>
+<h3 id="优惠券真的是为了给大家省钱吗？"><a href="#优惠券真的是为了给大家省钱吗？" class="headerlink" title="优惠券真的是为了给大家省钱吗？"></a>优惠券真的是为了给大家省钱吗？</h3><p>​	电子优惠券的出现确实让消费者省钱了，但是商家也挣钱了，这看似不合理，<strong>买家更省钱，卖家更挣钱，钱还能凭空变出来不成？</strong></p>
+<p>​	只有一种可能，省钱的消费者和不省钱的消费者不是一拨人，而电子优惠券做到了用户分群。</p>
+<p>​	让我们看看这几年的双十一购物节，淘宝令人诟病的复杂优惠券机制，站在用户视角，一定是让大部分人不耐烦的，直接把优惠给我不就行了吗？站在淘宝的视角，给用户优惠，但是不能无脑给，给的同时要实现收益最大化，想要收益最大化就需要<strong>让尽可能多的人使用可接受的最高价下单</strong>，大家在淘宝花时间玩游戏也好，活跃也好，如果感觉价格合适了，一般就不存在足够的动机继续下去，于是为了商家、平台的利益最大化，淘宝设定了一套复杂的优惠机制，让消费者利用时间与精力换取优惠。</p>
+<p>​	当价格高于心理可接受的最高价的时候，时间与精力的价值小于优惠的价值，用户会自发性的参与活动，获取优惠。</p>
+<p>​	当价格低于心理可接受最高价的时候，用户则没有足够的动机继续参与活动获取优惠，而是进入下单流程。</p>
+<p>​	<strong>通过这样一个付出成本获取优惠的机制，实现了针对不同用户的动态优惠，完成了用户分层与针对每个用户的区别定价；最终不同消费能力的用户都认为省钱了，同时消费者剩余为0，商家+平台利润最大化状态。</strong></p>
+<img src="http://qiliu.vkcyan.top/FmmnhC5ER69UigqsnSeWXFyVSE92.png" style="zoom:50%;" />
+
+
+
+<p>相比较与传统优惠券，电子优惠券有一些非常突出的优点</p>
+<ul>
+<li>电子优惠券实现了动态定价，让商品覆盖到了更多的维度，同时更大限度的实现了消费者剩余为0。</li>
+<li>价格标高 + 复杂的优惠券规则，实现对用户的分层，动态实现利润最大化，这个本质上是<strong>优惠券 + 大数据 &#x3D; 卡用户心里最高价</strong>。</li>
+</ul>
+<h3 id="传统优惠券与现代优惠券"><a href="#传统优惠券与现代优惠券" class="headerlink" title="传统优惠券与现代优惠券"></a>传统优惠券与现代优惠券</h3><p>​	当我们用传统的优惠券思维，去理解电子优惠券的时候，一切似乎都不合理，而看懂了基于互联网的优惠券的逻辑，我们才能解释现代世界中发生很多事情。</p>
+<ul>
+<li><p>为什么会存在大数据杀熟？</p>
+</li>
+<li><p>为什么不直接降价而是让用户通过优惠券的方式来购买？</p>
+</li>
+<li><p>为什么商家千方百计的想获取你的信息？</p>
+</li>
+<li><p>为什么现如今数据是极其宝贵的资源？</p>
+</li>
+</ul>
+<p>​	商家、平台在满足用户需求的情况下，都是为了收益最大化而努力，凭借消费者的用户信息、用户标签、消费习惯，等等信息，实现收益最大化；</p>
+<p>​	<strong>通过以上案例与分析，我们可以发现电子优惠券和传统优惠券早已经不是一种东西，虽然他们都叫优惠券</strong>，电子优惠券虽然很厉害，但是也存在很强的开发成本与技术壁垒，传统优惠券虽然能力有限，但是使用门槛很低，成本更低。所以也不能片面说电子优惠券就是好，传统优惠券就是差，<strong>思考自己拥有的资源与需求，理性判断最合适的产品方案</strong>即可。</p>
+<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>​	本来只是想回顾一下优惠券的历史，结果一不小心就写了一篇5000字的文章，无论是消费者还是商家，理解优惠券的规则都可以帮助大家更好的理解这个世界发生的事情。</p>
+<p>​	下一篇文章，我们将进入实战篇，谈谈<strong>营销工具 - 优惠券的产品设计逻辑</strong>。</p>
+<p>​	</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a target="_blank" rel="noopener" href="https://www.foodtalks.cn/news/5374">2万字深度拆解可口可乐百年营销史：如何从冷启动到风靡全世界？</a></p>
+<p><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/u2nLG2dk3-BxqX8zVhg2mA">我无比怀念肯德基和麦当劳的纸质优惠券</a></p>
+<p><a target="_blank" rel="noopener" href="https://weibo.com/1721030600/zmFhXbyAy">艾瑞咨询</a></p>
+<p><a target="_blank" rel="noopener" href="http://tech.sina.com.cn/t/2008-05-10/03432187170.shtml">日本3G市场</a></p>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://bluedancers.github.io/2023/09/29/%E4%BA%A7%E5%93%81%E7%9B%B8%E5%85%B3%E6%96%87%E7%AB%A0/%E8%90%A5%E9%94%80%E5%B7%A5%E5%85%B7%EF%BC%881%EF%BC%89%20-%20%E4%BA%BA%E4%BA%BA%E9%83%BD%E7%88%B1%E7%94%A8%E7%9A%84%E4%BC%98%E6%83%A0%E5%88%B8%EF%BC%8C%E8%83%8C%E5%90%8E%E9%80%BB%E8%BE%91%E7%AB%9F%E7%84%B6%E8%BF%99%E4%B9%88%E5%A4%8D%E6%9D%82%EF%BC%9F/" title="营销工具(1) - 人人都爱用的优惠券，背后逻辑竟然这么复杂？" target="_blank" rel="external">https://bluedancers.github.io/2023/09/29/产品相关文章/营销工具（1） - 人人都爱用的优惠券，背后逻辑竟然这么复杂？/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/bluedancers" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/bluedancers" target="_blank"><span class="text-dark">bluedancers</span><small class="ml-1x">Web Developer &amp; Product Manager</small></a></h3>
+        <div>一切都是为了实现技术的价值</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2023/09/29/vue3%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/runtime%E7%9B%B8%E5%85%B3/" title="runtime运行时"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2023/08/10/%E9%98%85%E8%AF%BB/%E4%BB%8E%E8%AF%BB%E3%80%8A%E5%BE%AE%E4%BF%A1%E8%83%8C%E5%90%8E%E7%9A%84%E4%BA%A7%E5%93%81%E8%A7%82%E3%80%8B%E5%88%B0%E6%80%9D%E8%80%83%E5%89%8D%E7%AB%AF%E5%B7%A5%E7%A8%8B%E5%B8%88%E7%9A%84%E2%80%9C35%E5%B2%81%E2%80%9D/" title="从读《微信背后的产品观》到思考前端工程师的“35岁”"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+    <li class="toggle-toc">
+      <a class="toggle-btn " data-toggle="collapse" href="#collapseToc" aria-expanded="false" title="文章目录" role="button">    <span>[&nbsp;</span><span>文章目录</span>
+        <i class="text-collapsed icon icon-anchor"></i>
+        <i class="text-in icon icon-close"></i>
+        <span>]</span>
+      </a>
+    </li>
+    
+  </ul>
+  
+  
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-fancy btn-donate pop-onhover bg-gradient-warning" data-toggle="modal" data-target="#donateModal"><span>赏</span></button>
+  <!-- <div class="wave-icon wave-icon-danger btn-donate" data-toggle="modal" data-target="#donateModal">
+    <div class="wave-circle"><span class="icon"><i class="icon icon-bill"></i></span></div>
+  </div> -->
+  
+  
+  <div class="bar-right">
+    
+  </div>
+  </div>
+</nav>
+  
+<!-- Modal -->
+<div class="modal modal-center modal-small modal-xs-full fade" id="donateModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content donate">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <div class="modal-body">
+        <div class="donate-box">
+          <div class="donate-head">
+            <p>感谢您的支持，我会继续努力的!</p>
+          </div>
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade active in" id="alipay">
+              <div class="donate-payimg">
+                <img src="/images/donate/alipayimg.jpg" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开支付宝扫一扫，即可进行扫码打赏哦</p>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="wechatpay">
+              <div class="donate-payimg">
+                <img src="/images/donate/wechatpayimg.jpg" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开微信扫一扫，即可进行扫码打赏哦</p>
+            </div>
+          </div>
+          <div class="donate-footer">
+            <ul class="nav nav-tabs nav-justified" role="tablist">
+              <li role="presentation" class="active">
+                <a href="#alipay" id="alipay-tab" role="tab" data-toggle="tab" aria-controls="alipay" aria-expanded="true"><i class="icon icon-alipay"></i> 支付宝</a>
+              </li>
+              <li role="presentation" class="">
+                <a href="#wechatpay" role="tab" id="wechatpay-tab" data-toggle="tab" aria-controls="wechatpay" aria-expanded="false"><i class="icon icon-wepay"></i> 微信支付</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/bluedancers" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://juejin.cn/user/3720403077840519" target="_blank" title="Juejin" data-toggle=tooltip data-placement=top><i class="icon icon-juejin"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="https://cdn.staticfile.org/jquery/1.12.4/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+   
+
+
+
+
+    <script defer type="text/javascript">
+(function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'G-H48QGKLW34', 'auto');
+ga('send', 'pageview');
+
+</script>
+
+
+
+</body>
+</html>
