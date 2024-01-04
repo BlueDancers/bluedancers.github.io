@@ -1,3 +1,13 @@
+---
+title: 搭建一个企业内部的实用AI
+categories:
+  - chatGPT
+tags:
+  - ai机器人
+toc: true
+date: 2023-12-12
+---
+
 
 
 参考文章

@@ -1,8 +1,15 @@
-# （23年12月）chatGPT绑虚拟卡并开通plus会员
-
-本文更新与2023年12月12日。
-
-
+---
+title: （23年12月）chatGPT绑虚拟卡并开通plus会员
+categories:
+  - chatGPT
+tags:
+  - chatgpt PLUS
+  - 虚拟币
+  - depay
+  - dupay
+toc: true
+date: 2023-12-12
+---
 
 ## 看完这篇文章你将学会
 
