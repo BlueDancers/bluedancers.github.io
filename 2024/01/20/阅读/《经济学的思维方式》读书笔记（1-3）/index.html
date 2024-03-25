@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>vkcyan Blog</title>
+  <meta name="description" content="《经济学的思维方式》读书笔记前言​	本书来自于“蜜獾吃书”播客的推荐，我一直都经济学都挺感兴趣的，毕竟经济学涉及到每一个人，也涉及到人的决策，大学里面学过一些微观经济学，但是理解比较浅显，工作多年也深感自己浮于表面，所以趁此机会打算好好读读保罗海恩的《经济学的思维方式》，强加一下自己的经济学思维。 第一章：经济学的思维方式Q：经济学的定义 A：一套关于选择以及选择产生的意外之果的理论 Q：介绍优化">
+<meta property="og:type" content="article">
+<meta property="og:title" content="vkcya Blog">
+<meta property="og:url" content="https://bluedancers.github.io/2024/01/20/%E9%98%85%E8%AF%BB/%E3%80%8A%E7%BB%8F%E6%B5%8E%E5%AD%A6%E7%9A%84%E6%80%9D%E7%BB%B4%E6%96%B9%E5%BC%8F%E3%80%8B%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0%EF%BC%881-3%EF%BC%89/index.html">
+<meta property="og:site_name" content="vkcya Blog">
+<meta property="og:description" content="《经济学的思维方式》读书笔记前言​	本书来自于“蜜獾吃书”播客的推荐，我一直都经济学都挺感兴趣的，毕竟经济学涉及到每一个人，也涉及到人的决策，大学里面学过一些微观经济学，但是理解比较浅显，工作多年也深感自己浮于表面，所以趁此机会打算好好读读保罗海恩的《经济学的思维方式》，强加一下自己的经济学思维。 第一章：经济学的思维方式Q：经济学的定义 A：一套关于选择以及选择产生的意外之果的理论 Q：介绍优化">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://qiliu.vkcyan.top/FvWvF5uUxwQvx0noIhScJM34leXz.png">
+<meta property="og:image" content="http://qiliu.vkcyan.top/FsOa6I3j1gjgBk4-dhStiarczzJa.png">
+<meta property="article:published_time" content="2024-01-20T09:42:29.749Z">
+<meta property="article:modified_time" content="2024-02-16T10:30:54.632Z">
+<meta property="article:author" content="bluedancers">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://qiliu.vkcyan.top/FvWvF5uUxwQvx0noIhScJM34leXz.png">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://bluedancers.github.io/2024/01/20/%E9%98%85%E8%AF%BB/%E3%80%8A%E7%BB%8F%E6%B5%8E%E5%AD%A6%E7%9A%84%E6%80%9D%E7%BB%B4%E6%96%B9%E5%BC%8F%E3%80%8B%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0%EF%BC%881-3%EF%BC%89/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="vkcya Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+
+<body class="main-center theme-black" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/bluedancers" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">bluedancers</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Web Developer &amp; Product Manager</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> HeFei, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-books">
+          <a href="/books">
+            
+            <i class="icon icon-book-fill"></i>
+            
+            <span class="menu-title">书单</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">友链</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/bluedancers" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://juejin.cn/user/3720403077840519" target="_blank" title="Juejin" data-toggle=tooltip data-placement=top><i class="icon icon-juejin"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>往者不可谏，来者犹可追</p><br/>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript/">JavaScript</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript-2021/">JavaScript-2021</a><span class="category-list-count">10</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript-2022/">JavaScript-2022</a><span class="category-list-count">16</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript-2023/">JavaScript-2023</a><span class="category-list-count">16</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/chatGPT/">chatGPT</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%B9%A6%E6%91%98/">书摘</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%BA%A7%E5%93%81/">产品</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%BA%A7%E5%93%81%E7%BB%8F%E7%90%86/">产品经理</a><span class="category-list-count">8</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%85%B3%E4%BA%8E%E7%A8%8B%E5%BA%8F%E5%91%98/">关于程序员</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/">数据结构与算法</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%97%A5%E5%B8%B8/">日常</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%97%A5%E5%B8%B8%E5%BC%80%E5%8F%91/">日常开发</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%9D%82%E8%B0%88/">杂谈</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%8E%A9%E6%9C%BA%E6%8A%80%E5%B7%A7/">玩机技巧</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%A7%BB%E5%8A%A8%E7%AB%AF/">移动端</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/">读书笔记</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%9A%8F%E6%83%B3%E9%9B%86/">随想集</a><span class="category-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/" rel="tag">Hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a><span class="tag-list-count">19</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NPDP/" rel="tag">NPDP</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Pinia/" rel="tag">Pinia</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue/" rel="tag">Vue</a><span class="tag-list-count">12</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue-%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/" rel="tag">Vue - 源码解读</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue3/" rel="tag">Vue3</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ai%E6%9C%BA%E5%99%A8%E4%BA%BA/" rel="tag">ai机器人</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/calling-Funtion/" rel="tag">calling Funtion</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/chatGPT/" rel="tag">chatGPT</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/chatgpt-PLUS/" rel="tag">chatgpt PLUS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/depay/" rel="tag">depay</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/dupay/" rel="tag">dupay</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/h5%E8%A3%85%E4%BF%AE/" rel="tag">h5装修</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sku/" rel="tag">sku</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vue3/" rel="tag">vue3</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vw/" rel="tag">vw</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/webpack5/" rel="tag">webpack5</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/" rel="tag">个人博客</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%A7%E5%93%81/" rel="tag">产品</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%A7%E5%93%81%E5%88%86%E6%9E%90/" rel="tag">产品分析</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%A7%E5%93%81%E6%97%A5%E5%B8%B8/" rel="tag">产品日常</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BB%B7%E5%80%BC%E8%A7%82/" rel="tag">价值观</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BC%98%E6%83%A0%E5%88%B8/" rel="tag">优惠券</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BD%8E%E4%BB%A3%E7%A0%81/" rel="tag">低代码</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%85%B3%E4%BA%8EC%E7%AB%AF/" rel="tag">关于C端</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%85%B3%E4%BA%8Eproxy/" rel="tag">关于proxy</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%85%BC%E5%AE%B9%E6%80%A7/" rel="tag">兼容性</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8A%A8%E6%80%81%E8%B7%AF%E7%94%B1-vue3/" rel="tag">动态路由 - vue3</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%93%8D%E5%BA%94%E5%BC%8F/" rel="tag">响应式</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BC%A0%E5%B0%8F%E9%BE%99/" rel="tag">张小龙</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%81%8B%E7%88%B1/" rel="tag">恋爱</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag">数据结构</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%97%A0%E9%9A%9C%E7%A2%8D/" rel="tag">无障碍</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A2%81%E6%B0%B8%E5%AE%89/" rel="tag">梁永安</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/" rel="tag">源码解读</a><span class="tag-list-count">12</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%A7%92%E6%9D%80/" rel="tag">秒杀</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%A7%BB%E5%8A%A8%E7%AB%AF/" rel="tag">移动端</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AB%A5%E5%B9%B4/" rel="tag">童年</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%90%A5%E9%94%80%E5%B7%A5%E5%85%B7/" rel="tag">营销工具</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%99%9A%E6%8B%9F%E5%B8%81/" rel="tag">虚拟币</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%B0%E5%BD%95/" rel="tag">记录</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%BE%93%E5%87%BA/" rel="tag">输出</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%98%85%E8%AF%BB%E3%80%81%E6%B8%B8%E5%8E%86%E5%92%8C%E7%88%B1%E6%83%85/" rel="tag">阅读、游历和爱情</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9A%8F%E6%83%B3/" rel="tag">随想</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9A%8F%E9%80%89%E6%9C%97%E8%AF%BB/" rel="tag">随选朗读</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/Hexo/" style="font-size: 13px;">Hexo</a> <a href="/tags/JavaScript/" style="font-size: 14px;">JavaScript</a> <a href="/tags/NPDP/" style="font-size: 13.5px;">NPDP</a> <a href="/tags/Pinia/" style="font-size: 13.5px;">Pinia</a> <a href="/tags/Vue/" style="font-size: 13.83px;">Vue</a> <a href="/tags/Vue-%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/" style="font-size: 13.17px;">Vue - 源码解读</a> <a href="/tags/Vue3/" style="font-size: 13px;">Vue3</a> <a href="/tags/ai%E6%9C%BA%E5%99%A8%E4%BA%BA/" style="font-size: 13px;">ai机器人</a> <a href="/tags/calling-Funtion/" style="font-size: 13px;">calling Funtion</a> <a href="/tags/chatGPT/" style="font-size: 13px;">chatGPT</a> <a href="/tags/chatgpt-PLUS/" style="font-size: 13px;">chatgpt PLUS</a> <a href="/tags/depay/" style="font-size: 13px;">depay</a> <a href="/tags/dupay/" style="font-size: 13px;">dupay</a> <a href="/tags/h5%E8%A3%85%E4%BF%AE/" style="font-size: 13px;">h5装修</a> <a href="/tags/sku/" style="font-size: 13px;">sku</a> <a href="/tags/vue3/" style="font-size: 13.17px;">vue3</a> <a href="/tags/vw/" style="font-size: 13px;">vw</a> <a href="/tags/webpack5/" style="font-size: 13px;">webpack5</a> <a href="/tags/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/" style="font-size: 13px;">个人博客</a> <a href="/tags/%E4%BA%A7%E5%93%81/" style="font-size: 13px;">产品</a> <a href="/tags/%E4%BA%A7%E5%93%81%E5%88%86%E6%9E%90/" style="font-size: 13px;">产品分析</a> <a href="/tags/%E4%BA%A7%E5%93%81%E6%97%A5%E5%B8%B8/" style="font-size: 13px;">产品日常</a> <a href="/tags/%E4%BB%B7%E5%80%BC%E8%A7%82/" style="font-size: 13px;">价值观</a> <a href="/tags/%E4%BC%98%E6%83%A0%E5%88%B8/" style="font-size: 13.17px;">优惠券</a> <a href="/tags/%E4%BD%8E%E4%BB%A3%E7%A0%81/" style="font-size: 13px;">低代码</a> <a href="/tags/%E5%85%B3%E4%BA%8EC%E7%AB%AF/" style="font-size: 13px;">关于C端</a> <a href="/tags/%E5%85%B3%E4%BA%8Eproxy/" style="font-size: 13px;">关于proxy</a> <a href="/tags/%E5%85%BC%E5%AE%B9%E6%80%A7/" style="font-size: 13px;">兼容性</a> <a href="/tags/%E5%8A%A8%E6%80%81%E8%B7%AF%E7%94%B1-vue3/" style="font-size: 13px;">动态路由 - vue3</a> <a href="/tags/%E5%93%8D%E5%BA%94%E5%BC%8F/" style="font-size: 13px;">响应式</a> <a href="/tags/%E5%BC%A0%E5%B0%8F%E9%BE%99/" style="font-size: 13px;">张小龙</a> <a href="/tags/%E6%81%8B%E7%88%B1/" style="font-size: 13px;">恋爱</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="font-size: 13.67px;">数据结构</a> <a href="/tags/%E6%97%A0%E9%9A%9C%E7%A2%8D/" style="font-size: 13px;">无障碍</a> <a href="/tags/%E6%A2%81%E6%B0%B8%E5%AE%89/" style="font-size: 13px;">梁永安</a> <a href="/tags/%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/" style="font-size: 13.83px;">源码解读</a> <a href="/tags/%E7%A7%92%E6%9D%80/" style="font-size: 13px;">秒杀</a> <a href="/tags/%E7%A7%BB%E5%8A%A8%E7%AB%AF/" style="font-size: 13px;">移动端</a> <a href="/tags/%E7%AB%A5%E5%B9%B4/" style="font-size: 13px;">童年</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 13.17px;">算法</a> <a href="/tags/%E8%90%A5%E9%94%80%E5%B7%A5%E5%85%B7/" style="font-size: 13.33px;">营销工具</a> <a href="/tags/%E8%99%9A%E6%8B%9F%E5%B8%81/" style="font-size: 13px;">虚拟币</a> <a href="/tags/%E8%AE%B0%E5%BD%95/" style="font-size: 13.33px;">记录</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 13px;">设计模式</a> <a href="/tags/%E8%BE%93%E5%87%BA/" style="font-size: 13px;">输出</a> <a href="/tags/%E9%98%85%E8%AF%BB%E3%80%81%E6%B8%B8%E5%8E%86%E5%92%8C%E7%88%B1%E6%83%85/" style="font-size: 13px;">阅读、游历和爱情</a> <a href="/tags/%E9%9A%8F%E6%83%B3/" style="font-size: 13px;">随想</a> <a href="/tags/%E9%9A%8F%E9%80%89%E6%9C%97%E8%AF%BB/" style="font-size: 13px;">随选朗读</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/01/">一月 2024</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/12/">十二月 2023</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/11/">十一月 2023</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/10/">十月 2023</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/09/">九月 2023</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/08/">八月 2023</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/06/">六月 2023</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/05/">五月 2023</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/03/">三月 2023</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/02/">二月 2023</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/01/">一月 2023</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/09/">九月 2022</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/07/">七月 2022</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/06/">六月 2022</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/05/">五月 2022</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/03/">三月 2022</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/12/">十二月 2021</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/10/">十月 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/09/">九月 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/06/">六月 2021</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/03/">三月 2021</a><span class="archive-list-count">9</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2024/01/20/%E9%98%85%E8%AF%BB/%E3%80%8A%E7%BB%8F%E6%B5%8E%E5%AD%A6%E7%9A%84%E6%80%9D%E7%BB%B4%E6%96%B9%E5%BC%8F%E3%80%8B%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0%EF%BC%881-3%EF%BC%89/" class="title">(no title)</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-01-20T09:42:29.749Z" itemprop="datePublished">2024-01-20</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2024/01/20/%E9%98%85%E8%AF%BB/%E3%80%8A%E7%BB%8F%E6%B5%8E%E5%AD%A6%E7%9A%84%E6%80%9D%E7%BB%B4%E6%96%B9%E5%BC%8F%E3%80%8B%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0%EF%BC%884-6%EF%BC%89/" class="title">(no title)</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-01-20T09:42:29.749Z" itemprop="datePublished">2024-01-20</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2024/01/05/%E9%98%85%E8%AF%BB/%E3%80%8A%E5%9B%9B%E4%B8%87%E4%B8%87%E9%A1%BE%E5%AE%A2%E3%80%8B%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" class="title">(no title)</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-01-05T01:36:56.596Z" itemprop="datePublished">2024-01-05</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/">读书笔记</a>
+              </p>
+              <p class="item-title">
+                <a href="/2024/01/04/%E9%98%85%E8%AF%BB/%E5%A6%82%E4%BD%95%E9%81%BF%E5%85%8D%E5%AD%A4%E7%8B%AC%E7%BB%88%E8%80%81/" class="title">《如何避免孤独终老》读书笔记</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-01-03T16:00:00.000Z" itemprop="datePublished">2024-01-04</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2023/12/22/%E6%97%A5%E5%B8%B8/2023%E5%B9%B4%E7%BB%88%E6%80%BB%E7%BB%93-%E9%BB%84%E9%87%91%E6%97%B6%E4%BB%A3%E7%9A%84%E6%80%BB%E7%BB%93/" class="title">(no title)</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-12-22T09:29:38.656Z" itemprop="datePublished">2023-12-22</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-阅读/《经济学的思维方式》读书笔记（1-3）" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2024/01/20/%E9%98%85%E8%AF%BB/%E3%80%8A%E7%BB%8F%E6%B5%8E%E5%AD%A6%E7%9A%84%E6%80%9D%E7%BB%B4%E6%96%B9%E5%BC%8F%E3%80%8B%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0%EF%BC%881-3%EF%BC%89/" class="article-date">
+	  <time datetime="2024-01-20T09:42:29.749Z" itemprop="datePublished">2024-01-20</time>
+	</a>
+</span>
+        
+        
+
+        
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2024/01/20/%E9%98%85%E8%AF%BB/%E3%80%8A%E7%BB%8F%E6%B5%8E%E5%AD%A6%E7%9A%84%E6%80%9D%E7%BB%B4%E6%96%B9%E5%BC%8F%E3%80%8B%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0%EF%BC%881-3%EF%BC%89/#comments" class="article-comment-link">评论</a></span>
+        
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <h1 id="《经济学的思维方式》读书笔记"><a href="#《经济学的思维方式》读书笔记" class="headerlink" title="《经济学的思维方式》读书笔记"></a>《经济学的思维方式》读书笔记</h1><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>​	本书来自于“蜜獾吃书”播客的推荐，我一直都经济学都挺感兴趣的，毕竟经济学涉及到每一个人，也涉及到人的决策，大学里面学过一些微观经济学，但是理解比较浅显，工作多年也深感自己浮于表面，所以趁此机会打算好好读读保罗海恩的《经济学的思维方式》，强加一下自己的经济学思维。</p>
+<h2 id="第一章：经济学的思维方式"><a href="#第一章：经济学的思维方式" class="headerlink" title="第一章：经济学的思维方式"></a>第一章：经济学的思维方式</h2><p>Q：经济学的定义</p>
+<p>A：一套关于选择以及选择产生的意外之果的理论</p>
+<p>Q：介绍优化行为的概念？</p>
+<p>A：在进行选择的时候，个体会不断比较各种行为能为他们带来的额外收益和额外预期成本</p>
+<p>Q：理解个人决策的重要性</p>
+<p>A：所有社会现象都来自于个体的行为和个体之间的互动，而个体在选择行为时只考虑对自身的预期收益和预期成本，而且所谓集体从选择，归根结底仍然是个体的选择。</p>
+<p>Q：介绍产权的概念：产权是经济学游戏的重要规则</p>
+<p>A：产权是经济学游戏的规则中的关键元素，产权通过法律将稀缺资源的所有权分配到个人。</p>
+<p>Q：理解社会互动中“看不见的手”扮演的重要角色</p>
+<p>A：这个看不见的手，实际上都是人们面对不断变化的收益和支出，总是做出最优解的集体行为。</p>
+<ul>
+<li>当人们习惯某件事情后，就很容易讲起视为天经地义，而难以看清它的本质</li>
+<li>人们总是关注失败，而把成功视作理所应当，甚至根本意思不到他的存在。</li>
+<li>高峰时段的交通最大的特点不是堵塞，而是流动，每个人都独立选择自己的路线，相互不商量，驾驶技术参差不齐，风险偏好都不一致，礼貌程度天差地别，但是这样的交通系统不仅没有瘫痪，反而仅仅有条，仿佛有一双看不见的手，在引导车辆的运动，着是社会协作的奇迹</li>
+</ul>
+<p>​	一个社会必须完成大量生产活动，而这些活动一非常复杂的方式相互关联。如何鼓励每个人的紧缺采取行动，形成共同体？也就是说社会协作究竟是如何发生的呢？</p>
+<p>​	先人在几百年前开始研究这一问题，但是他们他们的社会比我们的要简单的多，也收到了诸多限制，所以直到18世纪</p>
+<p>​	思想家才开始思考社会究竟是如何运转：个体仅拥有极为有限的信息，且仅关心自己的利益，然而我们得到的结果并非一团混乱，而是令人惊叹的充满秩序、生产力充沛的社会，为什么会这样呢？</p>
+<p>​	亚当斯密毫无疑问是最有洞察力的思想家，在他的时代，大部分受过教育的人都相信，政治统治者必须进行精心的计划，否则整个社会将会退化到贫困和无序，亚当斯密不同意这个观点，他认为社会的运作依赖于某种协作过程。但是，想要驳倒当时的主流看法，他必须把社会协作描述出来，斯密认为，这个过程能够自发运转，不仅不需要政府随时监管，甚至还能抵消与之相左的政府政策。</p>
+<p>​	经济学的思维方式：<strong>所有社会现象都产生与个体的行为和相互作用，而个体根据行为给自身带来的预期收益和预期成本进行选择。</strong></p>
+<p>​	经济学不仅关于金钱和利润、商业和金融，也不仅研究人们的竞争性行为。事实上，经济学研究所有类型的选择，以及这些选择所产生的意外之果，也就是人们在选择自己行为时没有预料到的副作用。</p>
+<p>​	虽然适用于世间万物，但实际这并不是说所有人都是自私、物质，只关心利益，而是一切都取决于如何定义收益与成本，以及他们赋予这些收益和成本的相对价值。</p>
+<p>​	实际应用这，经济学的思维主要涉及三个方面 </p>
+<ul>
+<li>行为，强调优化与权衡，或者说取舍</li>
+<li>互动，互动是自发性的，没有超级管理员，互动可以良好的分工进而产生更多价值，现代社会，人人靠专业分工与交换为生。</li>
+<li>结果</li>
+</ul>
+<p>1.5</p>
+<p>​	经济学理论认为，你的选择、计划会改变他人的机会；人际互动使各种选择的净收益不断变化，人们再根据这些变化不断相互调整，从而完成社会协作的过程。</p>
+<p>​	想象一条高速公路，在2个方向上各有四条车道，所有的入口和出口，都设置到车道的右侧，为什么有些人还有费事换到最左侧行驶呢？因为右侧车速最慢，那离开最有道后，实际会选择剩下三道的那一道呢？根据经济学的理论，每一条车道的净收益都在不断变化，司机会随时关注这些变化，最终所有车道的车速都会一致，以上协调过程能够自发的快速、准确的完成，如果强制每一辆车到指定车道，效率将会远低于自动协作系统的效率。</p>
+<p>​	<strong>只要稍稍改变某种选择的经济成本和经济收益，就能让很多人改变自己的行为，这个机制就是市场经济的核心机制。</strong></p>
+<p>1.6 信号</p>
+<p>​	要想成功调整自己的行为、适应他人的行为，信息是必不可少的，以路上开车为例子，指示牌、交通灯、转向灯、，简单的行为将信息广播到数不清的人，但是我们通常意识不到这个过程，就像开车的型号，价格也帮助我们决定生产与消费，明确各种选择与权衡，如果没有价格的引导，我们就像失去信号灯一样一样盲目。</p>
+<p>1.7 游戏规则</p>
+<p>​	人们通过一套约定俗称的习惯来协调各种目标与计划，这个习惯就是经济系统，要想一个游戏顺利进行，必须满足以下2个条件</p>
+<ul>
+<li>参与者必须大致明白规则并基本同意遵守</li>
+<li>游戏规则需要决定一定稳定性。</li>
+</ul>
+<p>​	如果游戏规则不清晰，或者自相矛盾，都会导致游戏的崩溃，人们会既不明白别人希望你做什么也不知道该期待别人做什么，互惠消息无法再缺乏规则的情况下进行，人们会犹豫试图弄清游戏规则，甚至试图破坏并建立对自己有利的新规则。</p>
+<p>1.8 产权是一种游戏规则</p>
+<p>​	游戏规则的重头戏是产权，私有产权是市场交换型经济体的根基，所谓私有产权，是指法律以所有权的形式将权利明确分配到具体的个人。私有产权清楚界定了谁在法律上拥有什么。任何人都无权在未经你的同意的情况下使用与改变你的财物，哪怕是给你的汽车装一个更好的音响。</p>
+<p>​	此外，人们可以资源的买卖或者交换私有产权，即放弃自己的产权，换取对其他商品或服务的类似产权，所以购买被视为产权的一种交换，交易完成后你拥有了物品的拥有权，卖家则拥有了你支付的现金的所有权。</p>
+<p>​	私有产权能够为社会成员提供可靠的信息和激励机制，但是清晰、令人满意的私有产权系统并非一朝一夕的事情，需要相当长的时间进行演化</p>
+<p>1.9 经济理论的偏向性：是长处还是弱点</p>
+<p>​	经济学理论并非完美的理论，不能提供一种毫无偏见的意见，不能同时呈现所有事实，不能赋予所有价值观相同的权重。</p>
+<ul>
+<li>经济学总是过于强调个人选择，难道是人们选择成为穷人或者失业吗</li>
+<li>经济学家试图将集体（企业、政府、国家）的选择分解为集体中的个人选择。</li>
+<li>经济学的思维强化优化过程，强调权衡和计算，强调目的手段的一致性，但是人们真的如此精于计算吗？我们的行为难道不是更多的受无意识的欲望和未经权衡的冲动引导。</li>
+<li>经济学的思维方式是一种偏向于市场的思维方式，确实是这样的，经济学家更加喜欢能促成互惠交易和高效生产的社会支付和游戏规则，并让所有参与者获益。</li>
+</ul>
+<p>1.10 是偏见还是结论</p>
+<p>​	经济学是一门关于选择以及选择的意外之果的理论</p>
+<p>​	很多人对华丽的理论嗤之以鼻，职员椅相信常识和日常经验，但这些人事实上往往相信一些极为模糊笼统的假设，并沦为这些东西受害者。</p>
+<p>​	仅仅因为几组事实之间具有统计上的相关性就认为这几组事实之间有某种因果关系，这是一种非常常见的错误思维。</p>
+<p>1.11 经济学家的技能</p>
+<p>​	我们可以观察事实，但是要想解释事实发生的原因，就必须建立一套理论，一套关于因果关系的理论。正式有理论的存在，我们才能在大部分情况下从眼花缭乱、头晕目眩的各种事实中找出规律和原因。事实上，我们知道的事情总，只有一小部分来自观察，我们在这里发现一点提示，在那里找到一点线索，剩下的部分都是理论。</p>
+<p>​	</p>
+<h2 id="第二章-效率、交换和比较优势"><a href="#第二章-效率、交换和比较优势" class="headerlink" title="第二章 效率、交换和比较优势"></a>第二章 效率、交换和比较优势</h2><p>Q：区分免费商品、稀缺商品和负商品</p>
+<p>A：免费商品是不需要付出任何成本的商品，稀缺商品是需要付出成本的的商品，也要进行取舍，负商品是越少越好的商品</p>
+<p>Q：解释经济效率的概念以及这个概念与主观价值的联系</p>
+<p>A：经济效率是比较各种决策的成本与收益，预期额外收益与预期额外成本之间的关系，这个取决于当事人的价值观</p>
+<p>Q：理解自由交换对交换双方都有益</p>
+<p>A：自由交换可以让双发都获取对自己有价值的产品，自由交换不是等价交换，交换也是另一种形式的生产</p>
+<p>Q：用生产可能性曲线比较优势</p>
+<p>A：生产可能性曲线可以帮助我们找到几乎成本最低的生产方案，实现更多的收益。</p>
+<p>Q：探索中间人在较低交易成本和提供细且信息方面发挥的作用</p>
+<p>A：中间生可以让双方获取更多信息，以及机会，这些信息会增加参与者的收益。他们协调不同地区之间的市场交易，将本地市场整个进入更大的经济系统中</p>
+<p>Q：引入对长期经济增长现象的解释</p>
+<p>A：</p>
+<p>​	认为交换不能产生任何真正的收益是一种偏见，人们总是认为从交易中获利的商人一定是对社会进行了某种剥削，农民和工匠生产了所谓真正的产品，而商人似乎并不播种、不劳而获，他们的活动似乎没有创造出任何产品，但是他们竟然从中获利，因此游戏人认为贸易是一种社会浪费。</p>
+<p>​	实际上这是一种完全错误的观点，交换是一种能产生效益的生产活动，我们说交换能商城效益是因为这种活动能让人获得更多他们想要的东西。</p>
+<p>2.1 正商品与负商品</p>
+<p>​	如果面临选择的人认为某种东西多多益善，那么这种东西就是一种正商品</p>
+<p>​	免费商品是指不需要做出任何医生就能获得到的商品，而想要获得稀缺商品就必须牺牲某些其他有价值的东西。</p>
+<p>​	如果只有通过牺牲才能获得一种商品，那么这种商品就是稀缺的。</p>
+<p>​	免费商品确实都存在，比如空气，但是在潜水场景，空气也是稀缺商品。</p>
+<p>​	然而大部分商品都是稀缺商品，所以我们必须做出选择，也就是经济学问题，稀缺性。</p>
+<p>​	负商品：越少越好的东西，比如夏天咬人的蚊子，恐怖袭击。</p>
+<p>​	同一个东西可以同时是一个人的负商品和另一个人的正商品，比如榴莲。</p>
+<p>2.2 物质财务的迷思</p>
+<p>​	什么是财富？并不是具体的物品，在经济学思维方式下，只要是人认为有价值的东西都是财富。</p>
+<p>​	人认为有价值的都是财富，对于想要灌溉农田的农民来说，更多的雨水意味着更多财富，对于洪困住的农民来说，雨水显然不是财富。</p>
+<p>​	积极增长并不是指物品数量的增长，而是指财富的增长，虽然物质的产品能够为财富的创造做出贡献，但是财富的增长与物质产品的体积、数量并没有必然联系，所以我们要否定“财务等于物质产品”的想法。</p>
+<p>​	专业分工与交换正是亚当斯密所说的商业社会的核心。</p>
+<p>2.3 贸易创造财富</p>
+<p>​	通常认为，交换是等值物品的交换，事实恰好相反，当人们资源进行交换的时候，他们交换的从来不是价值相等的物品，如果2件东西价值相等，那根本就没有必要发生交换。</p>
+<p>​	参与交换的人相互合作，是为了抓住机会获得更多他们认为有价值的东西，正是因为双方都想获得更加价值，才产生了交换的动机。这是因为参与交易的双方的有着不同的价值观。</p>
+<p>​	价值观的差异正是交易活动生产效益的根源，交易完成后，双方的财富都增加了。</p>
+<p>​	也许会有人说，交易并没有使财富发生实质性的增长，因为交易没有正常产出任何东西。没错，确实没有创造新的物质，但是我们想一下“制造”究竟是是那么？</p>
+<p>​	从技术的角度来说，制造是改变原料的排布方式，让原谅以更有价值的方式组合起来，制造的目的是增加价值，如果不能增加价值，就没必要进行制造活动。</p>
+<p>​	我们跳出具体的制造，交换的本质也是对物品进行了重组，大家都认为重组后的物品价值更高，所以交易活动为双方创造了价值，交换活动被视为生产的另一种方式，交易双方都通过有价值的商品换来了另一个更有价值的商品。</p>
+<p>​	自愿交易是一种能同时为双方创造财富的办法，通过在交换活动中与对手合作，交易双方都活动了增加自身财富的机会。</p>
+<p>2.4 值不值？效率和价值</p>
+<p>​	做决策的时候，个人通常会权衡这项决策将带来的所有预期额外收益和所有预期额外成本，并比较两者的关系。</p>
+<p>​	比如买车，每公里的油耗是技术效率，是客观因素，经济学家所说的效率这是从选择者的角度出发，比较各种决策的额外收益和额外成本，我们将这种效率成为经济效率。</p>
+<p>​	在个人层面，值不值实际上是一个经济效率的问题，比如同样是上班，有人选择坐地铁，有人选择骑自行车，有人选择开车，每一位员工都会选择从经济角度最有效率的通勤方式</p>
+<p>​	每个人的选择都反应了他们的偏好和价值观，我们的价值观决定了我们认为什么决策效率高，什么决策效率低</p>
+<p>​	当产权清晰，稳定并且可以交换的时候，稀缺资源通常具有合理的价格，价格会反应相对稀缺程度，如果有人认为自由市场决定的商品价格是错误的，那么他实际上否定的是决定价格的市场，是现存产权体系以及产前之外的其他游戏规则。</p>
+<p>2.5 认识取舍：对生产的机会成本进行比较</p>
+<p>生产可能性曲线：在给定资源和给定技术的前提下能够生产的最大组合。</p>
+<p>琼斯每三个月可以生产10加仑的淡啤酒或者5加仑的黑啤酒</p>
+<p>布朗每三个月可以生产3加仑的淡啤酒，4加仑的黑啤酒</p>
+<p>从量度来看，似乎琼斯无论是生产淡啤酒还是黑啤酒都比布朗有效率，但是生产能力的高低本身并不是量度效率，而是看多多的代价是什么？</p>
+<p>若想获得更多啤酒，就必须牺牲某些东西，我们需要比较这种获得和牺牲之间的取舍，这就是研究机会成本。</p>
+<p>假设琼斯只生成淡啤酒，那么他生产10加仑淡啤酒的成本是5加仑1的黑啤酒，反之生产5加仑黑啤酒的代价是牺牲10加仑的淡啤酒</p>
+<p>布朗生产4加仑黑啤酒的的代价是放弃生产3加仑的淡啤酒</p>
+<p>我们可以看出，在淡啤酒方面，琼斯的效率更高，机会成本最小</p>
+<p>在黑啤酒方面，布朗的效率更好，因为布朗生产1加仑黑啤酒的机会成本是四分之三淡啤酒，所以在黑啤酒的生产上，布朗机会成本更低。</p>
+<p>2.6 分工和交换带来的效益</p>
+<p>​	如果2人分工，每个人只生产自己相对擅长的产品，并相互按照1:1的方式进行交换，会带来什么样的结果呢？</p>
+<p>两个人的的生产可能曲线都处于自身的外侧，也就是代表他的财富增加了，生产和交换拓展了人们的生产可能性，如果不与布朗交换，他不可能产出这么多啤酒。</p>
+<p>​	通过只生产自身具有比较优势的产品，他们提高了稀缺资源的使用效率，两位生产者同时提高了自己的财富。</p>
+<p>​	<img src="http://qiliu.vkcyan.top/FvWvF5uUxwQvx0noIhScJM34leXz.png" style="zoom:50%;" /></p>
+<p>2.7 为什么要进行专业分工</p>
+<p>​	专业分工就是选择自己具有优势的工作，因为这样能提高他们的财富水平，人们通过分工拓展自己面对的可能性，他们可以用自己生产的产品去交换那些自己生产成本更高的东西，市场经济的规则允许让你们进行产权交换。</p>
+<p>​	这种想法被称为<strong>比较优势法则</strong>，这个概念解释了专业分工的动机，以及专业分工能提高经济增长，也解释了人们自己不生产所有东西，之所以会产生比较优势，也许是因为不同的人天生擅长的不同，或者是练习与学习的技术不同；人们可以通过自己拥有比较优势的活动来获得财富。</p>
+<p>2.8 从个人贸易到国际贸易，再从国际贸易到个人贸易</p>
+<p>​	从本质上来看，交易双方都在用自己出口的产品来交换自己进口的产品。</p>
+<p>​	无论是组织之间的贸易还是国家与国家之间贸易，本质上都是人在进行交易，只是他们以组织的名义交易，只有个人才能做出选择。</p>
+<p>2.9 交易成本</p>
+<p>​	在私有产权系统下，人们进行专业分工的动机很强，因为比较优势能穿在更多的个人财富，系统的游戏也鼓励人们进行这些活动，但是除了机会生产本外，寻找交易对象的过程也会生产成本，在上述的例子中，我们有意忽略了交易成本，但是实际上发现交易机会并不简单，因为双方可能不在一个国家、不在一个地区，交易因此变得困难。</p>
+<p>​	我们把这些因素称为交易成本，交易成本是安排相关方达成契约和协议的成本。</p>
+<p>2.10 降低交易成本的动机：中间人</p>
+<p>​	中间人扩大了可供我们选择的机会范围。</p>
+<p>​	人们常常对中介费颇有微词，因为我们习惯把实际情况和并不存在的更优情况进行比较，但是我们实际进行交易甚少能像“假设我们知道所有信息时可能进行的交易”那样有利，所以我们认定中间人利用我们的无知占我们的便宜。</p>
+<p>​	实际上，这种中间人和正常岗位没有区别，医生也会利用你对疾病的无知而收费，中间人和医生一样在创造真正的财富，因为他们为我们创造了更多我们想要的选择机会。</p>
+<p>2.11 中间人创造信息</p>
+<p>​	自由市场过程中的供给与需求产生了价格，价格是一种信息，这种信息能帮助人们评估不同商品与服务的稀缺程度，其中市场参与者可以低成本的产生高质量的信息，这是市场最重要却最容易被人忽视的优点之一，这个过程就反映了中间人的优势</p>
+<p>​	有些市场是有组织的市场比如股票，该市场在较广的地理范围内交易同质化程度很高，另一些市场有组织化药低很多，比如二手家具。</p>
+<p>​	每一种价格对其他人来说，都是一条潜在的有用信息，这种信息能告诉人们有哪些机会可供选择，人们面临的选择机会越多，人们的财富就越高，更多的选择机会意味着有能力做更多我们想做的事情	。</p>
+<p>​	中间人的专长就是组织市场，创造有价值的信息，比如ebay的出现，让使用该网站的人生产有价值的信息，降低双方的交易成本，中间人能够减少交易的阻碍。</p>
+<p>​	如果没有中间人，双方都要付出更高的成本的获取更多信息。</p>
+<p>2.12 市场是一种发现的过程</p>
+<p>​	市场中的个体从事他们自认为具有比较优势的行当。个体衡量自身的成本和收益，并根据这些判断来选择自己的行为。</p>
+<p>​	比较优势预期生产的效率不是在黑板上被发现，而是通过产权交换在真实的市场中被发现。</p>
+<p>​	在大多数的决策中，相对价格为决策者提供了极为重要的根本性信息，我们根据自身的情况，选择各种工作能带来的工资，还有选择自己感兴趣的项目、学生选择学位，当然并不是说人们仅仅关注价格，而是多数情况下，相对价格能够对人的决策起到指导作用。</p>
+<p>​	达到某种目标的最高效的方式就是成本最低的方式，人们不断协调合作互动和相互调整过程，这个过程构成了我们的经济。</p>
+<p>2.13 关于经济增长的初步思考</p>
+<p>​	在人类历史的绝大部分，除了少数特权阶级，贫困是大部分人的生活常态，而大约300年前，欧亚大不了的西北角出现了经济的增长，少部分人是如何致富的呢？这是经济学研究的问题</p>
+<p>2.14 寻找一种解释</p>
+<p>究竟发生了什么？</p>
+<p>​	分工是的各种产品能够成倍制造和数量激增。在井然有序的社会里，由于劳动产品极大丰富，以至可以提供到最下层人民。</p>
+<p>​	马克思认为，一个以私有产权和盈利而生产为特征的社会具有一些深刻的缺陷，这些缺陷将会摧毁整个资本主义系统，但是他并不怀疑这样的社会确实具有创造财富的能力。</p>
+<p>2.15 鼓励专业分工和交换的规则如何演进</p>
+<p>​	尽管人类能够预见劳动分工将袋子普遍赋予，并设法通过劳动分工加以实现，但劳动分工带来的诸多利益并不是人类智慧的结果，是随着时间缓慢、逐渐演化而来的。</p>
+<p>​	复杂的社会支付是长期演化而来，事先并无蓝图，金钱支付的演化过程与社会分工的演化过程一样：人们自发推进自己感兴趣的事业，并在这个过程中与其他人互动，这个互动自动催生了金钱系统。</p>
+<p>​	一个国家从最低级的野蛮到最高的富裕状态，只需要和平、轻税赋以及一套合理的司法管理系统，剩下的部分都会自己完成。</p>
+<p>​	这并不是说预见不重要，也不是说，政府没有对成功的经济系统发展做出贡献，亚当斯密主张：“井然有序的社会”中才能演化出广泛的专业分工，从而提高产出，实现”普遍的富裕“。</p>
+<p>​	再谈第一章的重要概念，游戏规则以及经济学的最重要特点：界定清晰并受充分保护的产权。如果没有相对安全的产权，人们就不会为未来投资，不会启动任何有成本的事业。</p>
+<p>​	成功的商业社会，必须满足2个比较条件，第一是相对安全的产权系统，第二是产权的自由交换</p>
+<p>简要回顾</p>
+<p>​	商品交换的本质是产权的交换，社会具有一个清晰的产权，社会产生的价格信息就能指引人们发现自己的比较优势，市场过程能够告诉大家可供选择的机会，有了这些信息，人们就能发现市场参与者创造收益的途径。</p>
+<h2 id="第三章-无处不在的替代品：需求的概念"><a href="#第三章-无处不在的替代品：需求的概念" class="headerlink" title="第三章 无处不在的替代品：需求的概念"></a>第三章 无处不在的替代品：需求的概念</h2><ul>
+<li>建立”所有稀缺商品都有替代品“的论点</li>
+<li>引入”选择都是在边际上做出“的概念</li>
+<li>引入需求法则，并解释这个概念</li>
+<li>清晰区分需求和去需求量的概念</li>
+<li>研究使需求曲线移动的因素</li>
+<li>指导需求的价格弹性，并运用这个概念</li>
+</ul>
+<p>​	之前我们一直讨论取舍的问题，并且我们知道大部分商品都是稀缺商品，也就是说想要获取这些商品必须牺牲其他有价值的东西，现在我们深入讨论稀缺性，任何东西都存在替代品，我们要考虑如何比较不同替代品的预期额外成本与预期额外收益，也就是取舍。</p>
+<p>3.1 关于”需要“这个词</p>
+<p>​	需要并不是一个确定的词，会收到很多因素的影响，所谓需要也可以通过多种方式进行实现，而当我们选择A的方式，就会牺牲掉其他的方式</p>
+<p>3.2 边际价值</p>
+<p>​	当我们在日常生活中，钻石的价值比水的价值更高，当我们在沙漠里面的时候，水的价值比钻石的价值更好，我们的选择是在特定的背景下进行，<strong>我们的选择取决与我们面对环境</strong>。</p>
+<p>​	牙缝里面卡住骨头的时候，一根牙签比一个鸡腿更有价值，当你想想上厕所的时候，卫生纸比《莎士比亚全集》更加有价值，价值完全取决于我们面对的情况。</p>
+<p>​	在经济学上，起作用的价值是边际价值。边际收益和边际成本是决策过程中仅有的两个重要因素。</p>
+<p>3.3 分叉路口：日常选择是边际选择</p>
+<p>​	假设明天你就要进行期末开始，但是晚上9点你正要复习的时候，你的对象打电话给你希望你陪她打游戏，你拒绝的时候，她问你”考试比我还重要吗“？这时候你可以运用你的经济学思维告诉他，在此刻的边际价值上，考试比你重要。</p>
+<p>​	经济学的思维否定非此即彼的决策方式，而要求我们关注边际收益和边际成本。这一规律适用于所有稀缺商品的优化过程。</p>
+<p>3.4 需求曲线</p>
+<p>​	人们面临各种取舍，为了多获得某样东西，就得少获得另一样东西，正是因为如此所以才有了”需求“的概念。</p>
+<p>​	需求的概念把人们希望获得的东西的数量和必须付出的代价联系了起来。</p>
+<p>​	当付出的的代价出现变化，人们希望获得的东西的数量也会随之发生变化</p>
+<p>​	比如一个小镇上，当水费越贵，居民用的水也就会越少，具体用水与水的费用就呈现出一个关系</p>
+<img src="http://qiliu.vkcyan.top/FsOa6I3j1gjgBk4-dhStiarczzJa.png" style="zoom: 33%;" />
+
+<p>​	这样的需求就被称为需求曲线，需求曲线描绘了在所有给定价格下消费者计划购买的商品数量。</p>
+<p>​	当水相对便宜的时候，人们会将水用于饮用、洗澡、烹饪、洗衣、草坪浇水、洗车，但是当水的价格变贵的时候，人们就会改变他们的计划，比如人们可能会降低洗车的频率、洗衣服的频率，水被用于”更重要“的场景，或者个体决策者眼中价值最高的用途。</p>
+<p>​	他们判定把水用在某些方面不再值得，人们会选择替代方案，比如高压淋浴喷头，取消游泳池，这些都可以算作水的替代品。</p>
+<p>3.5 需求法则</p>
+<p>​	将其他条件保持不变，如果某种商品的价格上升，其需求量就会下降。同样，当其他条件保持不变，如果某个商品的价格下降，其需求量就会上升</p>
+<p>​	需求法则：当其他条件不变的前提下，价格和需求量之间的关系是负相关的。</p>
+<p>3.6 需求和需求量</p>
+<p>​	需求和需求量并不是一种东西，我们常说的需求的的减少与增加，其实说的是需求量。</p>
+<p>​	对任何一个商品的需求都不是一个具体的数量，需求永远是一种关系，这种关系将不同的价格下人们愿意购买的数量联系起来。</p>
+<p>​	无论价格怎么变化，需求本身是不会变的，要想区分需求和需求量，最佳的方式是始终牢记需求这个词永远可以被替换称为需求曲线或者需求表。</p>
+<p>3.7 需求本身也可以变化</p>
+<p>​	对某种特定商品而言，如果商品的价格不变，但人们愿意购买的商品数量却发生了变化，那么这种商品的整体需求就发生了变化。</p>
+<p>​	我们依旧以小镇居民对水的需求为例子，若是想整体需求提高，就必须发生某件事，比如当地出现了干旱，用水量可能就会上升，当地出现了水源污染，当地的用水量就会下降，这些都会导致需求曲线的上升或者下降，但是需求法则依旧成立，需求与价格依旧是反相关的关系。</p>
+<p>3.8 所有东西都取决于其他东西</p>
+<p>​	有些因素会导致商品需求发生变化，我们要分离并注意这些因素</p>
+<ul>
+<li>消费者数量的变化，老年人增加会导致养老类产品需求的增加</li>
+<li>消费者的品味和偏好的变化，追求健康的潮流会导致高脂肪视频需求的变化</li>
+<li>收入的变化，经济繁荣的时候，去迪士尼玩的人会更多</li>
+</ul>
+<p>​	消费者收入增加，某些商品的需求曲线开始右移，这是正常商品，如果消费者收入上升，对某种商品的需求反而下降，那么这种商品就是低档商品。</p>
+<p>​	但是我们不要忘记，价值还是做出选择的人眼中的价值，这是非常动态的。</p>
+<p>​	对经济学家而言，低档商品和正常商品的区别仅在与收入变化时消费者对这种商品的需求如何变化。</p>
+<p>​	经济学的思维方式理解所有东西都是相互关联的，所有东西区取决于其他东西。</p>
+<p>​	单一商品的价格本身没有意义，只有吧这种价格与选择者面对的大量其他商品和服务的价格进行对比，这种价格才有意义。</p>
+<p>​	所以<strong>替代品价格的变化也是影响需求的因素</strong></p>
+<p>​	在其他条件不变的前提下，如果一个商品的价格上升，其替代品的需求也就会上升。</p>
+<p>​	<strong>互补品的价格变化也会让需求曲线发生移动</strong>。</p>
+<p>​	在其他条件不变的前提下，如果一种商品的价格上升，其互补品的需求就会下降，比如油价上升会导致燃油车的需求下降。</p>
+<p>​	<strong>商品预期价格的变化会导致对这种商品的整体需求的变化</strong>，比如油价明天将会上涨，汽油的需求曲线将会右移，这个时刻，你对汽油需求增加了。</p>
+<p>3.9 通货膨胀导致的误解</p>
+<p>​	因为通货膨胀的存在，商品的价格发生了增加，但是需求曲线却并没有左移，这似乎并不符合需求曲线的定义，也就是价格与需求呈反比。</p>
+<p>​	这是对通货膨胀的误解，通货膨胀是指商品的平均货币价格的增加，现在我们思考一个理想情况，如果人们的收入以及他们使用的所有其他商品的价格同时翻倍了，则所有商品的相对价格都没有发生变化，只是过去的金钱的实际价格变了，只有过去的一半。</p>
+<p>​	通货膨胀是一个比较特殊的情况，日后我们会单独讨论。</p>
+<p>3.10 时间站在我们这边</p>
+<p>​	价格变化后人们的购买量也许没有太大变化，但是这仅限于价格刚刚变化的时候，有时候这种现象会让人认为价格对消费者没有影响，这是非常错误的结论，因为顾客需要调整的时间。人是习惯性东西，寻找任何东西的替代品都需要一定的时间。</p>
+<p>3.11 需求的弹性</p>
+<p>​	如果某种商品只要价格小幅变化，人们的购买量就会显著改变，那么我们就说对这个商品的需求是有弹性的。相对的，如果某种商品即使价格大幅度改变，需求也不怎么变化，我们就说这种商品的需求缺乏弹性。</p>
+<p>​	需求的价格弹性精确定义如下：价格弹性等于需求量变化的百分比除以价格变化的百分比，因此，如果鸡蛋价格上升了10%，会使消费者的购买量下降5%，这鸡蛋需求的价格弹性就是5%除以10%，即0.5（忽略负数）。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">需求的价格弹性 = 需求量变化的百分比 / 价格变化的百分比</span><br></pre></td></tr></table></figure>
+
+<p>如果一个商品的价格弹性大于1.0，我们就认为这个需求有弹性</p>
+<p>如果一个商品的价格弹性小于1.0，我们就会认为需求缺乏弹性</p>
+<p>如果一个商品的价格弹性等于1.0，我们就会任务需求具有单一弹性</p>
+<p>需求弹性受到三个因素的影响</p>
+<ul>
+<li>时间，价格变化后，供人们调整的时间越长，需求的弹性越大</li>
+<li>消费者获得已知替代品的难易程度以及已知替代品与原商品的接近程度，越容易知道替代品，或者替代品越多，弹性越高。</li>
+<li>花在这个商品上的钱占总支出的比例，比例越小，需求弹性越低，比例越大，需求弹性越高，也会对价格的变化更加敏感。</li>
+</ul>
+<p>3.12 对弹性的思考</p>
+<p>​	即使盐的价格翻一倍，我还是会买同样数量的盐，因此所谓需求法则并不成立。实际上是因为这些商品	占总支出的比例很小，你没有动机成为一个小心挑剔的消费者。</p>
+<p>​	盐的价格从5毛到1元，可能你没啥感觉，但是到5元、10元，开始占据较大比例的总支出的时候，你和很难不挑剔了。</p>
+<p>​	相对于盐这样的刚需产品，汽车的价格弹性就高出了很多，因为替代品非常多。</p>
+<p>3.13 弹性与总收入</p>
+<p>​	如果大学的学费降低20%，大学收到的学会总数其实会上升。</p>
+<p>​	如果价格变化后收入的变化方向与价格的方向相反，那么需求一定有弹性。</p>
+<p>​	如果价格变化后总收入的变化方向与价格变化的方向相同，那么需求一定缺乏弹性</p>
+<p>​	大学是否总能通过降低学费来改善财政呢？并不是的，虽然降低学费可以提高总收入，但是大学必须考虑总收入的提高是否大于总成本的提高。</p>
+<p>​	另一方面，弹性和总收入的关系也让我们产生一个误解，提高售价可以多挣钱，但是价格的替身会导致商品的需求量下降，企业的总收入也会下降。</p>
+<p>3.14 竖直需求曲线的迷思</p>
+<p>​	需求曲线不可能在价格上完全没有弹性，也就是价格无论怎么变化，需求都不变，这就意味这这个东西没有替代品，在现实世界这是不可能的。</p>
+<p>​	比如糖尿病患者对胰岛素的需求，这个看起来是没有替代品，因为这是糖尿病一个最好的解决方案，但是即使这样，他的需求弹性曲线也不是竖直的，因为随着价格的升高，人们会采用克制的生活方式、甚至祈祷来降低胰岛素的使用量。价格降低也会有更多人选择胰岛素。</p>
+<p>3.15 需求应该扮演怎样的角色</p>
+<p>​	到目前为止，我们一直把市场价格以及支付这种价格的意愿高低作为决定谁可以获得哪些稀缺商品和服务主要标准。</p>
+<p>​	除了这个之外，我们现实生活中还有其他系统，而这是一个产权问题。</p>
+<p>​	按需分配：但是这个评价标准过于含糊，容易被滥用。</p>
+<p>​	先到先得：就像排队，人们都要花极长的时间，非常低效。</p>
+<p>​	随机抽签：抽签似乎是一种公平的办法，但是也会让蛋糕小到失去价值</p>
+<p>​	强权就是正义：稀缺商品属于配得上他的人，不管配得上的原因是什么，但是这样会让弱者没有任何资源，抢着必须浪费资源夺取他和捍卫他们的资源</p>
+<p>​	论功行赏：就不需要界定什么是功绩，这个只能小范围达成。</p>
+<p>​	而以上的系统还都忽略了供给的问题，生产者希望自己获得回报，生产者需要系统基于的鼓励。</p>
+<p>​	现在的系统：鼓励资源以产权交换稀缺商品，并让愿意支付的边际价格最高的人获得稀缺商品。这样的系统会使得每个人都能根据自己的特定条件进行优化，从而扩大人们的自由和权利。</p>
+<p>​	当某件商品价格上涨，消费者会自信优化，不需要有人来命令他们优化，也不需要经济学家们来告诉他们如何优化。从消费者的自身利益出发，优化是最佳的选择，即使他们从来没有听说过这个词。</p>
+<p>​	需求让大家为了自己主动选择最优解，社会也达到了最优解的动态平衡。</p>
+<p>3.16 金钱是唯一重要的因素吗？货币成本、其他成本和经济计算</p>
+<p>​	需求的概念绝不说明金钱是人们唯一关心的东西。</p>
+<p>​	当商品的成本商城，消费者就会少买，这并不意味着人们是自私的，相反经济学的思维方式指出：<strong>当某种行为的机会成本上升的时候，决策者就会较少的采取这种行动，当某种行为的机会成本下降的时候，决策者就会较多的采取这种行动</strong></p>
+<p>​	人们不是仅仅对预期收益的变化做出反应，他们会比较预期额外收益和预期额外成本，<strong>不管他们以何种方式度量成本</strong></p>
+<p>​	货币度量价格使得经济计算成为可能。</p>
+<p>小结</p>
+<p>需求法则：人们会自己优化自己的行为，不管什么商品，当价格下降的时候，人们就会多买，价格上升的时候，人们就会少买</p>
+<p>需求曲线：需求与价格之间关系的曲线。</p>
+<p>需求的价格弹性：需求量变化的百分比除以价格变化的百分比</p>
+<p>价格弹性的敏感程度主要取决于商品占总支出的比例以及替代品价格的变化</p>
+<p>需求曲线上升的影响因素</p>
+<ul>
+<li>消费者数量增加</li>
+<li>消费者品味和偏好改变</li>
+<li>消费者收入上升</li>
+<li>互补品的价格下降</li>
+<li>替代品的价格商城</li>
+<li>消费者预期这种商品未来会涨价</li>
+</ul>
+<p>需要不代表一定要得到，需要到得到收到诸多因素的影响，毕竟价格，价格的上升会降低用户购买的欲望。</p>
+<blockquote>
+<p> ps：为什么需求曲线中间的点的收入是最高的？暂时不知道怎么解释这种情况</p>
+</blockquote>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://bluedancers.github.io/2024/01/20/%E9%98%85%E8%AF%BB/%E3%80%8A%E7%BB%8F%E6%B5%8E%E5%AD%A6%E7%9A%84%E6%80%9D%E7%BB%B4%E6%96%B9%E5%BC%8F%E3%80%8B%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0%EF%BC%881-3%EF%BC%89/" title="" target="_blank" rel="external">https://bluedancers.github.io/2024/01/20/阅读/《经济学的思维方式》读书笔记（1-3）/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/bluedancers" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/bluedancers" target="_blank"><span class="text-dark">bluedancers</span><small class="ml-1x">Web Developer &amp; Product Manager</small></a></h3>
+        <div>一切都是为了实现技术的价值</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    
+    <li class="next">
+      <a href="/2024/01/20/%E9%98%85%E8%AF%BB/%E3%80%8A%E7%BB%8F%E6%B5%8E%E5%AD%A6%E7%9A%84%E6%80%9D%E7%BB%B4%E6%96%B9%E5%BC%8F%E3%80%8B%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0%EF%BC%884-6%EF%BC%89/" title="(no title)"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-fancy btn-donate pop-onhover bg-gradient-warning" data-toggle="modal" data-target="#donateModal"><span>赏</span></button>
+  <!-- <div class="wave-icon wave-icon-danger btn-donate" data-toggle="modal" data-target="#donateModal">
+    <div class="wave-circle"><span class="icon"><i class="icon icon-bill"></i></span></div>
+  </div> -->
+  
+  
+  <div class="bar-right">
+    
+  </div>
+  </div>
+</nav>
+  
+<!-- Modal -->
+<div class="modal modal-center modal-small modal-xs-full fade" id="donateModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content donate">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <div class="modal-body">
+        <div class="donate-box">
+          <div class="donate-head">
+            <p>感谢您的支持，我会继续努力的!</p>
+          </div>
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade active in" id="alipay">
+              <div class="donate-payimg">
+                <img src="/images/donate/alipayimg.jpg" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开支付宝扫一扫，即可进行扫码打赏哦</p>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="wechatpay">
+              <div class="donate-payimg">
+                <img src="/images/donate/wechatpayimg.jpg" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开微信扫一扫，即可进行扫码打赏哦</p>
+            </div>
+          </div>
+          <div class="donate-footer">
+            <ul class="nav nav-tabs nav-justified" role="tablist">
+              <li role="presentation" class="active">
+                <a href="#alipay" id="alipay-tab" role="tab" data-toggle="tab" aria-controls="alipay" aria-expanded="true"><i class="icon icon-alipay"></i> 支付宝</a>
+              </li>
+              <li role="presentation" class="">
+                <a href="#wechatpay" role="tab" id="wechatpay-tab" data-toggle="tab" aria-controls="wechatpay" aria-expanded="false"><i class="icon icon-wepay"></i> 微信支付</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/bluedancers" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://juejin.cn/user/3720403077840519" target="_blank" title="Juejin" data-toggle=tooltip data-placement=top><i class="icon icon-juejin"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="https://cdn.staticfile.org/jquery/1.12.4/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+   
+
+
+
+
+    <script defer type="text/javascript">
+(function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'G-H48QGKLW34', 'auto');
+ga('send', 'pageview');
+
+</script>
+
+
+
+</body>
+</html>
